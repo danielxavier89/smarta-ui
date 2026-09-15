@@ -32,7 +32,9 @@ const buttonVariants = cva(
         ghost:
           "bg-transparent border-transparent text-fg-muted hover:bg-surface-sunken hover:text-fg",
         danger:
-          "bg-bad border-bad text-fg-on-accent hover:brightness-110",
+          // A solid STATUS fill, so the text is --on-status, not --accent-fg:
+          // in dark mode --bad is a light red and white on it measures 2.87:1.
+          "bg-bad border-bad text-on-status hover:brightness-110",
         /** A destructive action that is not the page's main move. */
         "danger-quiet":
           "bg-transparent border-border text-bad hover:bg-bad-bg hover:border-bad",

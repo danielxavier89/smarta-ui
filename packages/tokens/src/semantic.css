@@ -42,7 +42,6 @@
   --fg-muted:        var(--p-plum-600);
   --fg-subtle:       var(--p-plum-500);
   --fg-faint:        var(--p-plum-300);
-  --fg-on-accent:    var(--p-white);
 
   /* Lines */
   --border:          var(--p-plum-200);
@@ -100,7 +99,6 @@
   --fg-muted:        #C9BACD;
   --fg-subtle:       #A392A8;
   --fg-faint:        #6B5A71;
-  --fg-on-accent:    var(--p-white);
 
   --border:          #332A38;
   --border-soft:     #2A2230;
@@ -153,7 +151,6 @@
   --fg-muted:        var(--p-grey-600);
   --fg-subtle:       var(--p-grey-500);
   --fg-faint:        var(--p-grey-300);
-  --fg-on-accent:    var(--p-white);
 
   --border:          var(--p-grey-200);
   --border-soft:     var(--p-grey-100);
@@ -203,7 +200,6 @@
   --fg-subtle:       var(--p-grey-400);
   --fg-faint:        #5E5E5E;
   /* The accent inverts to near-white, so text ON it must go dark */
-  --fg-on-accent:    var(--p-grey-950);
 
   --border:          #2E2E2E;
   --border-soft:     #262626;
@@ -311,7 +307,6 @@
     --fg-muted:        #C9BACD;
     --fg-subtle:       #A392A8;
     --fg-faint:        #6B5A71;
-    --fg-on-accent:    var(--p-white);
     --border:          #332A38;
     --border-soft:     #2A2230;
     --border-strong:   #4A3E51;
@@ -345,7 +340,6 @@
     --fg-muted:        #C4C4C4;
     --fg-subtle:       var(--p-grey-400);
     --fg-faint:        #5E5E5E;
-    --fg-on-accent:    var(--p-grey-950);
     --border:          #2E2E2E;
     --border-soft:     #262626;
     --border-strong:   #454545;

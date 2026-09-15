@@ -27,7 +27,6 @@
   --color-fg-muted:     var(--fg-muted);
   --color-fg-subtle:    var(--fg-subtle);
   --color-fg-faint:     var(--fg-faint);
-  --color-fg-on-accent: var(--fg-on-accent);
 
   /* Lines */
   --color-border:        var(--border);
@@ -100,7 +99,7 @@
   --color-muted:                 var(--surface-sunken);
   --color-muted-foreground:      var(--fg-subtle);
   --color-destructive:           var(--bad);
-  --color-destructive-foreground: var(--fg-on-accent);
+  --color-destructive-foreground: var(--on-status);
   --color-input:                 var(--border);
   --color-ring:                  var(--focus-ring);
 }

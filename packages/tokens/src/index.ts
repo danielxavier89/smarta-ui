@@ -66,7 +66,6 @@ export const COLOR_TOKENS: TokenGroup[] = [
       { name: "fg-muted", utility: "fg-muted", use: "Body copy, icons, secondary lines that still matter." },
       { name: "fg-subtle", utility: "fg-subtle", use: "Labels, captions, placeholder-adjacent text. The quietest text that is still text." },
       { name: "fg-faint", utility: "fg-faint", use: "Dots, empty-state icons, hover borders. Never text — it does not reach 4.5:1." },
-      { name: "fg-on-accent", utility: "fg-on-accent", use: "Text and icons sitting on an accent fill." },
     ],
   },
   {

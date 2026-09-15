@@ -79,6 +79,11 @@ const PAIRS = [
   ["neutral-fg", "neutral-bg"], ["accent-soft-fg", "accent-soft"], ["selected-fg", "selected-bg"],
   ["inverse-fg", "inverse-surface"],
   ["on-status", "bad"], ["on-status", "ok"], ["on-status", "warn"], ["on-status", "info"],
+  // Pairs that only exist because a component composes them. The danger Button
+  // shipped at 2.87:1 in webapp dark because this row was missing.
+  ["on-status", "neutral"], ["fg", "skeleton"], ["fg-muted", "surface-hover"],
+  ["accent-soft-fg", "selected-bg"], ["ok", "surface"], ["warn", "surface"],
+  ["bad", "surface"], ["info", "surface"], ["bad", "canvas"],
 ];
 
 const MIN = 4.5;

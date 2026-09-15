@@ -65,17 +65,20 @@ function Surface({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeProvider product={product} theme={theme} className="rounded-lg">
+    <ThemeProvider
+      product={product}
+      theme={theme}
+      // The border is inside the provider so it can use a token. An outer
+      // wrapper sits outside the theme scope and would have to hardcode a
+      // colour, which is invisible against a dark cell.
+      className={label ? "overflow-hidden rounded-lg border border-border-strong" : ""}
+    >
       {label && (
-        <div className="border-b border-border-soft px-[14px] py-[7px] text-2xs font-medium uppercase tracking-wide text-fg-subtle">
+        <div className="border-b border-border-soft bg-surface-sunken px-[14px] py-[7px] text-2xs font-medium uppercase tracking-wide text-fg-subtle">
           {label}
         </div>
       )}
-      <div className="p-[20px]">
-        <TooltipProvider>
-          <ToastProvider>{children}</ToastProvider>
-        </TooltipProvider>
-      </div>
+      <div className="p-[20px]">{children}</div>
     </ThemeProvider>
   );
 }
@@ -85,44 +88,53 @@ const withTheme: Decorator = (Story, ctx) => {
   const theme = (ctx.globals.theme ?? "light") as Theme;
   const compare = (ctx.globals.compare ?? "off") as "off" | "modes" | "products" | "all";
 
-  if (compare === "off") {
-    return (
-      <Surface product={product} theme={theme}>
-        <Story />
-      </Surface>
-    );
-  }
-
   const combos: Array<[Product, Theme]> =
-    compare === "modes"
-      ? [[product, "light"], [product, "dark"]]
-      : compare === "products"
-        ? [["webapp", theme], ["backoffice", theme]]
-        : [
-            ["webapp", "light"],
-            ["webapp", "dark"],
-            ["backoffice", "light"],
-            ["backoffice", "dark"],
-          ];
+    compare === "off"
+      ? [[product, theme]]
+      : compare === "modes"
+        ? [[product, "light"], [product, "dark"]]
+        : compare === "products"
+          ? [["webapp", theme], ["backoffice", theme]]
+          : [
+              ["webapp", "light"],
+              ["webapp", "dark"],
+              ["backoffice", "light"],
+              ["backoffice", "dark"],
+            ];
 
+  const cells = combos.map(([p, t]) => (
+    // Each cell is its own theme scope. The tokens are inherited custom
+    // properties, so four scopes on one page cost nothing and cannot leak.
+    <Surface key={`${p}-${t}`} product={p} theme={t} label={compare === "off" ? undefined : `${p} \u00b7 ${t}`}>
+      <Story />
+    </Surface>
+  ));
+
+  // One TooltipProvider and one ToastProvider for the whole preview, not one per
+  // cell. Radix's toast viewport is a labelled landmark, so four of them made
+  // the a11y addon report a landmark-unique violation that belonged to the
+  // harness rather than to any component.
   return (
-    <div
-      style={{
-        display: "grid",
-        gap: 12,
-        gridTemplateColumns: compare === "all" ? "repeat(2, minmax(0,1fr))" : "1fr",
-      }}
-    >
-      {combos.map(([p, t]) => (
-        // Each cell is its own theme scope. The tokens are inherited custom
-        // properties, so four scopes on one page cost nothing and cannot leak.
-        <div key={`${p}-${t}`} style={{ border: "1px solid #0001", borderRadius: 14, overflow: "hidden" }}>
-          <Surface product={p} theme={t} label={`${p} · ${t}`}>
-            <Story />
-          </Surface>
-        </div>
-      ))}
-    </div>
+    <ThemeProvider product={product} theme={theme}>
+      <TooltipProvider>
+        <ToastProvider>
+          {compare === "off" ? (
+            cells
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gap: 12,
+                padding: 12,
+                gridTemplateColumns: compare === "all" ? "repeat(2, minmax(0,1fr))" : "1fr",
+              }}
+            >
+              {cells}
+            </div>
+          )}
+        </ToastProvider>
+      </TooltipProvider>
+    </ThemeProvider>
   );
 };
 

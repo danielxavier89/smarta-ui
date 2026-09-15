@@ -141,7 +141,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
           "motion-safe:hover:-translate-y-[1px]",
           // Keyboard users get the same lift as the mouse.
           "has-[:focus-visible]:border-border-strong has-[:focus-visible]:shadow-xs",
-          affordance === "arrow" && "pr-[46px]",
+          affordance === "arrow" && "[&>*:first-child]:pr-[40px]",
         ],
         disabled && "pointer-events-none opacity-60",
         className,

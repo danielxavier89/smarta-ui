@@ -37,11 +37,16 @@ the Compare control does.
 
 Three layers sit behind that:
 
-| Layer | Example | Who reads it |
-|---|---|---|
-| Primitives | `--p-plum-600` | the semantic layer, and nothing else |
-| Semantics | `--fg-muted`, `--accent`, `--ok-bg` | **components** |
-| Tailwind bridge | `bg-canvas`, `text-fg-muted` | components, as utilities |
+<table>
+  <thead>
+    <tr><th align="left">Layer</th><th align="left">Example</th><th align="left">Who reads it</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Primitives</td><td><code>--p-plum-600</code></td><td>the semantic layer, and nothing else</td></tr>
+    <tr><td>Semantics</td><td><code>--fg-muted</code>, <code>--accent</code>, <code>--ok-bg</code></td><td><b>components</b></td></tr>
+    <tr><td>Tailwind bridge</td><td><code>bg-canvas</code>, <code>text-fg-muted</code></td><td>components, as utilities</td></tr>
+  </tbody>
+</table>
 
 A component that reads `--p-plum-600` is hardcoded to the webapp in light mode. A
 component that reads `--fg-muted` is not. See **Foundations → Design tokens** for
