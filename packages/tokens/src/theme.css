@@ -1,0 +1,106 @@
+/* ==========================================================================
+   Layer 3 — Tailwind bridge
+   Maps the semantic tokens into Tailwind's --color-* namespace so components
+   can write bg-canvas / text-fg-muted / border-border instead of arbitrary
+   var() syntax.
+
+   @theme inline, not @theme: inline makes each utility emit `var(--canvas)`
+   rather than the resolved value, which is the whole point — the utility has
+   to keep resolving at runtime, because --canvas changes when a wrapper
+   element carries a different data-product or data-theme.
+
+   Every colour a component can reach is listed here. If a colour is not in
+   this block a component cannot use it, which is the enforcement mechanism
+   behind "components use tokens, never hardcoded values".
+   ========================================================================== */
+
+@theme inline {
+  /* Surfaces */
+  --color-canvas:         var(--canvas);
+  --color-surface:        var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-hover:  var(--surface-hover);
+
+  /* Text */
+  --color-fg:           var(--fg);
+  --color-fg-muted:     var(--fg-muted);
+  --color-fg-subtle:    var(--fg-subtle);
+  --color-fg-faint:     var(--fg-faint);
+  --color-fg-on-accent: var(--fg-on-accent);
+
+  /* Lines */
+  --color-border:        var(--border);
+  --color-border-soft:   var(--border-soft);
+  --color-border-strong: var(--border-strong);
+
+  /* Brand */
+  --color-accent:         var(--accent);
+  --color-accent-hover:   var(--accent-hover);
+  --color-accent-fg:      var(--accent-fg);
+  --color-accent-soft:    var(--accent-soft);
+  --color-accent-soft-fg: var(--accent-soft-fg);
+  --color-link:           var(--link);
+  --color-link-hover:     var(--link-hover);
+
+  /* Selection */
+  --color-selected-bg: var(--selected-bg);
+  --color-selected-fg: var(--selected-fg);
+
+  /* Focus */
+  --color-focus-ring: var(--focus-ring);
+  --color-focus-halo: var(--focus-halo);
+
+  /* Status */
+  --color-ok:      var(--ok);
+  --color-ok-bg:   var(--ok-bg);
+  --color-ok-fg:   var(--ok-fg);
+  --color-warn:    var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-fg: var(--warn-fg);
+  --color-bad:     var(--bad);
+  --color-bad-bg:  var(--bad-bg);
+  --color-bad-fg:  var(--bad-fg);
+  --color-info:    var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-info-fg: var(--info-fg);
+  --color-neutral:    var(--neutral);
+  --color-neutral-bg: var(--neutral-bg);
+  --color-neutral-fg: var(--neutral-fg);
+  --color-on-status:  var(--on-status);
+
+  /* Inversion, scrim, loading */
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-fg:      var(--inverse-fg);
+  --color-overlay:         var(--overlay);
+  --color-skeleton:        var(--skeleton);
+  --color-skeleton-sheen:  var(--skeleton-sheen);
+
+  /* ------------------------------------------------------------------
+     shadcn compatibility shim.
+     A shadcn block pasted in from the registry speaks background/foreground/
+     muted/primary/ring. These aliases let it render in smarta's palette
+     without being rewritten first.
+
+     One trap worth knowing: shadcn's --accent is its *hover fill*, not a
+     brand colour. It maps to surface-hover here. smarta's brand accent is
+     --color-accent, which is shadcn's --primary. Getting those two the wrong
+     way round paints every hover state magenta.
+     ------------------------------------------------------------------ */
+  --color-background:            var(--canvas);
+  --color-foreground:            var(--fg);
+  --color-card:                  var(--surface);
+  --color-card-foreground:       var(--fg);
+  --color-popover:               var(--surface-raised);
+  --color-popover-foreground:    var(--fg);
+  --color-primary:               var(--accent);
+  --color-primary-foreground:    var(--accent-fg);
+  --color-secondary:             var(--surface-sunken);
+  --color-secondary-foreground:  var(--fg);
+  --color-muted:                 var(--surface-sunken);
+  --color-muted-foreground:      var(--fg-subtle);
+  --color-destructive:           var(--bad);
+  --color-destructive-foreground: var(--fg-on-accent);
+  --color-input:                 var(--border);
+  --color-ring:                  var(--focus-ring);
+}

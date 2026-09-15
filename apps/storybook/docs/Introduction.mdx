@@ -1,0 +1,76 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundations/Introduction" />
+
+# smarta-ui
+
+One component library, two products.
+
+The client-facing **webapp** is plum. The internal **backoffice** is grayscale. Both
+run in light and dark. That is four combinations every component has to be right in —
+and no component in this library contains a single colour, which is what makes that
+possible without a branch anywhere.
+
+## Try it
+
+Two controls in the toolbar above, and they are independent:
+
+- **Product** — webapp or backoffice
+- **Mode** — light or dark
+- **Compare** — puts two or four combinations on screen at once
+
+Compare is the useful one. A tone that drifted in backoffice dark is invisible when
+you look at one state at a time.
+
+## How the tokens resolve
+
+```
+data-product="webapp"      →  plum brand
+data-product="backoffice"  →  grayscale brand
+data-theme="dark"          →  inverted
+data-theme absent          →  follow the operating system
+```
+
+Both are plain attributes, and every token is an inherited custom property. So they
+nest, an inner scope wins, and four scopes can share a page — which is exactly what
+the Compare control does.
+
+Three layers sit behind that:
+
+| Layer | Example | Who reads it |
+|---|---|---|
+| Primitives | `--p-plum-600` | the semantic layer, and nothing else |
+| Semantics | `--fg-muted`, `--accent`, `--ok-bg` | **components** |
+| Tailwind bridge | `bg-canvas`, `text-fg-muted` | components, as utilities |
+
+A component that reads `--p-plum-600` is hardcoded to the webapp in light mode. A
+component that reads `--fg-muted` is not. See **Foundations → Design tokens** for
+every token and what it is for.
+
+## Where the rules live
+
+Each component's folder holds its own `.md`: when to use it, when to reach for
+something else instead, its props, its states, and its do's and don'ts.
+
+```
+packages/ui/src/components/Button/
+  Button.tsx
+  Button.md            ← the rules
+  Button.stories.tsx
+```
+
+Those files are written for an AI as much as for a person. Each opens with YAML
+frontmatter and a **Don't use it when** table pointing at the right component
+instead — which is the part that stops a model reaching for a Chip when it wanted
+a Badge.
+
+## House rules
+
+- Sentence case everywhere.
+- Buttons say what happens: "Upload it", "Reject & tell the customer". Never "Submit".
+- One primary button per view.
+- Empty states explain the situation and offer the next action. Never "No data".
+- Status is never colour alone.
+- A disabled control always carries a reachable reason.
+- Errors show in place; toasts are for changes the user cannot see.
+- Reversible destructive actions get Undo; irreversible ones get a Dialog that names the act.

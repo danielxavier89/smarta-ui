@@ -1,0 +1,22 @@
+{
+  "name": "smarta-ui",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Shared design system for the smarta webapp and backoffice.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "storybook": "npm run storybook -w @smarta/storybook",
+    "build-storybook": "npm run build-storybook -w @smarta/storybook",
+    "build": "npm run build -w @smarta/ui",
+    "typecheck": "npm run typecheck -w @smarta/ui",
+    "lint:tokens": "node scripts/lint-tokens.mjs",
+    "audit:contrast": "node scripts/audit-contrast.mjs",
+    "check": "npm run typecheck && npm run lint:tokens && npm run audit:contrast"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

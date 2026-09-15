@@ -1,0 +1,388 @@
+/* ==========================================================================
+   Layer 2 — Semantics
+   The only colour tokens a component is allowed to read.
+
+   A token is named for the JOB it does (--canvas, --fg-muted),
+   never for the colour it happens to be. That is what lets one <Button/>
+   render plum on the webapp and graphite in the backoffice without a single
+   conditional in the component.
+
+   Resolution
+   ----------
+     data-product   "webapp" | "backoffice"        which brand
+     data-theme     "light" | "dark" | absent       which mode
+
+   Both attributes are inherited through custom properties, so they can sit on
+   <html>, on a <body>, or on any wrapper — which is how Storybook puts four
+   combinations on one page at once.
+
+   With data-theme absent the page follows prefers-color-scheme. An explicit
+   data-theme always wins, in both directions.
+
+   :root falls back to webapp light, so a page that forgets the attributes
+   still renders something coherent rather than unstyled.
+   ========================================================================== */
+
+/* -------------------------------------------------- webapp / light ------- */
+:root,
+[data-product="webapp"] {
+  color-scheme: light;
+
+  /* Surfaces, back to front */
+  --canvas:          var(--p-plum-50);    /* the page itself */
+  --surface:         var(--p-white);      /* cards, tables, rows */
+  --surface-raised:  var(--p-white);      /* menus, popovers, panels */
+  --surface-sunken:  var(--p-plum-100);   /* wells, segmented tracks */
+  --surface-hover:   #FDFBFD;             /* row and card hover */
+
+  /* Text, most to least prominent.
+     -faint is DECORATION ONLY: dots, empty icons, hover borders. It does not
+     reach 4.5:1 anywhere and must never carry a word the user has to read. */
+  --fg:              var(--p-plum-800);
+  --fg-muted:        var(--p-plum-600);
+  --fg-subtle:       var(--p-plum-500);
+  --fg-faint:        var(--p-plum-300);
+  --fg-on-accent:    var(--p-white);
+
+  /* Lines */
+  --border:          var(--p-plum-200);
+  --border-soft:     var(--p-plum-100);
+  --border-strong:   var(--p-plum-300);
+
+  /* Accent — the brand colour used as a FILL (primary buttons, checked states) */
+  --accent:          var(--p-magenta-600);
+  --accent-hover:    var(--p-magenta-800);
+  --accent-fg:       var(--p-white);
+  --accent-soft:     var(--p-magenta-100);
+  --accent-soft-fg:  var(--p-magenta-700);
+
+  /* Link — the brand colour used as TEXT on canvas or surface.
+     Split from --accent on purpose: a fill and a glyph need different
+     contrast against different backgrounds, and in dark mode they diverge hard. */
+  --link:            var(--p-magenta-600);
+  --link-hover:      var(--p-magenta-800);
+  --link-decoration:       none;                /* backoffice underlines instead */
+
+  /* Selection — the nav pill, the chosen row */
+  --selected-bg:     var(--p-magenta-200);
+  --selected-fg:     var(--p-magenta-700);
+
+  /* Focus */
+  --focus-ring:      var(--p-magenta-600);
+  --focus-halo:      var(--p-magenta-100);
+
+  /* Inversion — tooltips, and only tooltips so far */
+  --inverse-surface: var(--p-plum-950);
+  --inverse-fg:      var(--p-white);
+
+  /* Scrim behind a panel or dialog */
+  --overlay:         rgb(67 47 74 / 0.32);
+
+  /* Loading placeholder */
+  --skeleton:        var(--p-plum-100);
+  --skeleton-sheen:  var(--p-plum-50);
+
+  /* Shadows are plum-tinted so they sit in the palette rather than on it */
+  --shadow-color:          67 47 74;
+}
+
+/* -------------------------------------------------- webapp / dark -------- */
+[data-product="webapp"][data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas:          var(--p-plum-1000);
+  --surface:         #1E1822;
+  --surface-raised:  #261F2B;
+  --surface-sunken:  #221B27;
+  --surface-hover:   #272030;
+
+  --fg:              #F4EFF5;
+  --fg-muted:        #C9BACD;
+  --fg-subtle:       #A392A8;
+  --fg-faint:        #6B5A71;
+  --fg-on-accent:    var(--p-white);
+
+  --border:          #332A38;
+  --border-soft:     #2A2230;
+  --border-strong:   #4A3E51;
+
+  /* In dark mode the accent inverts, exactly as the backoffice's does: a light
+     fill carrying dark text. White on a mid magenta measured 4.35:1 — and its
+     hover, being lighter still, was worse. A light fill gets better on hover
+     instead of worse, which is the behaviour you want. */
+  --accent:          var(--p-magenta-400);
+  --accent-hover:    #E7A3DE;
+  --accent-fg:       var(--p-magenta-950);
+  --accent-soft:     #34203A;
+  --accent-soft-fg:  var(--p-magenta-300);
+
+  /* Text version has to be far lighter than the fill to survive the dark canvas */
+  --link:            var(--p-magenta-400);
+  --link-hover:      var(--p-magenta-300);
+  --link-decoration:       none;
+
+  --selected-bg:     #3A2440;
+  --selected-fg:     var(--p-magenta-300);
+
+  --focus-ring:      var(--p-magenta-400);
+  --focus-halo:      #3E2745;
+
+  /* Inverted again: in dark mode the tooltip is the light thing */
+  --inverse-surface: #EDE6EF;
+  --inverse-fg:      var(--p-plum-950);
+
+  --overlay:         rgb(10 6 12 / 0.60);
+
+  --skeleton:        #2A2230;
+  --skeleton-sheen:  #332A38;
+
+  --shadow-color:          0 0 0;
+}
+
+/* -------------------------------------------------- backoffice / light --- */
+[data-product="backoffice"] {
+  color-scheme: light;
+
+  --canvas:          var(--p-grey-50);
+  --surface:         var(--p-white);
+  --surface-raised:  var(--p-white);
+  --surface-sunken:  var(--p-grey-100);
+  --surface-hover:   #FCFCFC;
+
+  --fg:              var(--p-grey-900);
+  --fg-muted:        var(--p-grey-600);
+  --fg-subtle:       var(--p-grey-500);
+  --fg-faint:        var(--p-grey-300);
+  --fg-on-accent:    var(--p-white);
+
+  --border:          var(--p-grey-200);
+  --border-soft:     var(--p-grey-100);
+  --border-strong:   var(--p-grey-300);
+
+  --accent:          var(--p-grey-800);
+  --accent-hover:    var(--p-grey-950);
+  --accent-fg:       var(--p-white);
+  --accent-soft:     #F0F0F0;
+  --accent-soft-fg:  var(--p-grey-900);
+
+  --link:            var(--p-grey-800);
+  --link-hover:      var(--p-grey-950);
+  /* Grayscale cannot signal "link" with hue, so it signals with a rule.
+     This is the one product difference that changes behaviour, not just value. */
+  --link-decoration:       underline;
+
+  --selected-bg:     var(--p-grey-150);
+  --selected-fg:     var(--p-grey-900);
+
+  --focus-ring:      var(--p-grey-800);
+  --focus-halo:      var(--p-grey-200);
+
+  --inverse-surface: #1A1A1A;
+  --inverse-fg:      var(--p-white);
+
+  --overlay:         rgb(0 0 0 / 0.36);
+
+  --skeleton:        var(--p-grey-100);
+  --skeleton-sheen:  var(--p-grey-50);
+
+  --shadow-color:          0 0 0;
+}
+
+/* -------------------------------------------------- backoffice / dark ---- */
+[data-product="backoffice"][data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas:          var(--p-grey-950);
+  --surface:         #1A1A1A;
+  --surface-raised:  #212121;
+  --surface-sunken:  #1F1F1F;
+  --surface-hover:   #242424;
+
+  --fg:              #F2F2F2;
+  --fg-muted:        #C4C4C4;
+  --fg-subtle:       var(--p-grey-400);
+  --fg-faint:        #5E5E5E;
+  /* The accent inverts to near-white, so text ON it must go dark */
+  --fg-on-accent:    var(--p-grey-950);
+
+  --border:          #2E2E2E;
+  --border-soft:     #262626;
+  --border-strong:   #454545;
+
+  /* A black accent is invisible on a black canvas. Grayscale inverts. */
+  --accent:          #EDEDED;
+  --accent-hover:    var(--p-white);
+  --accent-fg:       var(--p-grey-950);
+  --accent-soft:     #2A2A2A;
+  --accent-soft-fg:  #EDEDED;
+
+  --link:            #EDEDED;
+  --link-hover:      var(--p-white);
+  --link-decoration:       underline;
+
+  --selected-bg:     #2F2F2F;
+  --selected-fg:     var(--p-white);
+
+  --focus-ring:      #EDEDED;
+  --focus-halo:      #3A3A3A;
+
+  --inverse-surface: #EDEDED;
+  --inverse-fg:      var(--p-grey-950);
+
+  --overlay:         rgb(0 0 0 / 0.64);
+
+  --skeleton:        #262626;
+  --skeleton-sheen:  #2E2E2E;
+
+  --shadow-color:          0 0 0;
+}
+
+/* -------------------------------------------------- status / light -------
+   Status carries meaning, not brand, so it is identical in both products.
+   Declared once against both light selectors rather than copied into each,
+   so the two can never drift. */
+[data-product="webapp"],
+[data-product="backoffice"],
+:root {
+  --ok:      var(--p-green-600);
+  --ok-bg:   var(--p-green-tint);
+  --ok-fg:   var(--p-green-600);
+
+  --warn:    var(--p-amber-600);
+  --warn-bg: var(--p-amber-tint);
+  --warn-fg: var(--p-amber-600);
+
+  --bad:     var(--p-red-600);
+  --bad-bg:  var(--p-red-tint);
+  --bad-fg:  var(--p-red-600);
+
+  --info:    var(--p-blue-600);
+  --info-bg: var(--p-blue-tint);
+  --info-fg: var(--p-blue-600);
+
+  /* A neutral chip, for "no status" states that still need a pill */
+  --neutral:    var(--fg-subtle);
+  --neutral-bg: var(--surface-sunken);
+  --neutral-fg: var(--fg-muted);
+
+  /* Text sitting on a SOLID status fill (a red count badge, not a tinted chip).
+     White works over the darkened light-mode status colours; it would fail over
+     the lightened dark-mode ones, which is why this is a token and not a
+     hardcoded text-white in the one component that needs it. */
+  --on-status: var(--p-white);
+}
+
+/* -------------------------------------------------- status / dark -------- */
+[data-product="webapp"][data-theme="dark"],
+[data-product="backoffice"][data-theme="dark"] {
+  --ok:      var(--p-green-400);
+  --ok-bg:   var(--p-green-deep);
+  --ok-fg:   #7EDCB4;
+
+  --warn:    var(--p-amber-400);
+  --warn-bg: var(--p-amber-deep);
+  --warn-fg: #F0BE6E;
+
+  --bad:     var(--p-red-400);
+  --bad-bg:  var(--p-red-deep);
+  --bad-fg:  #F5918A;
+
+  --info:    var(--p-blue-400);
+  --info-bg: var(--p-blue-deep);
+  --info-fg: #9FC7F6;
+
+  /* The dark-mode status colours are light, so what sits on them must be dark. */
+  --on-status: var(--p-grey-950);
+}
+
+/* -------------------------------------------------- system preference ----
+   Only reached when data-theme is absent. An explicit data-theme="light"
+   opts out, which is what :not() is doing here. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]),
+  [data-product="webapp"]:not([data-theme="light"]) {
+    color-scheme: dark;
+    --canvas:          var(--p-plum-1000);
+    --surface:         #1E1822;
+    --surface-raised:  #261F2B;
+    --surface-sunken:  #221B27;
+    --surface-hover:   #272030;
+    --fg:              #F4EFF5;
+    --fg-muted:        #C9BACD;
+    --fg-subtle:       #A392A8;
+    --fg-faint:        #6B5A71;
+    --fg-on-accent:    var(--p-white);
+    --border:          #332A38;
+    --border-soft:     #2A2230;
+    --border-strong:   #4A3E51;
+    --accent:          var(--p-magenta-400);
+    --accent-hover:    #E7A3DE;
+    --accent-fg:       var(--p-magenta-950);
+    --accent-soft:     #34203A;
+    --accent-soft-fg:  var(--p-magenta-300);
+    --link:            var(--p-magenta-400);
+    --link-hover:      var(--p-magenta-300);
+    --selected-bg:     #3A2440;
+    --selected-fg:     var(--p-magenta-300);
+    --focus-ring:      var(--p-magenta-400);
+    --focus-halo:      #3E2745;
+    --inverse-surface: #EDE6EF;
+    --inverse-fg:      var(--p-plum-950);
+    --overlay:         rgb(10 6 12 / 0.60);
+    --skeleton:        #2A2230;
+    --skeleton-sheen:  #332A38;
+    --shadow-color:          0 0 0;
+  }
+
+  [data-product="backoffice"]:not([data-theme="light"]) {
+    color-scheme: dark;
+    --canvas:          var(--p-grey-950);
+    --surface:         #1A1A1A;
+    --surface-raised:  #212121;
+    --surface-sunken:  #1F1F1F;
+    --surface-hover:   #242424;
+    --fg:              #F2F2F2;
+    --fg-muted:        #C4C4C4;
+    --fg-subtle:       var(--p-grey-400);
+    --fg-faint:        #5E5E5E;
+    --fg-on-accent:    var(--p-grey-950);
+    --border:          #2E2E2E;
+    --border-soft:     #262626;
+    --border-strong:   #454545;
+    --accent:          #EDEDED;
+    --accent-hover:    var(--p-white);
+    --accent-fg:       var(--p-grey-950);
+    --accent-soft:     #2A2A2A;
+    --accent-soft-fg:  #EDEDED;
+    --link:            #EDEDED;
+    --link-hover:      var(--p-white);
+    --selected-bg:     #2F2F2F;
+    --selected-fg:     var(--p-white);
+    --focus-ring:      #EDEDED;
+    --focus-halo:      #3A3A3A;
+    --inverse-surface: #EDEDED;
+    --inverse-fg:      var(--p-grey-950);
+    --overlay:         rgb(0 0 0 / 0.64);
+    --skeleton:        #262626;
+    --skeleton-sheen:  #2E2E2E;
+    --shadow-color:          0 0 0;
+  }
+
+  :root:not([data-theme="light"]),
+  [data-product="webapp"]:not([data-theme="light"]),
+  [data-product="backoffice"]:not([data-theme="light"]) {
+    --ok:      var(--p-green-400);
+    --ok-bg:   var(--p-green-deep);
+    --ok-fg:   #7EDCB4;
+    --warn:    var(--p-amber-400);
+    --warn-bg: var(--p-amber-deep);
+    --warn-fg: #F0BE6E;
+    --bad:     var(--p-red-400);
+    --bad-bg:  var(--p-red-deep);
+    --bad-fg:  #F5918A;
+    --info:    var(--p-blue-400);
+    --info-bg: var(--p-blue-deep);
+    --info-fg: #9FC7F6;
+    --on-status: var(--p-grey-950);
+  }
+}

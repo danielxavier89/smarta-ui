@@ -1,0 +1,25 @@
+/* The library's own stylesheet. A product imports this once; it pulls in
+   Tailwind and every token layer in the right order. */
+@import "tailwindcss";
+@import "@smarta/tokens/css";
+/* data-[state=open]:animate-in and friends. Tailwind v4 successor to
+   tailwindcss-animate; without it those classes silently do nothing. */
+@import "tw-animate-css";
+
+/* Tailwind's automatic content detection walks out from this file, and this
+   file is reached through a workspace symlink into node_modules — which is
+   exactly what auto-detection skips. So the component sources are registered
+   explicitly. Without this every utility the library uses is silently absent
+   from the build and the components render unstyled. */
+@source "./components";
+@source "./foundations";
+
+/* Storybook and the products both render components inside a wrapper that
+   carries data-product/data-theme, so the wrapper — not just <body> — has to
+   paint its own ground. Without this a dark panel sits on a light page. */
+@layer base {
+  [data-product] {
+    background: var(--canvas);
+    color: var(--fg);
+  }
+}

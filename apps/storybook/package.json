@@ -1,0 +1,26 @@
+{
+  "name": "@smarta/storybook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@smarta/tokens": "*",
+    "@smarta/ui": "*",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^9.1.5",
+    "@storybook/addon-docs": "^9.1.5",
+    "@storybook/react-vite": "^9.1.5",
+    "@tailwindcss/vite": "^4.1.13",
+    "@vitejs/plugin-react": "^5.0.2",
+    "storybook": "^9.1.5",
+    "tailwindcss": "^4.1.13",
+    "vite": "^7.1.5"
+  }
+}

@@ -1,0 +1,18 @@
+/* ==========================================================================
+   @smarta/tokens
+   Import order is load-bearing: primitives define the ramps, semantics pick
+   from them per product and mode, foundation registers the non-colour scales
+   with Tailwind, theme bridges semantics into Tailwind's colour namespace,
+   and base applies the page defaults last.
+
+   Consumers import Tailwind first, then this file:
+
+       @import "tailwindcss";
+       @import "@smarta/tokens/css";
+   ========================================================================== */
+
+@import "./primitives.css";
+@import "./semantic.css";
+@import "./foundation.css";
+@import "./theme.css";
+@import "./reset.css";

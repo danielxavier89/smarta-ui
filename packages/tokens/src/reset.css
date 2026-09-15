@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Layer 4 — Base
+   The handful of page-level defaults every smarta surface assumes. Kept in
+   the token package rather than in a component because each of these is a
+   decision about the product, not about any one element.
+   ========================================================================== */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--canvas);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Global, not per-table: any column of currency lines up without anyone
+       having to remember to ask for it. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* One focus treatment for the whole system. Components add a halo on top
+     where the control has a fill of its own; nothing overrides the ring. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::selection {
+    background: var(--selected-bg);
+    color: var(--selected-fg);
+  }
+
+  /* Inputs do not inherit type by default, and a 13px control next to a 14px
+     label is the sort of thing nobody can name but everybody sees. */
+  button, input, select, textarea, optgroup {
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+  }
+
+  svg {
+    /* Icons are sized by their box and coloured by their text. */
+    flex: none;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* A link is underlined in the backoffice and not in the webapp, because a
+   grayscale palette has no hue left to say "this is a link" with. The rule
+   lives on a token so a component never asks which product it is in. */
+@layer base {
+  .smarta-link {
+    color: var(--link);
+    text-decoration: var(--link-decoration);
+    text-underline-offset: 2px;
+  }
+  .smarta-link:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+  }
+}
+
+/* Hover never fires on touch, so anything revealed by hover is pinned to a
+   partial opacity instead of being unreachable. */
+@media (hover: none) {
+  @layer base {
+    .reveal-on-hover { opacity: 0.6 !important; }
+  }
+}
+
+/* Coarse pointers get a finger-sized target regardless of the size prop. */
+@media (pointer: coarse) {
+  @layer base {
+    button, [role="button"], a[href], summary,
+    input[type="checkbox"], input[type="radio"] {
+      min-height: var(--touch-target);
+    }
+    /* Inline controls inside prose are exempt — a 44px tall word breaks text. */
+    .smarta-link, button.smarta-link {
+      min-height: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @layer base {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

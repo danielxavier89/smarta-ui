@@ -1,0 +1,86 @@
+/* ==========================================================================
+   Layer 1 — Primitives
+   Raw values with no meaning attached. A ramp, not a decision.
+
+   Components must NEVER reference a primitive. They reference semantic tokens
+   (layer 2), which are what change between webapp and backoffice, light and
+   dark. If a component reads --plum-600 it is hardcoded to the webapp in light
+   mode, which is the exact bug this file exists to make visible in review.
+
+   Anchors are taken from the shipped prototypes:
+   plum-600 / magenta-600 / the status trio are the real product's colours.
+   ========================================================================== */
+
+:root {
+  /* --- Plum: the smarta brand neutral. Warm, low-chroma purple. ---------- */
+  --p-plum-50:   #FBF9FB;
+  --p-plum-100:  #F5F0F6;
+  --p-plum-200:  #EEE7EF;
+  --p-plum-300:  #C3B2C8;
+  --p-plum-400:  #9C86A2;
+  --p-plum-500:  #7A5D80;
+  --p-plum-600:  #6B5271;
+  --p-plum-700:  #57405D;
+  --p-plum-800:  #432F4A;
+  --p-plum-900:  #2E2034;
+  --p-plum-950:  #241B2A;
+  --p-plum-1000: #17121A;
+
+  /* --- Magenta: the webapp accent. Actions, links, selection. ------------ */
+  --p-magenta-50:  #FDF4FC;
+  --p-magenta-100: #F6EAF5;
+  --p-magenta-200: #FAE4F7;
+  --p-magenta-300: #E9A9E2;
+  --p-magenta-400: #D97BCF;
+  --p-magenta-500: #B455AB;
+  --p-magenta-600: #9B3F92;
+  --p-magenta-700: #8A3D86;
+  --p-magenta-800: #87357F;
+  --p-magenta-900: #5E2559;
+  --p-magenta-950: #2A0E27;
+
+  /* --- Grey: the backoffice neutral. Deliberately hue-free. --------------
+     grey-500 is the quiet text grey and carries the same constraint as the
+     webapp's: it must clear 4.5:1 on --canvas. The prototype's #7C7C7C was
+     4.0:1 — it only ever sat on white in practice — so it is nudged here. */
+  --p-grey-50:   #FAFAFA;
+  --p-grey-100:  #F1F1F1;
+  --p-grey-150:  #EAEAEA;
+  --p-grey-200:  #E6E6E6;
+  --p-grey-300:  #BDBDBD;
+  --p-grey-400:  #9A9A9A;
+  --p-grey-500:  #6E6E6E;
+  --p-grey-600:  #4A4A4A;
+  --p-grey-700:  #3A3A3A;
+  --p-grey-800:  #2B2B2B;
+  --p-grey-900:  #1F1F1F;
+  --p-grey-950:  #131313;
+  --p-grey-1000: #0B0B0B;
+
+  /* --- Status. Meaning, not brand: identical in both products. ----------
+     The light values are nudged darker than a naive ramp so a 12px chip
+     clears 4.5:1 against its OWN tint, not merely against white. The dark
+     values are the same hues re-picked against a dark canvas. */
+  --p-green-400:  #57C79C;
+  --p-green-600:  #2A785E;
+  --p-green-tint: #E4F2ED;
+  --p-green-deep: #142E24;
+
+  --p-amber-400:  #E0A64A;
+  --p-amber-600:  #9C5D0B;
+  --p-amber-tint: #FBEEDA;
+  --p-amber-deep: #33240C;
+
+  --p-red-400:    #F0736B;
+  --p-red-600:    #C4312A;
+  --p-red-tint:   #FBE7E6;
+  --p-red-deep:   #351917;
+
+  --p-blue-400:   #7FB3F2;
+  --p-blue-600:   #2563A8;
+  --p-blue-tint:  #E6EEF8;
+  --p-blue-deep:  #12233A;
+
+  --p-white: #FFFFFF;
+  --p-black: #000000;
+}
