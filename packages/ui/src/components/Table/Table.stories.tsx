@@ -4,6 +4,8 @@ import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "./Table";
 import { Chip } from "../Chip";
 import { EmptyState } from "../EmptyState";
 import { Button } from "../Button";
+import { docsPage } from "@/lib/docs";
+import rules from "./Table.md?raw";
 
 const rows = [
   { date: "3 Jun", who: "Staples Lisboa", acct: "Visa ···· 4417", amount: "-€86.40", status: "ok" as const, label: "Matched" },
@@ -13,7 +15,9 @@ const rows = [
   { date: "14 Jun", who: "Conference fee", acct: "Visa ···· 4417", amount: "-€486.22", status: "bad" as const, label: "Mismatch" },
 ];
 
-const meta = { title: "Containers/Table", component: Table } satisfies Meta<typeof Table>;
+const meta = { title: "Containers/Table", component: Table ,
+  parameters: docsPage(rules),
+} satisfies Meta<typeof Table>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

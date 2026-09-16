@@ -10,6 +10,8 @@ tokens_only: true
 
 Switches **what** is shown, within one page.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Tabs.
+
 ## Use it when
 
 - Two to six views of the same record or list, only one relevant at a time.

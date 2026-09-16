@@ -3,10 +3,13 @@ import { ListItem, List } from "./ListItem";
 import { Avatar } from "../Avatar";
 import { Chip } from "../Chip";
 import { Button } from "../Button";
+import { docsPage } from "@/lib/docs";
+import rules from "./ListItem.md?raw";
 
 const meta = {
   title: "Containers/ListItem",
   component: ListItem,
+  parameters: docsPage(rules),
   args: { title: "A row" },
 } satisfies Meta<typeof ListItem>;
 export default meta;

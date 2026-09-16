@@ -10,6 +10,8 @@ tokens_only: true
 
 One number, named.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to StatCard.
+
 ## Use it when
 
 - The number itself is the fact the user came for.

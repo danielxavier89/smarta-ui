@@ -10,6 +10,8 @@ tokens_only: true
 
 A drop target that is also a button that is also a file input.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Dropzone.
+
 ## Use it when
 
 - The user is adding files: receipts, statements, scans, an ID document.

@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Bell, MoreHorizontal, X, Download, Pencil } from "lucide-react";
 import { IconButton } from "./IconButton";
+import { docsPage } from "@/lib/docs";
+import rules from "./IconButton.md?raw";
 
 const meta = {
   title: "Actions/IconButton",
   component: IconButton,
+  parameters: docsPage(rules),
   args: { label: "Notifications", icon: <Bell size={16} /> },
   argTypes: {
     variant: { control: "inline-radio", options: ["secondary", "ghost", "primary", "danger"] },

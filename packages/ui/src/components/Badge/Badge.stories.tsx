@@ -2,10 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Bell, Inbox } from "lucide-react";
 import { Badge } from "./Badge";
 import { IconButton } from "../IconButton";
+import { docsPage } from "@/lib/docs";
+import rules from "./Badge.md?raw";
 
 const meta = {
   title: "Status/Badge",
   component: Badge,
+  parameters: docsPage(rules),
   args: { count: 3 },
 } satisfies Meta<typeof Badge>;
 

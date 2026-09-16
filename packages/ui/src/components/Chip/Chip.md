@@ -10,6 +10,8 @@ tokens_only: true
 
 A short, non-interactive status pill: "Matched", "Overdue", "Waiting on Ana".
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Chip.
+
 ## Use it when
 
 - A row, card or panel needs to state a status in one or two words.

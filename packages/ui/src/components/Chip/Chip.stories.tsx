@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Check, Clock, AlertTriangle } from "lucide-react";
 import { Chip } from "./Chip";
+import { docsPage } from "@/lib/docs";
+import rules from "./Chip.md?raw";
 
 const meta = {
   title: "Status/Chip",
   component: Chip,
+  parameters: docsPage(rules),
   args: { children: "Matched", tone: "ok" },
   argTypes: {
     tone: { control: "inline-radio", options: ["neutral", "ok", "warn", "bad", "info", "accent"] },

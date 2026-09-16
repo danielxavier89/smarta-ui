@@ -10,6 +10,8 @@ tokens_only: true
 
 The one busy indicator, for work with no knowable end.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Spinner.
+
 ## Use it when
 
 - An action is in flight: a save, a send, a verify.

@@ -10,6 +10,8 @@ tokens_only: true
 
 A bordered surface holding one thing.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Card.
+
 ## Use it when
 
 - A page needs to group related content into a unit with a title.

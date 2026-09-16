@@ -3,10 +3,13 @@ import { Info, HelpCircle } from "lucide-react";
 import { Tooltip } from "./Tooltip";
 import { IconButton } from "../IconButton";
 import { Button } from "../Button";
+import { docsPage } from "@/lib/docs";
+import rules from "./Tooltip.md?raw";
 
 const meta = {
   title: "Overlays/Tooltip",
   component: Tooltip,
+  parameters: docsPage(rules),
   args: { content: "A short label", children: null },
 } satisfies Meta<typeof Tooltip>;
 export default meta;

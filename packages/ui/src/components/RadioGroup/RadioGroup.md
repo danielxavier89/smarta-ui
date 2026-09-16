@@ -10,6 +10,8 @@ tokens_only: true
 
 One choice from a small set, with every option visible.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to RadioGroup.
+
 ## Use it when
 
 - There are two to five options.

@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar, AvatarStack } from "./Avatar";
+import { docsPage } from "@/lib/docs";
+import rules from "./Avatar.md?raw";
 
 const meta = {
   title: "Status/Avatar",
   component: Avatar,
+  parameters: docsPage(rules),
   args: { name: "Ana Ribeiro" },
 } satisfies Meta<typeof Avatar>;
 

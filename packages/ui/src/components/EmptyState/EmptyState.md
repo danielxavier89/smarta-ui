@@ -10,6 +10,8 @@ tokens_only: true
 
 The state a list is in when it has nothing to list.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to EmptyState.
+
 ## Use it when
 
 - A list, table, panel section or card has no rows.

@@ -10,6 +10,8 @@ tokens_only: true
 
 A circular control carrying an icon and no visible words.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to IconButton.
+
 ## Use it when
 
 - The action is universally recognisable as a glyph: close, more, copy, download, back, next.

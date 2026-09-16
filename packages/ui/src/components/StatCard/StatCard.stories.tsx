@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Receipt, AlertTriangle, Mail } from "lucide-react";
 import { StatCard } from "./StatCard";
+import { docsPage } from "@/lib/docs";
+import rules from "./StatCard.md?raw";
 
 const meta = {
   title: "Containers/StatCard",
   component: StatCard,
+  parameters: docsPage(rules),
   args: { label: "Missing charges", value: "12" },
 } satisfies Meta<typeof StatCard>;
 

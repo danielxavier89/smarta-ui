@@ -10,6 +10,8 @@ tokens_only: true
 
 The words naming a control.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Label.
+
 ## Use it when
 
 - You are laying out a form by hand and need the label alone.

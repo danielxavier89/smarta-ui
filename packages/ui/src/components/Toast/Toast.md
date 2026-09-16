@@ -12,6 +12,8 @@ A transient message about something that just happened.
 
 Mount `<ToastProvider>` once near the root; raise messages with `useToast()`.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Toast.
+
 ## Use it when
 
 - **A state change the user cannot see on screen.** A row moved to another queue, a lead was reassigned, something was sent.

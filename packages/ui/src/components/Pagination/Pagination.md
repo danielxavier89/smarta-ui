@@ -10,6 +10,8 @@ tokens_only: true
 
 Moves through a list too long to show at once.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Pagination.
+
 ## Use it when
 
 - The user needs to **find** a specific row and the total matters.

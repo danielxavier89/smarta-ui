@@ -1,10 +1,13 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Dropzone } from "./Dropzone";
+import { docsPage } from "@/lib/docs";
+import rules from "./Dropzone.md?raw";
 
 const meta = {
   title: "Form/Dropzone",
   component: Dropzone,
+  parameters: docsPage(rules),
   args: { onFiles: () => {} },
 } satisfies Meta<typeof Dropzone>;
 export default meta;

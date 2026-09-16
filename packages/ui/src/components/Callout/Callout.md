@@ -10,6 +10,8 @@ tokens_only: true
 
 A message that stays on the page.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Callout.
+
 ## Use it when
 
 - A rule applies that the user needs before they act: a closed period, a blocked conversion.

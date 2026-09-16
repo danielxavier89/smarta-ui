@@ -10,6 +10,8 @@ tokens_only: true
 
 A multi-line text field.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Textarea.
+
 ## Use it when
 
 - The answer is prose: a note to Ana, a reason for rejecting, a message to a customer.

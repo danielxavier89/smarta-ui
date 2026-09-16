@@ -10,6 +10,8 @@ tokens_only: true
 
 A person, as a circle.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Avatar.
+
 ## Use it when
 
 - A row, message or header is *from* or *assigned to* somebody.

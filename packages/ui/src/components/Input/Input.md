@@ -10,6 +10,8 @@ tokens_only: true
 
 A single-line text field with its label, hint and error wired to it.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Input.
+
 ## Use it when
 
 - The answer is a short free-text value: a name, a number, a reference, an amount.

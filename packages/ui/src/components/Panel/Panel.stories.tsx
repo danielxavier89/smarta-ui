@@ -4,10 +4,13 @@ import { Panel, PanelSection } from "./Panel";
 import { Button } from "../Button";
 import { Chip } from "../Chip";
 import { KeyValue } from "../KeyValue";
+import { docsPage } from "@/lib/docs";
+import rules from "./Panel.md?raw";
 
 const meta = {
   title: "Overlays/Panel",
   component: Panel,
+  parameters: docsPage(rules),
   args: { open: false, onOpenChange: () => {}, title: "Detail", children: null },
 } satisfies Meta<typeof Panel>;
 export default meta;

@@ -1,8 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Spinner } from "./Spinner";
 import { Button } from "../Button";
+import { docsPage } from "@/lib/docs";
+import rules from "./Spinner.md?raw";
 
-const meta = { title: "Status/Spinner", component: Spinner } satisfies Meta<typeof Spinner>;
+const meta = { title: "Status/Spinner", component: Spinner ,
+  parameters: docsPage(rules),
+} satisfies Meta<typeof Spinner>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

@@ -1,10 +1,13 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Input } from "./Input";
+import { docsPage } from "@/lib/docs";
+import rules from "./Input.md?raw";
 
 const meta = {
   title: "Form/Input",
   component: Input,
+  parameters: docsPage(rules),
   args: { label: "Company name", placeholder: "Marcondes & Vale, Lda" },
 } satisfies Meta<typeof Input>;
 

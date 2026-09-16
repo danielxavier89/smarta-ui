@@ -10,6 +10,8 @@ tokens_only: true
 
 A native `<select>`, styled. One value from a known list.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Select.
+
 ## Use it when
 
 - The user is choosing a **value that gets stored**: an assignee, a period, a Bundesland, a template.

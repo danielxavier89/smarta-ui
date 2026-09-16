@@ -1,10 +1,13 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Pagination } from "./Pagination";
+import { docsPage } from "@/lib/docs";
+import rules from "./Pagination.md?raw";
 
 const meta = {
   title: "Navigation/Pagination",
   component: Pagination,
+  parameters: docsPage(rules),
   args: { page: 1, pageCount: 1, onPageChange: () => {} },
 } satisfies Meta<typeof Pagination>;
 export default meta;

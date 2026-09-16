@@ -10,6 +10,8 @@ tokens_only: true
 
 A modal that interrupts to ask one question.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Dialog.
+
 ## Use it when
 
 Only these two cases:

@@ -10,6 +10,8 @@ tokens_only: true
 
 A labelled control that does something when pressed.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Button.
+
 ## Use it when
 
 - The user is committing to an action: uploading, sending, matching, verifying, converting.

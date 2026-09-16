@@ -10,6 +10,8 @@ tokens_only: true
 
 Owns a theme scope: which product's tokens resolve, and in which mode.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to ThemeProvider.
+
 ## Use it when
 
 - Once, at the root of a product, with `asRoot` so the attributes land on `<html>`.

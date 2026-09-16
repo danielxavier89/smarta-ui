@@ -10,6 +10,8 @@ tokens_only: true
 
 The pill-shaped search field from both products' top bars.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to SearchInput.
+
 ## Use it when
 
 - The user is narrowing a list that is already on screen.

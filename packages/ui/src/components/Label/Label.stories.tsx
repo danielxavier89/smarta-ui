@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Label } from "./Label";
+import { docsPage } from "@/lib/docs";
+import rules from "./Label.md?raw";
 
-const meta = { title: "Form/Label", component: Label, args: { children: "Company name" } } satisfies Meta<typeof Label>;
+const meta = { title: "Form/Label", component: Label, args: { children: "Company name" } ,
+  parameters: docsPage(rules),
+} satisfies Meta<typeof Label>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

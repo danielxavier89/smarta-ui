@@ -2,10 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Callout } from "./Callout";
 import { Button } from "../Button";
 import { TextLink } from "../TextLink";
+import { docsPage } from "@/lib/docs";
+import rules from "./Callout.md?raw";
 
 const meta = {
   title: "Overlays/Callout",
   component: Callout,
+  parameters: docsPage(rules),
   args: { title: "May 2026 is closed", children: <p>Ana filed it on 18 June. Nothing in a closed period can change.</p> },
 } satisfies Meta<typeof Callout>;
 

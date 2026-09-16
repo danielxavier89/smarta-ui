@@ -10,6 +10,8 @@ tokens_only: true
 
 The right-hand detail view. A bottom sheet on a narrow screen.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Panel.
+
 ## Use it when
 
 - The user clicked a row and wants the detail without losing the list.

@@ -10,6 +10,8 @@ tokens_only: true
 
 A bar for work whose end is known.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Progress.
+
 ## Use it when
 
 - An upload, an import, a batch job with a real percentage.

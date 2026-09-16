@@ -10,6 +10,8 @@ tokens_only: true
 
 An independent on/off choice, or a row selector in a table.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Checkbox.
+
 ## Use it when
 
 - The choice is genuinely binary and independent of its neighbours.

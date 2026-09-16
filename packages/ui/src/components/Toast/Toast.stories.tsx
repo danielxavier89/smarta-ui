@@ -1,8 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useToast } from "./Toast";
 import { Button } from "../Button";
+import { docsPage } from "@/lib/docs";
+import rules from "./Toast.md?raw";
 
-const meta = { title: "Overlays/Toast", component: Button } satisfies Meta<typeof Button>;
+const meta = { title: "Overlays/Toast", component: Button ,
+  parameters: docsPage(rules),
+} satisfies Meta<typeof Button>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

@@ -1,10 +1,13 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SearchInput } from "./SearchInput";
+import { docsPage } from "@/lib/docs";
+import rules from "./SearchInput.md?raw";
 
 const meta = {
   title: "Form/SearchInput",
   component: SearchInput,
+  parameters: docsPage(rules),
 } satisfies Meta<typeof SearchInput>;
 
 export default meta;

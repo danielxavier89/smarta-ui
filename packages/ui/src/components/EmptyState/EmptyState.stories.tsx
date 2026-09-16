@@ -3,10 +3,13 @@ import { Receipt, SearchX, Lock, CloudOff } from "lucide-react";
 import { EmptyState } from "./EmptyState";
 import { Button } from "../Button";
 import { TextLink } from "../TextLink";
+import { docsPage } from "@/lib/docs";
+import rules from "./EmptyState.md?raw";
 
 const meta = {
   title: "Containers/EmptyState",
   component: EmptyState,
+  parameters: docsPage(rules),
   args: { title: "No receipts yet" },
 } satisfies Meta<typeof EmptyState>;
 

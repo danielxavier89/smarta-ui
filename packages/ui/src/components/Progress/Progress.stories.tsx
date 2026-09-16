@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Progress } from "./Progress";
+import { docsPage } from "@/lib/docs";
+import rules from "./Progress.md?raw";
 
-const meta = { title: "Status/Progress", component: Progress, args: { value: 62, label: "Uploading receipts" } } satisfies Meta<typeof Progress>;
+const meta = { title: "Status/Progress", component: Progress, args: { value: 62, label: "Uploading receipts" } ,
+  parameters: docsPage(rules),
+} satisfies Meta<typeof Progress>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

@@ -2,10 +2,13 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LayoutGrid, List as ListIcon } from "lucide-react";
 import { SegmentedControl } from "./SegmentedControl";
+import { docsPage } from "@/lib/docs";
+import rules from "./SegmentedControl.md?raw";
 
 const meta = {
   title: "Navigation/SegmentedControl",
   component: SegmentedControl,
+  parameters: docsPage(rules),
   args: { label: "View", value: "", onValueChange: () => {}, options: [] },
 } satisfies Meta<typeof SegmentedControl>;
 

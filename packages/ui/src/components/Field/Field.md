@@ -10,6 +10,8 @@ tokens_only: true
 
 Label, control, and the one line underneath — wired together so the hint and the error actually reach a screen reader.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Field.
+
 ## Use it when
 
 - You are wrapping a control this library does not provide: a native date input, a colour picker, a third-party editor.

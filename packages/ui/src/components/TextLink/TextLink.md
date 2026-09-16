@@ -10,6 +10,8 @@ tokens_only: true
 
 Text that behaves like a link. Renders a `<button>` by default.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to TextLink.
+
 ## Use it when
 
 - The control belongs inside a sentence: "…or **ask Ana to chase them**".

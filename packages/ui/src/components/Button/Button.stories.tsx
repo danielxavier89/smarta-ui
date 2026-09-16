@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Plus, Check, Trash2, ArrowRight } from "lucide-react";
 import { Button } from "./Button";
+import { docsPage } from "@/lib/docs";
+import rules from "./Button.md?raw";
 
 const meta = {
   title: "Actions/Button",
@@ -10,14 +12,7 @@ const meta = {
     variant: { control: "select", options: ["primary", "secondary", "ghost", "danger", "danger-quiet"] },
     size: { control: "inline-radio", options: ["sm", "md", "lg"] },
   },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "Buttons say what happens: \"Upload it\", \"Match them\", \"Send to Ana\". Never \"Submit\" or \"OK\". See Button.md for the full rules.",
-      },
-    },
-  },
+  parameters: docsPage(rules),
 } satisfies Meta<typeof Button>;
 
 export default meta;

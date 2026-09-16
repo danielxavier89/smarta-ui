@@ -3,6 +3,8 @@ import { Copy } from "lucide-react";
 import { KeyValue } from "./KeyValue";
 import { IconButton } from "../IconButton";
 import { Chip } from "../Chip";
+import { docsPage } from "@/lib/docs";
+import rules from "./KeyValue.md?raw";
 
 const meta = {
   title: "Containers/KeyValue",
@@ -64,6 +66,7 @@ export const Tones: Story = {
 export const NarrowColumn: Story = {
   name: "A narrow column",
   parameters: {
+    ...docsPage(rules),
     docs: {
       description: {
         story:

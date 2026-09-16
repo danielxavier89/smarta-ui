@@ -10,6 +10,8 @@ tokens_only: true
 
 One row in a list of things that are read rather than compared.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to ListItem.
+
 ## Use it when
 
 - Rows are read **across**: a title, a sentence of context, maybe an avatar.

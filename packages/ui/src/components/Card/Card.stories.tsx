@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter, CardAction } from "./Card";
 import { Button } from "../Button";
 import { Chip } from "../Chip";
+import { docsPage } from "@/lib/docs";
+import rules from "./Card.md?raw";
 
 const meta = {
   title: "Containers/Card",
@@ -38,6 +40,7 @@ export const Basic: Story = {
 
 export const Affordances: Story = {
   parameters: {
+    ...docsPage(rules),
     docs: {
       description: {
         story:

@@ -10,6 +10,8 @@ tokens_only: true
 
 A count on top of something else: the unread bubble on a nav item, the number beside a tab.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Badge.
+
 ## Use it when
 
 - The useful fact is **how many**, and the number is small enough to be read at a glance.

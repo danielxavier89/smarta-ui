@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Textarea } from "./Textarea";
+import { docsPage } from "@/lib/docs";
+import rules from "./Textarea.md?raw";
 
 const meta = {
   title: "Form/Textarea",
   component: Textarea,
+  parameters: docsPage(rules),
   args: { label: "What should Ana know?", placeholder: "One or two sentences is plenty." },
 } satisfies Meta<typeof Textarea>;
 

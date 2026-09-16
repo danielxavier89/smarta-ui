@@ -10,6 +10,8 @@ tokens_only: true
 
 A list of **actions**, opened from a control.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to DropdownMenu.
+
 ## Use it when
 
 - A row or header has more actions than fit: edit, download, send, delete.

@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RadioGroup } from "./RadioGroup";
+import { docsPage } from "@/lib/docs";
+import rules from "./RadioGroup.md?raw";
 
 const meta = {
   title: "Form/RadioGroup",
   component: RadioGroup,
+  parameters: docsPage(rules),
   args: {
     label: "How was this asset paid for?",
     defaultValue: "statement",

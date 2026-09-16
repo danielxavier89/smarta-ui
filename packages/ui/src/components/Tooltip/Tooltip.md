@@ -16,6 +16,8 @@ internally cannot crash an app that forgot. Mounting it at the root is still
 worth doing: it is what makes tooltips share a delay group, so the second one
 you hover appears immediately instead of waiting again.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Tooltip.
+
 ## Use it when
 
 - Naming an `IconButton` beyond its `aria-label`, for sighted users.

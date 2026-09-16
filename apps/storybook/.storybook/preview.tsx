@@ -144,6 +144,10 @@ const withTheme: Decorator = (Story, ctx) => {
 };
 
 const preview: Preview = {
+  // Every component gets a Docs page, which is where its .md rule file renders.
+  // One file: the rules a designer reads here and the rules an agent reads
+  // before writing code are the same bytes.
+  tags: ["autodocs"],
   globalTypes,
   initialGlobals,
   decorators: [withTheme],

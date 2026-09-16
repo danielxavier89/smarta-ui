@@ -10,6 +10,8 @@ tokens_only: true
 
 The facts about one thing, as a real `<dl>`.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to KeyValue.
+
 ## Use it when
 
 - A Panel or card is showing the details of a single record: a receipt's supplier, date, VAT and total.

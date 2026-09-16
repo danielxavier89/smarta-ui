@@ -3,11 +3,14 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Dialog } from "./Dialog";
 import { Button } from "../Button";
 import { Textarea } from "../Textarea";
+import { docsPage } from "@/lib/docs";
+import rules from "./Dialog.md?raw";
 
 // Required props live on meta so each story can stay a plain render().
 const meta = {
   title: "Overlays/Dialog",
   component: Dialog,
+  parameters: docsPage(rules),
   args: { open: false, onOpenChange: () => {}, title: "Are you sure?" },
 } satisfies Meta<typeof Dialog>;
 export default meta;

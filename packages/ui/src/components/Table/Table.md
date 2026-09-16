@@ -10,6 +10,8 @@ tokens_only: true
 
 Rows with the same columns, meant to be compared.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to Table.
+
 ## Use it when
 
 - Every row has the same fields, and the user scans **down a column** to compare: amounts, dates, statuses.

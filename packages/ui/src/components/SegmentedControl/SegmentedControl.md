@@ -10,6 +10,8 @@ tokens_only: true
 
 Switches **how** the same content is shown.
 
+> Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to SegmentedControl.
+
 ## Use it when
 
 - Two to four mutually exclusive views: month / quarter / year, list / grid / calendar.

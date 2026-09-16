@@ -7,8 +7,10 @@ import {
 } from "./DropdownMenu";
 import { IconButton } from "../IconButton";
 import { Button } from "../Button";
+import { docsPage } from "@/lib/docs";
+import rules from "./DropdownMenu.md?raw";
 
-const meta = { title: "Navigation/DropdownMenu", component: DropdownMenu } satisfies Meta<typeof DropdownMenu>;
+const meta = { title: "Navigation/DropdownMenu", component: DropdownMenu, parameters: docsPage(rules) } satisfies Meta<typeof DropdownMenu>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

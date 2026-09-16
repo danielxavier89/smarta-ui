@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Select } from "./Select";
+import { docsPage } from "@/lib/docs";
+import rules from "./Select.md?raw";
 
 const assignees = [
   { value: "erik", label: "Erik" },
@@ -10,6 +12,7 @@ const assignees = [
 const meta = {
   title: "Form/Select",
   component: Select,
+  parameters: docsPage(rules),
   args: { label: "Assignee", options: assignees, defaultValue: "erik" },
 } satisfies Meta<typeof Select>;
 
