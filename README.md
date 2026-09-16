@@ -32,6 +32,10 @@ be right in. Storybook's toolbar has a control for each, plus a **Compare** cont
 that puts two or four of them on screen at once — which is the only reliable way to
 notice that a tone drifted in one of them.
 
+Product and mode persist as you move between stories. Compare does not: it resets
+to Single on every load, so a link someone pastes you cannot leave you staring at
+four panels with no idea why. Storybook defaults to webapp, light, single.
+
 ```
 data-product="webapp"     data-theme="light"      plum
 data-product="webapp"     data-theme="dark"       plum, inverted
