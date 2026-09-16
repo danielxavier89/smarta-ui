@@ -51,6 +51,48 @@ const globalTypes = {
   },
 };
 
+/**
+ * The screens worth checking, rather than the forty the addon ships with.
+ *
+ * There is one breakpoint in this system — Tailwind's `sm`, at 640px — and it
+ * is the line the Panel crosses from a bottom sheet to a side panel. So the
+ * set below is: comfortably under it, right under it, and over it. `Narrow
+ * phone` is the one that finds things; 320px is still a live width and almost
+ * nothing is designed at it.
+ *
+ * Touch behaviour does NOT follow from these. `touch:` and `.touch-target` key
+ * off `pointer: coarse`, and a desktop browser reports a mouse however narrow
+ * the frame is. To see the 44px targets, open the preview in device emulation
+ * (or on a phone) — that is the only place the pointer changes.
+ */
+const viewports = {
+  narrow: {
+    name: "Narrow phone (320)",
+    styles: { width: "320px", height: "640px" },
+    type: "mobile" as const,
+  },
+  phone: {
+    name: "Phone (390)",
+    styles: { width: "390px", height: "844px" },
+    type: "mobile" as const,
+  },
+  phoneLandscape: {
+    name: "Phone, landscape (844 × 390)",
+    styles: { width: "844px", height: "390px" },
+    type: "mobile" as const,
+  },
+  belowSm: {
+    name: "Just below sm (639)",
+    styles: { width: "639px", height: "900px" },
+    type: "mobile" as const,
+  },
+  tablet: {
+    name: "Tablet (834)",
+    styles: { width: "834px", height: "1112px" },
+    type: "tablet" as const,
+  },
+};
+
 const initialGlobals = { product: "webapp", theme: "light", compare: "off" };
 
 function Surface({
@@ -131,7 +173,13 @@ const withTheme: Decorator = (Story, ctx) => {
                 display: "grid",
                 gap: 12,
                 padding: 12,
-                gridTemplateColumns: compare === "all" ? "repeat(2, minmax(0,1fr))" : "1fr",
+                // auto-fit rather than a hard `repeat(2, ...)`: in a phone
+                // viewport two cells of a component side by side are 150px
+                // wide each and tell you nothing. They stack instead.
+                gridTemplateColumns:
+                  compare === "all"
+                    ? "repeat(auto-fit, minmax(min(320px, 100%), 1fr))"
+                    : "1fr",
               }}
             >
               {cells}
@@ -170,6 +218,7 @@ const preview: Preview = {
     },
     a11y: { test: "todo" },
     backgrounds: { disable: true },
+    viewport: { options: viewports },
   },
 };
 

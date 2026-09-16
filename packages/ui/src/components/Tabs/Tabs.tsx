@@ -18,6 +18,9 @@ export const TabsList = React.forwardRef<
         "flex items-center gap-[20px] border-b border-border",
         // Tabs overflow on a phone long before they wrap well.
         "overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+        // Without this, swiping past the last tab hands the gesture to the
+        // browser and iOS navigates back out of the page.
+        "overscroll-x-contain",
         className,
       )}
       {...props}
@@ -46,6 +49,7 @@ export const Tab = React.forwardRef<
         "relative -mb-px shrink-0 cursor-pointer whitespace-nowrap",
         "border-0 border-b-2 border-transparent bg-transparent",
         "px-[2px] py-[8px] text-sm font-medium text-fg-subtle",
+        "touch:min-h-[var(--touch-target)]",
         "transition-[color,border-color] duration-[var(--duration-fast)]",
         "hover:text-fg",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring rounded-xs",

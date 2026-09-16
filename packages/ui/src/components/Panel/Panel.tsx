@@ -61,7 +61,10 @@ export function Panel({
             "focus:outline-none",
             // Phone: a bottom sheet. One rule, one owner — three competing
             // versions of this is how you get a half-applied sheet.
-            "inset-x-0 bottom-0 top-auto h-[88vh] max-w-none",
+            // dvh, not vh: vh is the *large* viewport, measured as though the
+            // browser chrome were hidden. At 88vh the sheet's footer sat under
+            // Safari's toolbar until the user scrolled it away.
+            "inset-x-0 bottom-0 top-auto h-[88dvh] max-w-none",
             "rounded-t-xl border-t border-border shadow-[var(--shadow-sheet)]",
             "data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom",
             // Tablet up: a side panel.
@@ -93,7 +96,16 @@ export function Panel({
             </Dialog.Close>
           </div>
 
-          <div className="flex-1 overflow-y-auto overscroll-contain">{children}</div>
+          {/* With no footer the body is the last thing in the sheet, so it owes
+              the home indicator its own clearance. */}
+          <div
+            className={cn(
+              "flex-1 overflow-y-auto overscroll-contain",
+              !footer && "pb-[env(safe-area-inset-bottom)] sm:pb-0",
+            )}
+          >
+            {children}
+          </div>
 
           {footer && (
             <div className="flex items-center gap-[8px] border-t border-border bg-surface-sunken/50 px-[20px] py-[12px] pb-[max(12px,env(safe-area-inset-bottom))] sm:pb-[12px]">

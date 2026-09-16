@@ -50,6 +50,7 @@ The value can never become empty: pressing the active segment again does nothing
 3. **Two to four options.** Two is fine. Five is a `Select`.
 4. **Icon plus word, or word alone — never icon alone.** An icon-only segment is a guessing game; that is what `IconButton` with a tooltip is for.
 5. **Never use it for a destructive or committing choice.** It switches a view; it does not act.
+6. **The labels never wrap, so on a narrow screen the track scrolls sideways rather than widening the page.** Treat a track that scrolls on a phone as the signal rule 3 already gives you: it has too many options, or the words are too long, and it wants to be a `Select`.
 
 ## Do and don't
 

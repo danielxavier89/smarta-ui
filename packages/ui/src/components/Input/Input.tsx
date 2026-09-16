@@ -16,9 +16,9 @@ const inputShell = cva(
   {
     variants: {
       size: {
-        sm: "h-[var(--control-height-sm)] px-[var(--control-padding-x-sm)] text-xs",
-        md: "h-[var(--control-height-md)] px-[var(--control-padding-x-md)] text-base",
-        lg: "h-[var(--control-height-lg)] px-[var(--control-padding-x-lg)] text-base",
+        sm: "h-[var(--control-height-sm)] px-[var(--control-padding-x-sm)] text-[length:var(--field-font-size-sm)]",
+        md: "h-[var(--control-height-md)] px-[var(--control-padding-x-md)] text-[length:var(--field-font-size)]",
+        lg: "h-[var(--control-height-lg)] px-[var(--control-padding-x-lg)] text-[length:var(--field-font-size)]",
       },
     },
     defaultVariants: { size: "md" },
@@ -42,6 +42,11 @@ export interface InputProps
 
 /**
  * A single-line text input, with its label, hint and error wired to it.
+ *
+ * The type size is --field-font-size rather than a step on the type scale,
+ * because it is not a typographic decision: below 16px mobile Safari zooms the
+ * page on focus and never zooms back. The token is 14px on a mouse and 16px on
+ * a finger.
  *
  * The focus ring lives on the wrapper, not the input: the input drops its own
  * outline so the whole control — prefix, field and suffix — lights up as one

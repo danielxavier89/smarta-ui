@@ -180,7 +180,9 @@ export const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
       <div
         ref={ref}
         className={cn(
-          "flex items-start justify-between gap-[12px]",
+          // Wraps rather than squeezes: a CardAction is a whole control, and a
+          // narrow card would otherwise crush the title to fit it on the line.
+          "flex flex-wrap items-start justify-between gap-[12px]",
           "px-[var(--density-card-p)] pt-[var(--density-card-p)] pb-[10px]",
           className,
         )}

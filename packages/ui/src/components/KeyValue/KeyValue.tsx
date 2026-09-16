@@ -68,7 +68,10 @@ function NoteTip({ label, note }: { label: React.ReactNode; note: React.ReactNod
         aria-label={name}
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          "grid size-[15px] shrink-0 place-items-center rounded-full",
+          // 15px of icon, 44px of tap on a phone. A min-height here instead
+          // would set the height of the whole row, and a column of figures
+          // would gain a gap wherever a note happened to exist.
+          "touch-target grid size-[15px] shrink-0 place-items-center rounded-full",
           "text-fg-faint transition-colors duration-[var(--duration-fast)]",
           "hover:text-fg-subtle",
           "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring",

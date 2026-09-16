@@ -51,9 +51,10 @@ Closed · Open · Confirm loading · Blocking (no escape hatch).
 2. **The description says what will happen, including to other people.** "Lena will be told what to send instead, and the onboarding goes back to waiting on the customer."
 3. **Reversible actions do not get a dialog.** Do it, and offer Undo in a toast. A dialog in front of something undoable is friction with no payoff.
 4. **`blocking` is rare.** Reserve it for something that genuinely cannot be shrugged off; everything else lets the user press Escape.
-5. **Cancel is a ghost button on the left; confirm is on the right.** Never the reverse, and never two primary-looking buttons.
-6. **One question per dialog.** Two questions is a `Panel` with a form.
-7. **Don't stack dialogs.**
+5. **Cancel is a ghost button on the left; confirm is on the right.** Never the reverse, and never two primary-looking buttons. Below `sm` the pair stacks full-width with the confirm on top — a button that names the act does not fit beside a Cancel on a phone. The DOM order does not change, so the keyboard still reaches Cancel first.
+6. **Long content scrolls inside the dialog, it does not grow past the screen.** The box is capped at the viewport height and the body scrolls; the title and the buttons stay put. A phone in landscape is about 380px tall, so this is the normal case, not the edge one.
+7. **One question per dialog.** Two questions is a `Panel` with a form.
+8. **Don't stack dialogs.**
 
 ## Do and don't
 

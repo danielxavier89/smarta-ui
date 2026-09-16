@@ -14,6 +14,15 @@
 @source "./components";
 @source "./foundations";
 
+/* `touch:` — a coarse pointer, which in practice means a finger.
+
+   Not a width breakpoint: a phone held in landscape is wider than a small
+   window on a laptop, and it is the pointer that decides how big a target
+   has to be, not the number of pixels across. Controls that can afford to
+   grow use this; controls drawn at a fixed size use .touch-target in the
+   token reset, which grows the tap and leaves the box alone. */
+@custom-variant touch (@media (pointer: coarse));
+
 /* Storybook and the products both render components inside a wrapper that
    carries data-product/data-theme, so the wrapper — not just <body> — has to
    paint its own ground. Without this a dark panel sits on a light page. */

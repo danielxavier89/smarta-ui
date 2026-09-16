@@ -137,7 +137,7 @@ activity. And never paginate a list whose total the interface cannot state:
 - **Never nest interactive elements.** A clickable card is a `<div>` with its
   affordance stretched over it, not a `<button>` wrapping buttons.
 - **Hover never fires on touch.** Nothing may live only in a tooltip or only on
-  hover. Coarse pointers get 44px targets, handled globally.
+  hover. Coarse pointers get 44px targets — see *Small screens* below.
 - **`prefers-reduced-motion` is honoured once**, in `reset.css`. Do not add a
   second rule.
 - **Anything clickable by mouse is reachable by keyboard**, with the same
@@ -170,6 +170,56 @@ a real `<button>` so a keyboard opens it on focus and a finger can tap it — se
   up with the card's own padding, not with a number of its own.
 - **Never `overflow-hidden` on a table wrapper** — it scopes `position: sticky`
   and the headings scroll away. Clip corners on the cells instead.
+
+## Small screens
+
+Both products are dense data surfaces built on a 14px base, and both get opened
+on a phone. Two axes, and they are not the same axis:
+
+- **Width** decides layout. There is **one breakpoint**, Tailwind's `sm` at
+  640px, and it is the line the `Panel` crosses from a bottom sheet to a side
+  panel. Use `sm:` and nothing else — a second breakpoint is a second set of
+  rules nobody will keep in step.
+- **Pointer** decides target size. `touch:` is `@media (pointer: coarse)`.
+  A phone in landscape is wider than a small laptop window, so width is the
+  wrong question to ask about a finger.
+
+The rules:
+
+- **Targets are 44px on a coarse pointer** (`--touch-target`), by one of two
+  routes. A control that can grow uses `touch:min-h-[var(--touch-target)]` — a
+  tab, a menu item, a page number. A control drawn at a fixed size uses the
+  **`.touch-target`** class, which puts the 44px on a centred pseudo-element and
+  leaves the box alone: an `IconButton` stays a circle, a 17px checkbox stays on
+  its label's first line. Never reach for a bare `min-height` on a control whose
+  size is the point.
+- **Text inside a field is `--field-font-size`**, never a step on the type
+  scale. Below 16px, mobile Safari zooms the page on focus and does not zoom
+  back; the token is 14px on a mouse and 16px on a finger. `Input`, `Select`,
+  `Textarea` and `SearchInput` already read it — anything new that takes typing
+  must too.
+- **`dvh`, never `vh`**, for anything pinned to the bottom of the screen. `vh`
+  is measured as though the browser chrome were hidden, so a `100vh` sheet puts
+  its footer under Safari's toolbar.
+- **`100%`, never `100vw`**, for a full-width fixed element. `vw` counts the
+  scrollbar, so the thing ends up wider than the room it has and scrolls the
+  page sideways.
+- **Anything pinned to the bottom clears the home indicator**:
+  `pb-[max(<n>px,env(safe-area-inset-bottom))]`.
+- **A row of buttons stacks before it overflows.** Buttons here name the
+  outcome — "Reject & tell the customer" — so two side by side do not fit a
+  phone. `flex-col-reverse sm:flex-row` keeps cancel first in the DOM for the
+  keyboard and puts the act on top for the thumb.
+- **A sideways scroller contains its overscroll** (`overscroll-x-contain`).
+  Without it, a swipe past the end of a table or a tab strip reaches the browser
+  and iOS reads it as "go back".
+- **Nothing is allowed to widen the page.** If a thing cannot shrink, it scrolls
+  inside its own box — that is what `Table`, `Tabs` and `SegmentedControl` do.
+
+Check it in Storybook with the viewport toolbar: **Narrow phone (320)** is the
+one that finds things. Touch targets do **not** follow from a narrow viewport —
+a desktop browser reports a mouse however narrow the frame is, so open device
+emulation or a real phone to see the 44px.
 
 ## Theming
 

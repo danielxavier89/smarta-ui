@@ -42,7 +42,7 @@ export const SelectAllRow: Story = {
     const some = picked.length > 0 && !all;
 
     return (
-      <div className="w-[320px] overflow-hidden rounded-lg border border-border bg-surface">
+      <div className="max-w-[320px] overflow-hidden rounded-lg border border-border bg-surface">
         <div className="flex items-center gap-[10px] border-b border-border bg-surface-sunken/70 px-[16px] py-[10px]">
           <Checkbox
             size="sm"

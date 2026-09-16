@@ -47,8 +47,8 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
           // focus instead of a rectangle inside a circle.
           "focus-within:border-accent focus-within:shadow-[var(--shadow-focus)]",
           size === "sm"
-            ? "h-[var(--control-height-sm)] px-[12px] text-xs"
-            : "h-[var(--control-height-md)] px-[14px] text-base",
+            ? "h-[var(--control-height-sm)] px-[12px] text-[length:var(--field-font-size-sm)]"
+            : "h-[var(--control-height-md)] px-[14px] text-[length:var(--field-font-size)]",
           containerClassName,
         )}
       >
@@ -76,7 +76,9 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
               onClear();
               innerRef.current?.focus();
             }}
-            className="shrink-0 rounded-full p-[2px] text-fg-subtle hover:text-fg focus-visible:outline-2 focus-visible:outline-focus-ring"
+            // The X is 13px of icon inside a 44px tap on a phone. Growing the
+            // button instead would burst the pill it sits in.
+            className="touch-target shrink-0 rounded-full p-[2px] text-fg-subtle hover:text-fg focus-visible:outline-2 focus-visible:outline-focus-ring"
           >
             <X size={13} aria-hidden />
           </button>

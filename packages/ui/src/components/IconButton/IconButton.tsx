@@ -6,7 +6,11 @@ import { Spinner } from "@/components/Spinner";
 
 const iconButtonVariants = cva(
   [
-    "relative inline-grid place-items-center shrink-0",
+    // touch-target, not a bigger size: on a phone the tap is 44px while the
+    // drawn circle stays whatever the size prop asked for. Growing the box
+    // instead turned every icon button into an oval and shoved the toolbars
+    // it sits in out of alignment with the inputs beside them.
+    "touch-target relative inline-grid place-items-center shrink-0",
     "rounded-full border",
     "transition-[background-color,border-color,color] duration-[var(--duration-fast)]",
     "cursor-pointer select-none",

@@ -70,7 +70,9 @@ export const RadioGroup = React.forwardRef<
                 disabled={o.disabled}
                 aria-describedby={descId}
                 className={cn(
-                  "mt-[2px] size-[17px] shrink-0 rounded-full border border-border-strong bg-surface",
+                  // The dot keeps its 17px; the tap around it is 44px on a
+                  // phone. See .touch-target in the token reset.
+                  "touch-target mt-[2px] size-[17px] shrink-0 rounded-full border border-border-strong bg-surface",
                   "grid place-items-center cursor-pointer",
                   "transition-[border-color] duration-[var(--duration-fast)]",
                   "hover:border-accent",

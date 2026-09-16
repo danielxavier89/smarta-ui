@@ -20,7 +20,13 @@ export const DropdownMenuContent = React.forwardRef<
         align={align}
         collisionPadding={8}
         className={cn(
-          "z-[var(--z-dropdown)] min-w-[200px] overflow-hidden",
+          "z-[var(--z-dropdown)] min-w-[200px]",
+          // A menu longer than the screen used to be clipped with no way to
+          // reach the rest of it — overflow-hidden was there for the rounded
+          // corners, and on a phone it hid the items. Radix measures the room
+          // it actually has; the menu scrolls inside that.
+          "max-h-[var(--radix-dropdown-menu-content-available-height)] overflow-y-auto",
+          "max-w-[calc(100vw-16px)] overscroll-contain",
           "rounded-lg border border-border bg-surface-raised p-[4px] shadow-lg",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           className,
@@ -51,6 +57,7 @@ export const DropdownMenuItem = React.forwardRef<
       className={cn(
         "flex cursor-pointer select-none items-center gap-[9px] rounded-sm",
         "px-[9px] py-[7px] text-sm outline-none",
+        "touch:min-h-[var(--touch-target)]",
         tone === "danger" ? "text-bad" : "text-fg",
         "data-[highlighted]:bg-surface-hover",
         tone === "danger" && "data-[highlighted]:bg-bad-bg",
@@ -76,6 +83,7 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
       className={cn(
         "flex cursor-pointer select-none items-center gap-[9px] rounded-sm",
         "px-[9px] py-[7px] text-sm text-fg outline-none",
+        "touch:min-h-[var(--touch-target)]",
         "data-[highlighted]:bg-surface-hover",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-55",
         className,

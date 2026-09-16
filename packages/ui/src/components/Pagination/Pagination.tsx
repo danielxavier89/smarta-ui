@@ -87,6 +87,10 @@ export function Pagination({
                 onClick={() => onPageChange(p)}
                 className={cn(
                   "min-w-[28px] cursor-pointer rounded-md border-0 bg-transparent px-[7px] py-[5px]",
+                  // 28px is a comfortable click and a bad tap. On a finger the
+                  // slot squares up to 44, and the row wraps rather than
+                  // pushing the total off the edge.
+                  "touch:min-h-[var(--touch-target)] touch:min-w-[var(--touch-target)]",
                   "text-sm tabular-nums text-fg-muted",
                   "hover:bg-surface-sunken",
                   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",

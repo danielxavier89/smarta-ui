@@ -20,6 +20,10 @@ export const Table = React.forwardRef<
         "rounded-lg border border-border bg-surface",
         // Horizontal scroll only, so sticky headings still resolve vertically.
         "overflow-x-auto",
+        // A table is the one thing on a phone the user swipes sideways. Without
+        // containment that swipe reaches the browser at the end of the scroll
+        // and iOS reads it as "go back".
+        "overscroll-x-contain",
         containerClassName,
       )}
     >

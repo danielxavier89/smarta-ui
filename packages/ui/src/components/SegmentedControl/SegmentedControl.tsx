@@ -55,6 +55,12 @@ export function SegmentedControl({
       aria-label={label}
       className={cn(
         "inline-flex items-center gap-[2px] rounded-full bg-surface-sunken p-[3px]",
+        // The labels never wrap — that is the point of a segmented control —
+        // so on a narrow screen the track scrolls instead of pushing the page
+        // sideways. Four short segments still fit a 360px phone; past that,
+        // the component's own rule applies and it should have been a Select.
+        "max-w-full overflow-x-auto overscroll-x-contain",
+        "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         fullWidth && "flex w-full",
         className,
       )}
@@ -70,6 +76,7 @@ export function SegmentedControl({
             "cursor-pointer rounded-full border-0 bg-transparent font-medium text-fg-subtle",
             "transition-[background-color,color,box-shadow] duration-[var(--duration-fast)]",
             size === "sm" ? "h-[24px] px-[10px] text-xs" : "h-[28px] px-[13px] text-sm",
+            "touch:min-h-[var(--touch-target)]",
             "hover:text-fg",
             "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring",
             "data-[state=on]:bg-surface data-[state=on]:text-fg data-[state=on]:shadow-xs",

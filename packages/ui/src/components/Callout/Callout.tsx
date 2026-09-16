@@ -55,7 +55,9 @@ export function Callout({
       <div className="flex min-w-0 flex-1 flex-col gap-[4px]">
         {title && <p className="m-0 font-semibold">{title}</p>}
         {children && <div className="[&>p]:m-0 [&>p+p]:mt-[4px]">{children}</div>}
-        {action && <div className="mt-[4px] flex gap-[8px]">{action}</div>}
+        {/* Two buttons and an icon leave a callout about 240px of width on a
+            phone. They wrap rather than stretch the box past the screen. */}
+        {action && <div className="mt-[4px] flex flex-wrap gap-[8px]">{action}</div>}
       </div>
       {onDismiss && (
         <button

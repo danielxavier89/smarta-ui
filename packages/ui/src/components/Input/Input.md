@@ -56,6 +56,7 @@ A single-line text field with its label, hint and error wired to it.
 4. **The error says what to do**, not what is wrong: "A NIF is nine digits. This one has six." Not "Invalid input".
 5. **Money is formatted by the product, not by the field.** Pass `prefix="€"`; never bake a currency symbol into the value.
 6. **Never use a placeholder as the label.** It vanishes on the first keystroke, exactly when it is needed.
+7. **Don't override the field's type size.** It reads `--field-font-size`, which is 14px on a mouse and 16px on a finger — below 16px, mobile Safari zooms the page on focus and never zooms back. A `text-sm` on the input to make a form tighter buys a few pixels and costs every phone user their place on the page.
 
 ## Do and don't
 

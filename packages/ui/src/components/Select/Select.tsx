@@ -62,9 +62,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(function 
   }, [options]);
 
   const heights = {
-    sm: "h-[var(--control-height-sm)] pl-[var(--control-padding-x-sm)] text-xs",
-    md: "h-[var(--control-height-md)] pl-[var(--control-padding-x-md)] text-base",
-    lg: "h-[var(--control-height-lg)] pl-[var(--control-padding-x-lg)] text-base",
+    sm: "h-[var(--control-height-sm)] pl-[var(--control-padding-x-sm)] text-[length:var(--field-font-size-sm)]",
+    md: "h-[var(--control-height-md)] pl-[var(--control-padding-x-md)] text-[length:var(--field-font-size)]",
+    lg: "h-[var(--control-height-lg)] pl-[var(--control-padding-x-lg)] text-[length:var(--field-font-size)]",
   }[size];
 
   return (

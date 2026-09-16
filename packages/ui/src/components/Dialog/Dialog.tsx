@@ -61,13 +61,23 @@ export function Dialog({
           onPointerDownOutside={stop}
           onInteractOutside={stop}
           className={cn(
-            "fixed left-1/2 top-1/2 z-[var(--z-dialog)] w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2",
+            "fixed left-1/2 top-1/2 z-[var(--z-dialog)] -translate-x-1/2 -translate-y-1/2",
+            // 100% of the viewport, not 100vw: vw counts the scrollbar, so on
+            // a desktop with one the dialog was 15px wider than the room it
+            // had and the page gained a horizontal scroll behind the scrim.
+            "w-[calc(100%-32px)]",
             widths,
+            // A centred box with no ceiling loses its top and bottom off the
+            // screen the moment the content is taller than the viewport, and
+            // nothing scrolls it back — a phone in landscape is about 380px
+            // tall, so this was not an edge case. dvh, so the address bar
+            // sliding away does not leave the footer under it.
+            "flex max-h-[calc(100dvh-32px)] flex-col",
             "rounded-lg border border-border bg-surface-raised shadow-lg focus:outline-none",
             "data-[state=open]:animate-in data-[state=open]:zoom-in-95",
           )}
         >
-          <div className="flex items-start gap-[10px] px-[20px] pt-[18px]">
+          <div className="flex shrink-0 items-start gap-[10px] px-[20px] pt-[18px]">
             <div className="min-w-0 flex-1">
               <RDialog.Title className="m-0 text-lg font-semibold tracking-tight text-fg">
                 {title}
@@ -87,18 +97,36 @@ export function Dialog({
             )}
           </div>
 
-          {children && <div className="px-[20px] pt-[14px]">{children}</div>}
+          {children && (
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-[20px] pt-[14px]">
+              {children}
+            </div>
+          )}
 
           {confirm && (
-            <div className="mt-[18px] flex justify-end gap-[8px] border-t border-border-soft px-[20px] py-[14px]">
+            <div
+              className={cn(
+                "mt-[18px] flex shrink-0 gap-[8px] border-t border-border-soft px-[20px] py-[14px]",
+                // A confirm button names the act — "Reject & tell the customer"
+                // — so two of them side by side do not fit a phone. Stacked and
+                // reversed: the DOM keeps cancel first for the keyboard, the
+                // screen puts the act on top, where the thumb already is.
+                "flex-col-reverse sm:flex-row sm:justify-end",
+                // Clear of the home indicator on a phone held upright.
+                "pb-[max(14px,env(safe-area-inset-bottom))] sm:pb-[14px]",
+              )}
+            >
               <RDialog.Close asChild>
-                <Button variant="ghost">{cancelLabel}</Button>
+                <Button variant="ghost" className="w-full sm:w-auto">
+                  {cancelLabel}
+                </Button>
               </RDialog.Close>
               <Button
                 variant={confirm.variant ?? "primary"}
                 loading={confirm.loading}
                 disabled={confirm.disabled}
                 onClick={() => void confirm.onConfirm()}
+                className="w-full sm:w-auto"
               >
                 {confirm.label}
               </Button>

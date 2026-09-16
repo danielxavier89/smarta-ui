@@ -100,7 +100,7 @@ export function ToastProvider({
                   <button
                     type="button"
                     onClick={m.action.onClick}
-                    className="shrink-0 rounded-xs bg-transparent p-0 text-sm font-medium text-link hover:underline focus-visible:outline-2 focus-visible:outline-focus-ring"
+                    className="touch-target shrink-0 rounded-xs bg-transparent p-0 text-sm font-medium text-link hover:underline focus-visible:outline-2 focus-visible:outline-focus-ring"
                   >
                     {m.action.label}
                   </button>
@@ -108,7 +108,7 @@ export function ToastProvider({
               )}
               <RToast.Close
                 aria-label="Dismiss"
-                className="shrink-0 rounded-xs text-fg-faint hover:text-fg-muted focus-visible:outline-2 focus-visible:outline-focus-ring"
+                className="touch-target shrink-0 rounded-xs text-fg-faint hover:text-fg-muted focus-visible:outline-2 focus-visible:outline-focus-ring"
               >
                 <X size={14} aria-hidden />
               </RToast.Close>
@@ -117,8 +117,13 @@ export function ToastProvider({
         })}
         <RToast.Viewport
           className={cn(
-            "fixed bottom-0 right-0 z-[var(--z-toast)] m-0 flex w-[min(400px,100vw)] list-none flex-col gap-[8px] p-[16px]",
+            // 100%, not 100vw — vw counts the scrollbar, and a toast that is
+            // fifteen pixels wider than the window scrolls the page sideways
+            // behind it for the four seconds it is up.
+            "fixed bottom-0 right-0 z-[var(--z-toast)] m-0 flex w-[min(400px,100%)] list-none flex-col gap-[8px] p-[16px]",
             "pb-[max(16px,env(safe-area-inset-bottom))] outline-none",
+            // A phone held sideways puts the notch over the right-hand edge.
+            "pr-[max(16px,env(safe-area-inset-right))]",
           )}
         />
       </RToast.Provider>

@@ -104,8 +104,24 @@
   --control-padding-x-md: 14px;
   --control-padding-x-lg: 16px;
 
-  /* The minimum a finger can hit. Applied on coarse pointers in reset.css. */
+  /* The minimum a finger can hit. Spent by the .touch-target utility in
+     reset.css, which grows the hit area without growing the drawn control. */
   --touch-target: 44px;
+
+  /* --- Field type ------------------------------------------------------
+     The size of the text *inside* a text field, as its own token rather than
+     a utility on each control.
+
+     It exists because of one rule in mobile Safari: focusing a field whose
+     text is under 16px zooms the whole page in, and nothing zooms it back.
+     Every form in both products is 14px, so every tap on every field threw
+     the layout sideways. The alternative fix is user-scalable=no, which
+     takes pinch-zoom away from everyone to spare us a reflow.
+
+     So the type grows on a coarse pointer and nowhere else. Desktop density
+     is untouched: --text-base is still 14px, and a mouse never triggers it. */
+  --field-font-size:    var(--text-base);
+  --field-font-size-sm: var(--text-xs);
 
   /* --- Density ---------------------------------------------------------
      One set of numbers that table rows, list items and card padding read. */
@@ -141,4 +157,16 @@
   --density-row-x:  16px;
   --density-card-p: 16px;
   --sidebar-width:  224px;
+}
+
+/* A finger, not a mouse. Fields grow to the size mobile Safari will leave
+   alone; see --field-font-size above. Declared after the backoffice block so
+   it wins in both products — the density difference is real, the zoom is not
+   negotiable in either. */
+@media (pointer: coarse) {
+  :root,
+  [data-product="backoffice"] {
+    --field-font-size:    var(--text-lg);
+    --field-font-size-sm: var(--text-lg);
+  }
 }

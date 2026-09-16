@@ -11,7 +11,7 @@ import { Spinner } from "@/components/Spinner";
  */
 const buttonVariants = cva(
   [
-    "inline-flex items-center justify-center gap-[6px] whitespace-nowrap",
+    "touch-target inline-flex items-center justify-center gap-[6px] whitespace-nowrap",
     "rounded-md border font-medium",
     "transition-[background-color,border-color,color,box-shadow] duration-[var(--duration-fast)]",
     "cursor-pointer select-none",

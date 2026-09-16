@@ -30,6 +30,9 @@ export const Checkbox = React.forwardRef<
   const reactId = React.useId();
   const id = idProp ?? reactId;
   const descId = description ? `${id}-desc` : undefined;
+  // The tick stays 15/17px — it is drawn to sit on the same line as its
+  // label. touch-target puts a 44px tap around it on a phone without
+  // stretching the box into a slot.
   const box = size === "sm" ? "size-[15px]" : "size-[17px]";
 
   const control = (
@@ -40,7 +43,7 @@ export const Checkbox = React.forwardRef<
       aria-describedby={descId}
       className={cn(
         box,
-        "grid shrink-0 place-items-center rounded-xs border border-border-strong bg-surface",
+        "touch-target grid shrink-0 place-items-center rounded-xs border border-border-strong bg-surface",
         "transition-[background-color,border-color] duration-[var(--duration-fast)]",
         "cursor-pointer",
         "hover:border-accent",

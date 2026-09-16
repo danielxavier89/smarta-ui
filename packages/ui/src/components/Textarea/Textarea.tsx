@@ -80,7 +80,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             }}
             className={cn(
               "w-full rounded-md border border-border bg-surface",
-              "px-[var(--control-padding-x-md)] py-[8px] text-base text-fg",
+              "px-[var(--control-padding-x-md)] py-[8px] text-[length:var(--field-font-size)] text-fg",
               "placeholder:text-fg-subtle resize-y",
               "transition-[border-color,box-shadow] duration-[var(--duration-fast)]",
               "outline-none focus:border-accent focus:shadow-[var(--shadow-focus)]",
