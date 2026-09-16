@@ -1,5 +1,7 @@
 import * as React from "react";
+import { Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Tooltip } from "@/components/Tooltip";
 
 export interface KeyValueRow {
   key: React.ReactNode;
@@ -8,7 +10,16 @@ export interface KeyValueRow {
   action?: React.ReactNode;
   /** Draws the value in the bad tone — a mismatch, a value that failed a check. */
   tone?: "default" | "ok" | "warn" | "bad";
-  /** A quiet line under the value explaining where the number came from. */
+  /**
+   * Where the value came from, or the rule behind it. Shown on an info icon
+   * beside the key rather than as a second line, so a column of figures stays
+   * a column of figures.
+   *
+   * Keep it to a sentence, and keep it explanatory. Anything the user has to
+   * act on belongs on the page — a tooltip cannot be re-read once the pointer
+   * moves. The icon is a real button, so it is reachable by keyboard and can be
+   * tapped on a touch screen, where hover never fires.
+   */
   note?: React.ReactNode;
   /**
    * Keeps the value on one line, whatever the column width.
@@ -38,6 +49,37 @@ export interface KeyValueProps extends React.HTMLAttributes<HTMLDListElement> {
  * of a wall of text. It is for showing, not editing — the moment a value can be
  * changed, it is a Field.
  */
+/**
+ * The info icon beside a key.
+ *
+ * A real <button>, not a bare icon: Radix opens the tooltip on focus as well as
+ * hover, so a keyboard reaches it, and the click handler pins it open on a
+ * touch screen — where hover never fires and the content would otherwise be
+ * unreachable.
+ */
+function NoteTip({ label, note }: { label: React.ReactNode; note: React.ReactNode }) {
+  const [open, setOpen] = React.useState(false);
+  const name = typeof label === "string" ? `About ${label.toLowerCase()}` : "More about this value";
+
+  return (
+    <Tooltip content={note} open={open} onOpenChange={setOpen} side="top">
+      <button
+        type="button"
+        aria-label={name}
+        onClick={() => setOpen((o) => !o)}
+        className={cn(
+          "grid size-[15px] shrink-0 place-items-center rounded-full",
+          "text-fg-faint transition-colors duration-[var(--duration-fast)]",
+          "hover:text-fg-subtle",
+          "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring",
+        )}
+      >
+        <Info size={13} aria-hidden />
+      </button>
+    </Tooltip>
+  );
+}
+
 export function KeyValue({ className, rows, layout = "rows", size = "md", ...props }: KeyValueProps) {
   const toneClass = {
     default: "text-fg",
@@ -80,14 +122,15 @@ export function KeyValue({ className, rows, layout = "rows", size = "md", ...pro
         >
           <dt
             className={cn(
-              "m-0 min-w-0 text-fg-subtle",
+              "m-0 flex min-w-0 items-center gap-[4px] text-fg-subtle",
               // The key gives way before the value does: a long label may wrap,
               // so the figure beside it keeps its room.
               layout === "stacked" && "text-xs",
               layout === "rows" && "@max-[260px]:text-xs",
             )}
           >
-            {r.key}
+            <span className="min-w-0">{r.key}</span>
+            {r.note && <NoteTip label={r.key} note={r.note} />}
           </dt>
           <dd
             className={cn(
@@ -110,17 +153,6 @@ export function KeyValue({ className, rows, layout = "rows", size = "md", ...pro
             </span>
             {r.action}
           </dd>
-          {r.note && (
-            <dd
-              className={cn(
-                "m-0 text-xs font-normal text-fg-subtle",
-                layout === "rows" && "col-span-2 text-right",
-                layout === "rows" && "@max-[260px]:col-span-1 @max-[260px]:text-left",
-              )}
-            >
-              {r.note}
-            </dd>
-          )}
         </div>
       ))}
     </dl>

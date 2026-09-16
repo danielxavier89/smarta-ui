@@ -1,1 +1,1 @@
-export { ThemeProvider, useTheme, type ThemeProviderProps } from "./ThemeProvider";
+export { ThemeProvider, ThemeScope, useTheme, type ThemeProviderProps } from "./ThemeProvider";

@@ -32,7 +32,7 @@ The facts about one thing, as a real `<dl>`.
 | `size` | `sm \| md` | no | `md` | |
 
 `KeyValueRow.tone` — `default \| ok \| warn \| bad`, for a value that failed a check.
-`KeyValueRow.note` — a quiet line under the value saying where the number came from.
+`KeyValueRow.note` — shown on an info icon beside the key, not as a second line.
 `KeyValueRow.action` — a control beside the value: copy, "Put into master data".
 `KeyValueRow.nowrap` — keeps the value on one line whatever the column width.
 
@@ -69,6 +69,11 @@ narrow, or when most values are prose.
 2. **It is a real `<dl>`**, so a screen reader reads each value with its own label rather than a wall of text. Don't rebuild it out of divs to win a layout.
 3. **Keys are labels, not sentences.** "VAT at 23%", not "The VAT charged on this receipt".
 4. **Use `note` for provenance**, not for a second value: "Converted at 1.1105 on 14 June."
+   It renders as an info icon beside the key, so a column of figures stays a
+   column of figures. Keep it to a sentence, and keep it explanatory — a
+   tooltip cannot be re-read once the pointer moves, so anything the user has
+   to act on belongs on the page. The icon is a real button: reachable by
+   keyboard, and tappable on touch, where hover never fires.
 5. **`tone` marks a value that failed a check** — a mismatch, an unreclaimable VAT — not a value that is merely interesting.
 6. **Money is already formatted** before it reaches a row, and carries `nowrap`.
 7. **Do not nest a `KeyValue` in a flex row with anything else.** It is a grid

@@ -10,7 +10,11 @@ tokens_only: true
 
 A short label on hover and on keyboard focus.
 
-Wrap the app (or the story) in `<TooltipProvider>` once.
+Wrap the app in `<TooltipProvider>` once. It is not mandatory — a Tooltip
+supplies its own when none is found, so a library component that renders one
+internally cannot crash an app that forgot. Mounting it at the root is still
+worth doing: it is what makes tooltips share a delay group, so the second one
+you hover appears immediately instead of waiting again.
 
 ## Use it when
 
@@ -50,6 +54,12 @@ Hidden · Delayed open · Open. It uses `--inverse-surface`, which flips: dark i
 4. **The trigger must be focusable** — a `<button>`, a link, or something with `tabIndex`. A tooltip on a `<span>` is invisible to a keyboard.
 5. **A disabled button's tooltip must still be reachable** — which is one more reason to prefer `aria-disabled` plus an explanation on click.
 6. **Sentence case, no full stop.**
+7. **The content is portalled but stays in its theme.** Radix renders into
+   `document.body`, outside the element carrying `data-product`/`data-theme`,
+   so the tooltip used to resolve its tokens from `:root` and could come out in
+   a different palette from the surface that opened it. `ThemeScope` re-applies
+   the scope inside the portal. The same applies to `Panel`, `Dialog` and
+   `DropdownMenu`; if you add another portalled surface, wrap its portal too.
 
 ## Do and don't
 

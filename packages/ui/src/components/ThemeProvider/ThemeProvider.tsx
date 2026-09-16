@@ -25,6 +25,29 @@ export function useTheme() {
   return React.useContext(ThemeContext);
 }
 
+/**
+ * Re-applies the current theme scope inside a portal.
+ *
+ * Radix portals render into document.body, which sits outside the element
+ * carrying data-product/data-theme — so a tooltip, menu, dialog or panel
+ * resolved its tokens from :root instead, and on a dark-mode machine came out
+ * in a different palette from the surface that opened it.
+ *
+ * display:contents means the wrapper adds no box, so Floating UI's positioning
+ * and Radix's focus management are untouched, while custom properties still
+ * inherit through it. Portalling into the themed element instead would have
+ * worked too, but any ancestor with overflow or a transform would then clip the
+ * thing being portalled — which is the reason to portal in the first place.
+ */
+export function ThemeScope({ children }: { children: React.ReactNode }) {
+  const { product, theme } = useTheme();
+  return (
+    <div data-product={product} data-theme={theme} style={{ display: "contents" }}>
+      {children}
+    </div>
+  );
+}
+
 export interface ThemeProviderProps extends React.HTMLAttributes<HTMLDivElement> {
   product?: Product;
   /** Omit to follow prefers-color-scheme. */

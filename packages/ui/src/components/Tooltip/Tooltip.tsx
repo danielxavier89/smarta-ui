@@ -1,8 +1,35 @@
 import * as React from "react";
 import { Tooltip as RTooltip } from "radix-ui";
 import { cn } from "@/lib/utils";
+import { ThemeScope } from "@/components/ThemeProvider";
 
-export const TooltipProvider = RTooltip.Provider;
+/**
+ * True when an app has mounted TooltipProvider above us.
+ *
+ * Radix's provider is what makes tooltips share a delay group: once one is
+ * open, the next shows instantly instead of waiting again. An app should mount
+ * one at the root to get that.
+ *
+ * But a component deep in the library may render a Tooltip of its own — see
+ * KeyValue's note icon — and Radix throws outright without a provider. A
+ * library component that crashes because of how the host app was wired is a bad
+ * trade, so Tooltip supplies its own when none is found, losing only the shared
+ * delay.
+ */
+const HasTooltipProvider = React.createContext(false);
+
+export function TooltipProvider({
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof RTooltip.Provider>) {
+  return (
+    <HasTooltipProvider.Provider value={true}>
+      <RTooltip.Provider delayDuration={200} skipDelayDuration={300} {...props}>
+        {children}
+      </RTooltip.Provider>
+    </HasTooltipProvider.Provider>
+  );
+}
 
 export interface TooltipProps {
   /**
@@ -35,10 +62,13 @@ export function Tooltip({
   open,
   onOpenChange,
 }: TooltipProps) {
-  return (
+  const hasProvider = React.useContext(HasTooltipProvider);
+
+  const root = (
     <RTooltip.Root delayDuration={delayDuration} open={open} onOpenChange={onOpenChange}>
       <RTooltip.Trigger asChild>{children}</RTooltip.Trigger>
       <RTooltip.Portal>
+      <ThemeScope>
         <RTooltip.Content
           side={side}
           align={align}
@@ -54,7 +84,10 @@ export function Tooltip({
           {content}
           <RTooltip.Arrow className="fill-[var(--inverse-surface)]" width={10} height={5} />
         </RTooltip.Content>
+      </ThemeScope>
       </RTooltip.Portal>
     </RTooltip.Root>
   );
+
+  return hasProvider ? root : <RTooltip.Provider>{root}</RTooltip.Provider>;
 }

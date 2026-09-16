@@ -2,6 +2,7 @@ import * as React from "react";
 import { DropdownMenu as RMenu } from "radix-ui";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeScope } from "@/components/ThemeProvider";
 
 export const DropdownMenu = RMenu.Root;
 export const DropdownMenuTrigger = RMenu.Trigger;
@@ -12,6 +13,7 @@ export const DropdownMenuContent = React.forwardRef<
 >(function DropdownMenuContent({ className, sideOffset = 6, align = "end", ...props }, ref) {
   return (
     <RMenu.Portal>
+      <ThemeScope>
       <RMenu.Content
         ref={ref}
         sideOffset={sideOffset}
@@ -25,7 +27,8 @@ export const DropdownMenuContent = React.forwardRef<
         )}
         {...props}
       />
-    </RMenu.Portal>
+    </ThemeScope>
+      </RMenu.Portal>
   );
 });
 

@@ -2,6 +2,7 @@ import * as React from "react";
 import { Dialog } from "radix-ui";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeScope } from "@/components/ThemeProvider";
 import { IconButton } from "@/components/IconButton";
 
 export interface PanelProps {
@@ -47,6 +48,7 @@ export function Panel({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
+      <ThemeScope>
         <Dialog.Overlay
           className={cn(
             "fixed inset-0 z-[var(--z-overlay)] bg-overlay",
@@ -99,6 +101,7 @@ export function Panel({
             </div>
           )}
         </Dialog.Content>
+      </ThemeScope>
       </Dialog.Portal>
     </Dialog.Root>
   );

@@ -2,6 +2,7 @@ import * as React from "react";
 import { Dialog as RDialog } from "radix-ui";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeScope } from "@/components/ThemeProvider";
 import { Button } from "@/components/Button";
 import { IconButton } from "@/components/IconButton";
 
@@ -53,6 +54,7 @@ export function Dialog({
   return (
     <RDialog.Root open={open} onOpenChange={onOpenChange}>
       <RDialog.Portal>
+      <ThemeScope>
         <RDialog.Overlay className="fixed inset-0 z-[var(--z-overlay)] bg-overlay data-[state=open]:animate-in" />
         <RDialog.Content
           onEscapeKeyDown={stop}
@@ -103,6 +105,7 @@ export function Dialog({
             </div>
           )}
         </RDialog.Content>
+      </ThemeScope>
       </RDialog.Portal>
     </RDialog.Root>
   );
