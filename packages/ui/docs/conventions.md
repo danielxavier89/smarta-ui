@@ -79,6 +79,33 @@ Handle all of these or say explicitly why one cannot happen.
 - **`--fg-faint` is decoration only.** Dots, empty-state icons, hover borders. It
   does not reach 4.5:1 and must never carry a word.
 
+## Icons
+
+**Lucide only** (`lucide-react`). One library keeps weight and optical size
+consistent; mixing two is visible immediately at 14px.
+
+These glyphs have fixed meanings. Using a different one for the same concept is
+how two products end up disagreeing about what a warning looks like.
+
+| Icon | Means |
+|---|---|
+| `Info` | Provenance, "why is this the way it is" |
+| `AlertTriangle` | Warning, blocked, needs a look |
+| `XCircle` | Failed, rejected |
+| `CheckCircle2` / `Check` | Done, matched, verified |
+| `Lock` | Locked, read-only, closed period |
+| `ArrowRight` | Goes somewhere |
+| `Copy` | Copies a value |
+| `MoreHorizontal` | Opens a menu of further actions |
+| `Search` | Narrows what is on screen |
+| `UploadCloud` | Accepts files |
+
+**Sizes**: 13px inside a chip or a dense row, 14px in a button, 15–16px in an
+icon button or a callout, 20–22px in an empty state. Never scale a glyph past
+24px — at that size it wants to be an illustration and Lucide is not one.
+
+**An icon never replaces the words.** Drop the icon before you drop the label.
+
 ## Numbers and money
 
 - **The product formats money, not the component.** Amounts arrive as strings.
@@ -91,6 +118,16 @@ Handle all of these or say explicitly why one cannot happen.
   number, it is a different one.
 - **If the interface states a number, rows exist behind it.** No off-screen
   constants, no "and 196 more".
+
+## Long lists
+
+**Pagination is the default**, and it states the total: "121–140 of 318". Both
+products are used by people looking for a specific row, and the total is itself
+useful — it says how much work is left. Load-more hides that.
+
+Use "load more" only for a feed that is scanned rather than searched, such as
+activity. And never paginate a list whose total the interface cannot state:
+"page 2 of ?" is a dead end.
 
 ## Accessibility
 
@@ -105,6 +142,22 @@ Handle all of these or say explicitly why one cannot happen.
   second rule.
 - **Anything clickable by mouse is reachable by keyboard**, with the same
   affordance on `:focus-visible`.
+
+## What may live only in a tooltip
+
+Provenance and units. Nothing else.
+
+| Allowed | Not allowed |
+|---|---|
+| Where a number came from — "Converted at 1.1105 on 14 June." | The value itself — a NIF the user needs to copy |
+| The full date behind a relative one | An action, a link, or a button |
+| Why a control is disabled — "2 documents still missing" | A consequence — "This will delete the receipt" |
+| The name of an icon-only control | Anything that changes a decision |
+
+The reason is that hover never fires on touch, and a tooltip cannot be re-read
+once the pointer moves. Where provenance does live in a tooltip, its trigger is
+a real `<button>` so a keyboard opens it on focus and a finger can tap it — see
+`KeyValue`'s note icon.
 
 ## Layout and spacing
 

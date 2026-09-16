@@ -48,20 +48,33 @@ you hover appears immediately instead of waiting again.
 
 Hidden · Delayed open · Open. It uses `--inverse-surface`, which flips: dark in light mode, light in dark mode.
 
+## What may live only in a tooltip
+
+Provenance and units. Nothing else.
+
+| Allowed | Not allowed |
+|---|---|
+| Where a number came from — "Converted at 1.1105 on 14 June." | The value itself — a NIF the user needs to copy |
+| The full date behind a relative one | An action, a link, or a button |
+| Why a control is disabled — "2 documents still missing" | A consequence — "This will delete the receipt" |
+| The name of an icon-only control | Anything that changes a decision |
+
 ## Rules
 
-1. **Hover never fires on touch.** Anything that lives only in a tooltip is simply gone on a phone. Never the only home for information.
-2. **It cannot be reached, selected or copied.** A tax number the user needs to copy goes in a `KeyValue` row with a copy button.
-3. **No interactive content.** Radix will let you; the user's pointer will not survive the trip.
-4. **The trigger must be focusable** — a `<button>`, a link, or something with `tabIndex`. A tooltip on a `<span>` is invisible to a keyboard.
-5. **A disabled button's tooltip must still be reachable** — which is one more reason to prefer `aria-disabled` plus an explanation on click.
-6. **Sentence case, no full stop.**
-7. **The content is portalled but stays in its theme.** Radix renders into
-   `document.body`, outside the element carrying `data-product`/`data-theme`,
-   so the tooltip used to resolve its tokens from `:root` and could come out in
-   a different palette from the surface that opened it. `ThemeScope` re-applies
-   the scope inside the portal. The same applies to `Panel`, `Dialog` and
-   `DropdownMenu`; if you add another portalled surface, wrap its portal too.
+1. **Hover never fires on touch**, and a tooltip cannot be re-read once the
+   pointer moves. That is the whole reason for the table above.
+2. **Where provenance does live in a tooltip, its trigger is a real `<button>`** —
+   so a keyboard opens it on focus and a finger can tap it. `KeyValue`'s note
+   icon is the worked example.
+3. **No interactive content.** Radix will let you; the user's pointer will not
+   survive the trip.
+4. **The trigger must be focusable.** A tooltip on a `<span>` is invisible to a
+   keyboard.
+5. **A disabled control's tooltip must still be reachable** — one more reason to
+   prefer `aria-disabled` plus an explanation on click.
+6. **Sentence case, no full stop**, and about ten words.
+7. **The content is portalled but stays in its theme.** `ThemeScope` handles it;
+   wrap any new portalled surface the same way.
 
 ## Do and don't
 

@@ -4,9 +4,19 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const avatarVariants = cva(
-  "relative grid shrink-0 place-items-center overflow-hidden rounded-full bg-accent-soft text-accent-soft-fg font-semibold select-none",
+  "relative grid shrink-0 place-items-center overflow-hidden font-semibold select-none",
   {
     variants: {
+      /**
+       * Shape carries the distinction, not colour: a circle is a person, a
+       * rounded square is an organisation. It reads instantly, survives
+       * greyscale, and costs no new token — which matters because the
+       * backoffice has no hue to spend on it.
+       */
+      kind: {
+        person: "rounded-full bg-accent-soft text-accent-soft-fg",
+        institution: "rounded-md bg-surface-sunken text-fg-muted",
+      },
       size: {
         xs: "size-[22px] text-[9.5px]",
         sm: "size-[26px] text-[10.5px]",
@@ -15,7 +25,7 @@ const avatarVariants = cva(
         xl: "size-[56px] text-lg",
       },
     },
-    defaultVariants: { size: "md" },
+    defaultVariants: { size: "md", kind: "person" },
   },
 );
 
@@ -30,8 +40,15 @@ export function initialsOf(name: string): string {
 export interface AvatarProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children">,
     VariantProps<typeof avatarVariants> {
-  /** Always required, even with a photograph — it is the fallback and the alt. */
+  /** Always required, even with an image — it is the fallback and the alt. */
   name: string;
+  /**
+   * A photograph for a person, or a logo for an organisation.
+   *
+   * Bundle it. Never point this at a third-party logo service: the request
+   * tells whoever hosts it which banks and authorities this client deals with,
+   * which is exactly the sort of thing a client portal must not leak.
+   */
   src?: string;
   /** A status dot on the corner: online, blocked, verified. */
   status?: "ok" | "warn" | "bad";
@@ -46,17 +63,22 @@ export interface AvatarProps
  * letters too — they know who they are.
  */
 export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
-  { className, size, name, src, status, ...props },
+  { className, size, kind, name, src, status, ...props },
   ref,
 ) {
   return (
-    <span ref={ref} className={cn(avatarVariants({ size }), className)} {...props}>
+    <span ref={ref} className={cn(avatarVariants({ size, kind }), className)} {...props}>
       <RAvatar.Root className="contents">
         {src && (
           <RAvatar.Image
             src={src}
             alt={name}
-            className="size-full object-cover"
+            // A face is cropped to fill; a logo is fitted, because cropping a
+            // wordmark cuts letters off it.
+            className={cn(
+              "size-full",
+              kind === "institution" ? "object-contain p-[3px]" : "object-cover",
+            )}
           />
         )}
         <RAvatar.Fallback
@@ -107,7 +129,7 @@ export function AvatarStack({ people, max = 4, size = "sm", className, ...props 
       {rest > 0 && (
         <span
           className={cn(
-            avatarVariants({ size }),
+            avatarVariants({ size, kind: "person" }),
             "-ml-[8px] bg-surface-sunken text-fg-muted ring-2 ring-surface",
           )}
         >

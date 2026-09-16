@@ -4,6 +4,7 @@ system: smarta-ui
 products: [webapp, backoffice]
 load: always
 see_also:
+  - docs/inventory.md
   - docs/conventions.md
   - docs/recipes/
   - src/components/<Name>/<Name>.md
@@ -16,9 +17,10 @@ internal **backoffice** is grayscale. Both run in light and dark. That is four
 combinations, and **no component contains a colour**, which is what makes them
 one library instead of two.
 
-Read this file first. Open `docs/conventions.md` before writing any UI copy or
-any state handling. Open a component's own `.md` only when you are about to use
-that component.
+Read this file first, then `docs/inventory.md` — every component and every token
+on one page, generated from source. Open `docs/conventions.md` before writing any
+UI copy or any state handling, and a component's own `.md` only when you are
+about to use it. Never load all 34; that is ~25k tokens.
 
 ## Setup
 
@@ -107,6 +109,21 @@ Do not assemble from scratch. Start from the recipe:
 | A list or table with filters and detail | `docs/recipes/list-page.md` |
 | A detail view beside a list | `docs/recipes/detail-panel.md` |
 | A form, or a multi-step flow | `docs/recipes/form.md` |
+
+## Say so when a request breaks a rule
+
+Do not quietly comply, and do not quietly ignore the request. Three lines: what
+the rule is, why in one sentence, and what you will do instead — then build the
+compliant version. If the person reaffirms after that, build what they asked and
+note the deviation.
+
+> "Two primary buttons on one view — the system allows one, because two means the
+> page hasn't decided what it's for. I'll make 'Send to Ana' primary and 'Save a
+> draft' secondary. Say the word if you want both filled."
+
+The full table of common cases is in the skill at
+`.claude/skills/smarta-ui/SKILL.md`. Two are never negotiable because they break
+the build or the product: a hardcoded colour, and nesting interactive elements.
 
 ## Before you say you are done
 

@@ -14,14 +14,17 @@ Moves through a list too long to show at once.
 
 ## Use it when
 
-- The user needs to **find** a specific row and the total matters.
-- The list has a known length: charges, leads, documents.
+**By default, for any list long enough to need it.** Both products are used by
+people looking for a specific row, and the total is itself useful — it says how
+much work is left.
+
+- The list has a knowable length: charges, leads, documents, assets.
 
 ## Don't use it when
 
 | Situation | Use instead |
 |---|---|
-| The user scans rather than searches | "Load more", or infinite scroll |
+| A feed that is scanned rather than searched — activity, notifications | "Load more" |
 | The total is unknown | neither — fix the query first (rule 1) |
 | There are fewer than ~2 pages | nothing |
 

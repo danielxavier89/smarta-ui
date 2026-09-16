@@ -30,7 +30,8 @@ A person, as a circle.
 | Prop | Type | Required | Default | Notes |
 |---|---|---|---|---|
 | `name` | `string` | **yes** | — | Required even with a photograph: it is the fallback *and* the alt text. |
-| `src` | `string` | no | — | |
+| `kind` | `person \| institution` | no | `person` | Circle vs rounded square. |
+| `src` | `string` | no | — | Bundled photograph or logo. Never a third-party URL. |
 | `size` | `xs \| sm \| md \| lg \| xl` | no | `md` | `md` (30px) is the list default. |
 | `status` | `ok \| warn \| bad` | no | — | A corner dot, ringed in `--surface`. |
 
@@ -42,12 +43,25 @@ Initials (default) · Photograph · Photograph failing to load → initials, wit
 
 ## Rules
 
-1. **A photograph is for someone the user must recognise; initials for everyone else.** In both prototypes: the accountant gets a face; the tax authority, the banks and social security get letters — and so does the person holding the screen, who knows who they are. A face is a signal, not decoration.
-   *(Proposed rule — the prototypes' existing behaviour, promoted to library policy. Flag it if you'd rather split it by client-facing vs. internal instead.)*
-2. **Initials are at most two letters**, first and last name. `initialsOf()` is exported so the rule cannot drift.
-3. **The name is always in the accessibility tree**, even when a photograph renders — the component adds it as visually-hidden text.
-4. **A status dot needs a legend somewhere.** A coloured dot with no explanation is colour carrying meaning alone, which the Chip rule already forbids.
-5. **Never use an avatar as the only identification.** The name goes beside it in a list.
+1. **A circle is a person; a rounded square is an organisation.** Shape carries
+   the distinction, not colour — it reads at a glance, survives greyscale, and
+   costs no token the backoffice cannot spend.
+2. **A photograph is for someone the user must recognise.** The accountant, the
+   assigned case worker — someone they have a relationship with. The person
+   holding the screen gets initials; they know who they are. A face is a signal,
+   not decoration.
+3. **An organisation may carry its logo**, and should where one exists: a bank
+   or an authority is recognised faster by its mark than by two letters.
+4. **Bundle every image.** Never point `src` at a third-party logo service. The
+   request tells whoever hosts it which banks and authorities this client deals
+   with, and a client portal must not leak that. It also puts a network
+   dependency in front of a face.
+5. **Initials are at most two letters**, first and last. `initialsOf()` is
+   exported so the rule cannot drift.
+6. **The name is always in the accessibility tree**, even when an image renders.
+7. **A status dot needs a legend somewhere.** A coloured dot with no explanation
+   is colour carrying meaning alone.
+8. **Never the only identification.** The name goes beside it in a list.
 
 ## Do and don't
 
