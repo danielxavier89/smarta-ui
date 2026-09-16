@@ -81,7 +81,11 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
       aria-label={affordanceLabel}
       className={cn(
         stretch,
-        "absolute right-[14px] top-[16px] grid size-[26px] place-items-center rounded-full",
+        // Inset to the card's own padding, not to numbers of its own: the arrow
+        // then shares the grid everything else in the card sits on, and its top
+        // edge lines up with whatever the header puts on its first row.
+        "absolute right-[var(--density-card-p)] top-[var(--density-card-p)]",
+        "grid size-[26px] place-items-center rounded-full",
         "border border-border bg-surface text-fg-subtle",
         "transition-[background-color,border-color,color,transform] duration-[var(--duration-fast)]",
         "group-hover:border-accent group-hover:bg-accent group-hover:text-accent-fg",
@@ -96,7 +100,13 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
       onClick={onClick}
       className={cn(
         stretch,
-        "mt-[12px] inline-flex items-center gap-[5px] self-start rounded-xs border-0 bg-transparent p-0",
+        // Inset to the card's own padding, so it lines up with the title and
+        // the body text above it rather than hanging off the left edge.
+        // mt-auto pins it to the foot: in an equal-height grid row a short card
+        // otherwise leaves its affordance floating in the middle, out of line
+        // with its neighbours'. With no spare height it resolves to 0.
+        "mx-[var(--density-card-p)] mb-[var(--density-card-p)] mt-auto self-start",
+        "inline-flex items-center gap-[5px] rounded-xs border-0 bg-transparent p-0",
         "text-sm font-medium text-link [text-decoration:var(--link-decoration)]",
         "transition-colors duration-[var(--duration-fast)]",
         "group-hover:text-link-hover group-hover:underline",
@@ -115,7 +125,8 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
       onClick={onClick}
       className={cn(
         stretch,
-        "mt-[14px] inline-flex h-[var(--control-height-sm)] items-center gap-[6px] self-start",
+        "mx-[var(--density-card-p)] mb-[var(--density-card-p)] mt-auto self-start",
+        "inline-flex h-[var(--control-height-sm)] items-center gap-[6px]",
         "rounded-md border border-border bg-surface px-[var(--control-padding-x-sm)]",
         "text-xs font-medium text-fg",
         "transition-[background-color,border-color] duration-[var(--duration-fast)]",
@@ -141,7 +152,15 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
           "motion-safe:hover:-translate-y-[1px]",
           // Keyboard users get the same lift as the mouse.
           "has-[:focus-visible]:border-border-strong has-[:focus-visible]:shadow-xs",
-          affordance === "arrow" && "[&>*:first-child]:pr-[40px]",
+          // Reserve the arrow's width plus a real gap, measured from the card
+          // padding. At 40px the reserve was exactly the arrow, so a chip in the
+          // header ended up touching it.
+          affordance === "arrow" &&
+            "[&>*:first-child]:pr-[calc(var(--density-card-p)+36px)]",
+          // The in-flow affordance is the last child, so :nth-last-child(2) is
+          // whatever sits above it. Drop that element's bottom padding, or the
+          // card's own padding stacks with the affordance's margin.
+          affordance !== "arrow" && "[&>*:nth-last-child(2)]:pb-[12px]",
         ],
         disabled && "pointer-events-none opacity-60",
         className,

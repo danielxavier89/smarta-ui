@@ -60,8 +60,9 @@ Default · Hover (border strengthens, 1px lift, **and the affordance reacts**) �
 3. **Anything interactive inside goes in `CardFooter` or `CardAction`**, which sit above the stretched layer. That is the whole reason for the pattern: the card navigates *and* keeps its own buttons.
 4. **One destination per card.** Two competing navigations on one surface is a coin toss.
 5. **The hover state is on the affordance, not only the border** — that is what tells the user the surface is live.
-6. **The lift is suppressed under `prefers-reduced-motion`**, globally. Do not re-add it.
-7. **Tone is a status, not a theme.** `warn`/`bad` mean the content is in that state, not that it is important.
+6. **The affordance sits on the card's own grid.** All three inset by `--density-card-p`, the same padding `CardHeader` and `CardBody` use, so the arrow's top-right corner matches the title's top-left and the link lines up under the body text. The in-flow affordances are pinned to the foot, so a row of equal-height cards has its affordances on one baseline rather than floating at different heights.
+7. **The lift is suppressed under `prefers-reduced-motion`**, globally. Do not re-add it.
+8. **Tone is a status, not a theme.** `warn`/`bad` mean the content is in that state, not that it is important.
 
 ## Do and don't
 
