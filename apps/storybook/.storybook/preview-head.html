@@ -4,3 +4,10 @@
   href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
   rel="stylesheet"
 />
+<script>
+  // The decorator sets these from the toolbar as soon as React mounts. Setting
+  // the default here means the first frame is already light, rather than
+  // whatever the operating system prefers.
+  document.documentElement.setAttribute("data-product", "webapp");
+  document.documentElement.setAttribute("data-theme", "light");
+</script>

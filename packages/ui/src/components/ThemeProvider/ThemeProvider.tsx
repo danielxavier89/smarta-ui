@@ -2,6 +2,10 @@ import * as React from "react";
 import type { Product, Theme } from "@smarta/tokens";
 import { cn } from "@/lib/utils";
 
+/** useLayoutEffect on the client, useEffect on the server, without the warning. */
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
+
 interface ThemeContextValue {
   product: Product;
   /** undefined means "follow the operating system". */
@@ -76,7 +80,10 @@ export function ThemeProvider({
   children,
   ...props
 }: ThemeProviderProps) {
-  React.useEffect(() => {
+  // Before paint, not after: a useEffect here lets the document render one frame
+  // in the operating system's theme before the chosen one lands, which reads as
+  // a flash of the wrong palette on every load.
+  useIsomorphicLayoutEffect(() => {
     if (!asRoot) return;
     const el = document.documentElement;
     el.setAttribute("data-product", product);

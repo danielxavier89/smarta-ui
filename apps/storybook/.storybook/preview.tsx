@@ -115,11 +115,12 @@ const withTheme: Decorator = (Story, ctx) => {
   // the a11y addon report a landmark-unique violation that belonged to the
   // harness rather than to any component.
   return (
-    // min-h-screen so the toolbar's theme paints the whole preview iframe. The
-    // iframe's own <html> carries no data-product, so it falls through to the
-    // :root default, which follows prefers-color-scheme — leaving a story in
-    // Light mode sitting in a dark void on a dark-mode machine.
-    <ThemeProvider product={product} theme={theme} className="min-h-screen">
+    // asRoot puts the attributes on the preview iframe's own <html>, rather than
+    // on a wrapper inside it. A wrapper only paints a background: the document
+    // still resolved :root from prefers-color-scheme, so color-scheme stayed
+    // dark on a dark-mode machine and the scrollbars and native controls went
+    // with it, under a story the toolbar said was Light.
+    <ThemeProvider asRoot product={product} theme={theme}>
       <TooltipProvider>
         <ToastProvider>
           {compare === "off" ? (
