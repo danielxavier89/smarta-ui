@@ -71,6 +71,11 @@ export function Pagination({
           icon={<ChevronLeft size={16} />}
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
+          // The arrows grow with the numbers rather than relying on the hit
+          // area an IconButton carries by default. In a row this tight the two
+          // approaches disagree: a 30px arrow with 44px of invisible tap around
+          // it overlaps the 44px page number beside it, and the number wins.
+          className="touch:size-[var(--touch-target)]"
         />
         {showNumbers &&
           pageWindow(page, pageCount).map((p, i) =>
@@ -108,6 +113,7 @@ export function Pagination({
           icon={<ChevronRight size={16} />}
           disabled={page >= pageCount}
           onClick={() => onPageChange(page + 1)}
+          className="touch:size-[var(--touch-target)]"
         />
       </div>
     </nav>
