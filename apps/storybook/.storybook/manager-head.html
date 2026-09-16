@@ -1,0 +1,56 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  /* The wordmark, set the way the backoffice sets it: the mark, with the
+     product name flush right underneath. brandTitle carries the markup;
+     this gives it its shape. */
+  .smarta-brand {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: #432F4A;          /* --fg */
+    line-height: 1;
+  }
+  .smarta-brand svg {
+    width: 92px;
+    height: auto;
+    display: block;
+    fill: currentColor;
+  }
+  .smarta-brand > span {
+    margin-top: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: #7A5D80;          /* --fg-subtle */
+  }
+
+  /* Storybook sizes the brand slot for its own logo. Let ours set its height,
+     and strip the link styling the title would otherwise inherit. */
+  .sidebar-header a,
+  .sidebar-header [class*="Brand"] {
+    height: auto !important;
+    max-height: none !important;
+    text-decoration: none;
+  }
+  .sidebar-header img { display: none; }
+
+  /* The webapp's sidebar marks the active page with a pale pink pill and plum
+     text, not a solid fill. Storybook's colorSecondary drives selection AND
+     several unrelated accents, so the pill is restyled here rather than by
+     weakening that token. */
+  .sidebar-item[data-selected="true"] {
+    background: #FAE4F7 !important;   /* --selected-bg */
+    color: #8A3D86 !important;        /* --selected-fg */
+    font-weight: 500;
+  }
+  .sidebar-item[data-selected="true"] svg { color: #8A3D86 !important; }
+
+  .sidebar-item:not([data-selected="true"]):hover {
+    background: #F5F0F6;              /* --surface-sunken */
+  }
+</style>

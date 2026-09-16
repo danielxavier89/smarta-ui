@@ -115,7 +115,11 @@ const withTheme: Decorator = (Story, ctx) => {
   // the a11y addon report a landmark-unique violation that belonged to the
   // harness rather than to any component.
   return (
-    <ThemeProvider product={product} theme={theme}>
+    // min-h-screen so the toolbar's theme paints the whole preview iframe. The
+    // iframe's own <html> carries no data-product, so it falls through to the
+    // :root default, which follows prefers-color-scheme — leaving a story in
+    // Light mode sitting in a dark void on a dark-mode machine.
+    <ThemeProvider product={product} theme={theme} className="min-h-screen">
       <TooltipProvider>
         <ToastProvider>
           {compare === "off" ? (
