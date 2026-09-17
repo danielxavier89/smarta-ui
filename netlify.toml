@@ -1,0 +1,29 @@
+# Deploys the built Storybook as a static site.
+#
+# Netlify rather than Vercel for no deep reason: this is a static directory with
+# no serverless anything, and Netlify will also take a drag-and-drop of
+# apps/storybook/storybook-static if you ever want a one-off link without
+# connecting the repo. On Vercel the same thing needs no file at all — set the
+# build command and output directory in the dashboard and it behaves identically.
+#
+# Note what this does NOT do: the free tier serves a public URL. It is
+# unguessable, not private. Password protection is a paid feature on both
+# platforms. That was a known trade when this was set up; revisit it if the
+# webapp's palette becomes something we would rather not have indexed.
+
+[build]
+  command = "npm run build-storybook"
+  publish = "apps/storybook/storybook-static"
+
+[build.environment]
+  # Storybook 9 and Vite 7 both want a current Node. Netlify's default lags.
+  NODE_VERSION = "20"
+
+# Storybook is a single-page app: the manager owns its own routing and reads
+# ?path= off the query string. Without this, deep links — the ones people
+# actually paste to each other, like /?path=/docs/foundations-start-here--docs —
+# 404 on a hard refresh.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
