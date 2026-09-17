@@ -14,12 +14,36 @@ packages/ui         34 React components, shadcn/Radix underneath
 apps/storybook      every component, with product and mode toggles
 ```
 
+## If you are here to review it
+
+Storybook is the system; this repository is where it is kept. Read it in this
+order and it takes about twenty minutes:
+
+| Where | Why |
+|---|---|
+| **Foundations → Start here** | The whole thing in five minutes, including the five rules that are not negotiable |
+| **Recipes → A list page** | Docs tab is the written rules; Canvas tab is that screen actually running |
+| **Foundations → States** | The six states every screen owes the user. The part most screens are missing |
+| Any component → **Docs** tab | Especially the *Don't use it when* table, which is what prevents the usual mistake |
+
+```sh
+npm install
+npm run storybook        # http://localhost:6006
+```
+
+**One thing to know before you plan around it:** `@smarta/ui` is currently
+`private: true` and ships raw TypeScript with no build step, so it cannot be
+installed from another repository yet — only used from inside this workspace.
+That is a deliberate not-yet, not an oversight. For reading and reviewing it
+changes nothing; it is the one blocker to actually building against it, and it
+is roughly half a day of packaging work.
+
 ## Running it
 
 ```sh
 npm install
 npm run storybook        # http://localhost:6006
-npm run typecheck
+npm run check            # typecheck + no hardcoded colours + contrast across 4 themes
 npm run build-storybook
 ```
 
