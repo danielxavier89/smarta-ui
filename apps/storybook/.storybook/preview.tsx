@@ -210,6 +210,7 @@ const preview: Preview = {
         order: [
           "Foundations",
           [
+            "Start here",
             "Introduction",
             "Conventions",
             "States",

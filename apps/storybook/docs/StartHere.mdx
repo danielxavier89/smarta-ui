@@ -1,0 +1,125 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+{/*
+  The handover page.
+
+  Written for two readers who will never read the same thing twice: a developer
+  about to build a screen, and someone deciding whether this was worth paying
+  for. Both get an answer above the fold, and neither has to read the other's
+  half.
+*/}
+
+<Meta title="Foundations/Start here" />
+
+# Start here
+
+This is the smarta design system: **34 components, two products, four themes**, and
+the rules that decide which component to use and what it should say.
+
+It exists so that a screen built by someone who has never designed one still looks
+like it belongs — and so that the same question does not get answered three
+different ways in three different places.
+
+---
+
+## If you are building a screen
+
+**The loop, every time:**
+
+1. **Start from a recipe, not from parts.** Recipes → *A list page*, *A detail
+   panel*, *A form*. Each one has the rules on its Docs tab and a working screen
+   on its Canvas tab. Copy the screen; do not assemble one from 34 components.
+2. **Check the six states** before you call it done. Foundations → *States*. A
+   screen that only handles the happy path is about a third finished.
+3. **Pick components from the table**, not from memory. Foundations → *Inventory*
+   lists all 34. If what you need is not there, say so — do not invent one.
+4. **Read the component's Docs tab** for anything you have not used before. The
+   *Don't use it when* table is the part that prevents the usual mistake.
+
+**The five rules that are not negotiable:**
+
+- **Never write a colour.** No hex, no `rgb()`, no `bg-red-500`. Use the semantic
+  tokens — `bg-canvas`, `text-fg-muted`, `border-border`, `text-ok-fg`. A
+  hardcoded colour belongs to one product in one mode, and there are four.
+- **Never nest interactive elements.** A button inside a clickable row is invalid
+  HTML and unreachable by keyboard.
+- **Sentence case, and buttons name the outcome.** "Upload it", "Reject & tell the
+  customer". Never "Submit", "OK", "Confirm".
+- **One primary button per view.** Two means the page has not decided what it is
+  for.
+- **Errors show in place.** A toast leaves before it can be acted on and cannot be
+  re-read. It is only ever for a change the user cannot see.
+
+Everything else lives in Foundations → *Conventions*: copy and tone, the six
+states, forms and validation, colour and meaning, money, accessibility, spacing.
+It is one page and it is worth the ten minutes.
+
+**If you are working with an AI assistant**, point it at `packages/ui/AI.md` and
+`packages/ui/docs/`. Those files are the same bytes you are reading here — the
+rules a person reads in Storybook and the rules a model loads before writing code
+cannot drift, because there is only one copy of each.
+
+---
+
+## Setting it up
+
+```tsx
+// once, at the root of the app
+import "@smarta/ui/styles.css";
+import { ThemeProvider, TooltipProvider, ToastProvider } from "@smarta/ui";
+
+<ThemeProvider asRoot product="webapp" theme={userChoice}>
+  <TooltipProvider>
+    <ToastProvider>
+      <App />
+    </ToastProvider>
+  </TooltipProvider>
+</ThemeProvider>
+```
+
+Everything else imports by name from `@smarta/ui`. You never pass a colour, and
+you never ask which product you are in — `data-product` and `data-theme` are
+inherited CSS custom properties, so the tokens resolve themselves.
+
+> **One thing is not ready yet.** `@smarta/ui` is currently `private: true` and
+> ships raw TypeScript with no build step, so it can only be consumed from inside
+> this monorepo — `npm install @smarta/ui` will not work from another repository
+> today. Getting it installable is a decision someone needs to make: publish to a
+> private registry, or bring the app into this workspace. Until then, treat
+> Storybook as the specification and this snippet as what it will look like.
+
+---
+
+## If you are deciding whether this is working
+
+**What the system buys you.** One component library serves both products. The
+webapp is plum, the backoffice is grayscale, both run light and dark — four
+combinations — and **no component contains a single colour**. That is what makes
+them one library rather than two, and it is enforced by a build check rather than
+by anyone remembering.
+
+**What is already guaranteed, automatically:**
+
+| Check | What it means |
+|---|---|
+| `lint:tokens` | No hardcoded colour can reach the library. The build fails. |
+| `audit:contrast` | 140 text/background pairs clear 4.5:1 across all four themes. |
+| `typecheck` | An icon-only button without a label does not compile. |
+
+**What to watch for**, as signs the system is being worked around rather than
+used: a second panel or modal component appearing; a screen with a colour written
+into it; buttons that say "Submit"; a list with no empty state. Each of those is
+someone deciding it was faster to go around than through, and each one is the
+beginning of a second design system.
+
+**Where it is thin today**, stated plainly so nobody is surprised:
+
+- There is **no app shell** — no sidebar, top bar or page header component, though
+  the tokens for their dimensions exist. Every page currently invents that frame.
+- There is **no automated test suite** and no visual regression, so a change that
+  breaks a component's appearance is caught by eye or not at all.
+- The **rules are enforced inside this library only**. Product code can still
+  hardcode a colour; nothing checks it.
+
+None of those block using the system. All of them get more expensive the longer
+the team builds without them.
