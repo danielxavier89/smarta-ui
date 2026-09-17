@@ -1,0 +1,19 @@
+import { Meta, Markdown } from "@storybook/addon-docs/blocks";
+import { docsFrom } from "@/lib/docs";
+import conventions from "../../../packages/ui/docs/conventions.md?raw";
+
+{/*
+  The same bytes the agents read.
+
+  conventions.md sat in the repo where a model could load it and a person could
+  not find it: Storybook only globbed component stories and this folder, so the
+  six states, the copy rules and the money rules were invisible to exactly the
+  people being asked to follow them. Rendering the file — rather than restating
+  it here — is what keeps the two from drifting.
+*/}
+
+<Meta title="Foundations/Conventions" />
+
+# Conventions
+
+<Markdown>{docsFrom(conventions)}</Markdown>

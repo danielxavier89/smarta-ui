@@ -1,0 +1,13 @@
+import { Meta, Markdown } from "@storybook/addon-docs/blocks";
+import { docsFrom } from "@/lib/docs";
+import source from "../../../packages/ui/docs/inventory.md?raw";
+
+{/*
+  Rendered from the file itself, not retyped. Generated from source by `npm run gen:inventory`, so the table cannot claim a component that does not exist.
+*/}
+
+<Meta title="Foundations/Inventory" />
+
+# Inventory
+
+<Markdown>{docsFrom(source)}</Markdown>

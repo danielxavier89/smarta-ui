@@ -75,3 +75,66 @@ export const OrAPanel: Story = {
     </p>
   ),
 };
+
+export const WhileItRuns: Story = {
+  name: "While the confirm runs",
+  render: function WhileItRuns() {
+    const [open, setOpen] = React.useState(false);
+    const [sending, setSending] = React.useState(false);
+
+    return (
+      <>
+        <Button variant="danger-quiet" onClick={() => setOpen(true)}>Delete the upload</Button>
+        <Dialog
+          open={open}
+          onOpenChange={(next) => { if (!sending) setOpen(next); }}
+          title="Delete the Gewerbeanmeldung?"
+          description="The file goes for good. Lena would have to send it again."
+          confirm={{
+            label: "Delete the upload",
+            variant: "danger",
+            loading: sending,
+            onConfirm: () => {
+              setSending(true);
+              window.setTimeout(() => { setSending(false); setOpen(false); }, 1800);
+            },
+          }}
+        />
+      </>
+    );
+  },
+};
+
+export const ConfirmNotYetAvailable: Story = {
+  name: "When the confirm cannot run yet",
+  render: function ConfirmNotYetAvailable() {
+    const [open, setOpen] = React.useState(false);
+    const [reason, setReason] = React.useState("");
+
+    return (
+      <>
+        <Button variant="danger-quiet" onClick={() => setOpen(true)}>Reject the document</Button>
+        <Dialog
+          open={open}
+          onOpenChange={setOpen}
+          title="Reject the Gewerbeanmeldung?"
+          description="Lena is told what to send instead, so the reason is not optional."
+          confirm={{
+            label: "Reject & tell the customer",
+            variant: "danger",
+            disabled: reason.trim().length === 0,
+            onConfirm: () => setOpen(false),
+          }}
+        >
+          <Textarea
+            label="What should Lena send instead?"
+            rows={3}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            hint={reason.trim() ? undefined : "The button turns on once this says something."}
+          />
+        </Dialog>
+      </>
+    );
+  },
+};

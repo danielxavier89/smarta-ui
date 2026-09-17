@@ -25,3 +25,30 @@ export const OptionalIsMarked: Story = {
     </div>
   ),
 };
+
+export const GoesQuietWithItsControl: Story = {
+  name: "Goes quiet with its control",
+  render: () => (
+    <div className="flex max-w-[56ch] flex-col gap-[14px]">
+      <div className="flex flex-col gap-[4px]">
+        <Label htmlFor="vat-off">VAT number</Label>
+        <input
+          id="vat-off"
+          disabled
+          defaultValue="PT 503 214 665"
+          className="peer h-[var(--control-height-md)] rounded-md border border-border bg-surface-sunken px-[var(--control-padding-x-md)] text-[length:var(--field-font-size)] text-fg opacity-70"
+        />
+      </div>
+      <p className="m-0 text-sm text-fg-subtle">
+        Label has no disabled prop of its own — it dims from the control beside it, through{" "}
+        <code>peer-disabled</code>. So the pair always agrees, and there is no second
+        boolean to keep in step.
+      </p>
+      <p className="m-0 text-sm text-fg-subtle">
+        The dimming is the only thing the label does. It never carries the reason: a
+        greyed-out field with no explanation is the thing the house rules ban, and the
+        reason belongs on the page where it can be read and acted on.
+      </p>
+    </div>
+  ),
+};

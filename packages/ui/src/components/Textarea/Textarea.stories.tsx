@@ -25,3 +25,19 @@ export const Variants: Story = {
     </div>
   ),
 };
+
+export const Disabled: Story = {
+  name: "Disabled, with the reason beside it",
+  render: () => (
+    <div className="flex max-w-[420px] flex-col gap-[8px]">
+      <Textarea
+        label="Reason for rejecting"
+        disabled
+        defaultValue="May 2026 is closed."
+      />
+      <p className="m-0 text-sm text-fg-subtle">
+        Ana filed the period on 18 June. Reopen it to change anything in it.
+      </p>
+    </div>
+  ),
+};

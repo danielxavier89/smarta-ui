@@ -78,3 +78,29 @@ export const VersusTabs: Story = {
     );
   },
 };
+
+export const DisabledSegment: Story = {
+  name: "A segment that is not available yet",
+  render: function DisabledSegment() {
+    const [view, setView] = React.useState("month");
+    return (
+      <div className="flex flex-col items-start gap-[10px]">
+        <SegmentedControl
+          label="Period"
+          value={view}
+          onValueChange={setView}
+          options={[
+            { value: "month", label: "Month" },
+            { value: "quarter", label: "Quarter" },
+            { value: "year", label: "Year", disabled: true },
+          ]}
+        />
+        <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+          The year view needs four filed quarters; Q3 is still open. The sentence under
+          the control is the reachable reason — without it the third segment is just a
+          segment that ignores you.
+        </p>
+      </div>
+    );
+  },
+};

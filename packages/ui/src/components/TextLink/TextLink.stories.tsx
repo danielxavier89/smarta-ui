@@ -34,3 +34,25 @@ export const UnderlinedInTheBackoffice: Story = {
     </p>
   ),
 };
+
+export const Disabled: Story = {
+  name: "Disabled, and why that is usually wrong",
+  render: () => (
+    <div className="flex max-w-[60ch] flex-col gap-[16px]">
+      <p className="m-0 text-base text-fg-muted">
+        The statement is ready. You can{" "}
+        <TextLink disabled>download it</TextLink> once Ana has signed off.
+      </p>
+      <p className="m-0 text-sm text-fg-subtle">
+        Read that again: the sentence carries the reason, which is the only thing that
+        makes the dead link tolerable. A bare disabled link in prose reads as a bug.
+      </p>
+      <p className="m-0 text-base text-fg-muted">
+        Better still, keep it live and answer on click —{" "}
+        <TextLink aria-disabled onClick={() => {}}>download it</TextLink> — because a
+        disabled control is skipped by the tab order, so a screen-reader user never
+        learns it is there to wait for.
+      </p>
+    </div>
+  ),
+};

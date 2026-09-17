@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Bell, MoreHorizontal, X, Download, Pencil } from "lucide-react";
+import { Bell, MoreHorizontal, X, Download, Pencil, Trash2 } from "lucide-react";
 import { IconButton } from "./IconButton";
 import { docsPage } from "@/lib/docs";
 import rules from "./IconButton.md?raw";
@@ -49,6 +49,30 @@ export const LabelIsNotOptional: Story = {
         An icon-only control is unreadable to a screen reader and unguessable to anyone
         new, so <code className="text-fg">label</code> is required by the type and is used
         for both <code className="text-fg">aria-label</code> and the native tooltip.
+      </p>
+    </div>
+  ),
+};
+
+export const LoadingAndDisabled: Story = {
+  name: "Working, and unavailable",
+  render: () => (
+    <div className="flex flex-col gap-[16px]">
+      <div className="flex items-center gap-[10px]">
+        <IconButton label="Download the statement" icon={<Download size={15} />} />
+        <IconButton label="Downloading the statement" icon={<Download size={15} />} loading />
+        <IconButton label="Delete the upload" icon={<Trash2 size={15} />} variant="danger" disabled />
+      </div>
+      <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+        Loading swaps the icon for a spinner and blocks the click; the button keeps its
+        size, so a toolbar does not reflow while one control is busy. The label stays
+        required in every state — mid-request is exactly when someone asks what is
+        happening, and an icon alone cannot answer.
+      </p>
+      <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+        The disabled one is only half a control until something says why. An icon button
+        has no room for a reason, so it needs a Tooltip or a line beside it — see
+        Foundations → States.
       </p>
     </div>
   ),

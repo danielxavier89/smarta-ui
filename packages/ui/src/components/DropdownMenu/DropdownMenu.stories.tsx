@@ -75,3 +75,30 @@ export const NotASelect: Story = {
     </p>
   ),
 };
+
+export const DisabledItem: Story = {
+  name: "An action that cannot run yet",
+  render: () => (
+    <div className="flex flex-col items-start gap-[10px]">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="secondary" size="sm">Actions</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Open the receipt</DropdownMenuItem>
+          <DropdownMenuItem>Ask the supplier again</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem disabled meta="May is closed">
+            Change the category
+          </DropdownMenuItem>
+          <DropdownMenuItem tone="danger">Delete the upload</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+        A menu is the one place a disabled control can carry its own reason: `meta` sits
+        on the right of the row and is read with it. Everywhere else the reason has to
+        live beside the control, because there is nowhere inside it to put one.
+      </p>
+    </div>
+  ),
+};

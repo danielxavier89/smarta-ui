@@ -204,9 +204,22 @@ const preview: Preview = {
     controls: { expanded: true, matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: {
       storySort: {
+        // Read top to bottom, this is the order someone should meet the system
+        // in: what it is, the rules, the states those rules are mostly about,
+        // then the raw material, then whole screens, then the parts.
         order: [
           "Foundations",
-          ["Introduction", "Design tokens", "Colour", "Type and space"],
+          [
+            "Introduction",
+            "Conventions",
+            "States",
+            "Design tokens",
+            "Colour",
+            "Type and space",
+            "Inventory",
+          ],
+          "Recipes",
+          ["A list page", "A detail panel", "A form"],
           "Actions",
           "Form",
           "Status",
