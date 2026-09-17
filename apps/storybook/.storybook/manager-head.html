@@ -8,12 +8,26 @@
   // from a link or a reload. Product and mode still persist, which is what you
   // do want to keep while moving between stories.
   //
+  // The same pass stamps the product on the manager's own <html>, so the
+  // sidebar is painted in the right palette on the very first frame. manager.ts
+  // keeps it in step afterwards, but it cannot run this early, and a sidebar
+  // that starts plum and turns grey a moment later is worse than one that never
+  // moved.
+  //
   // In <head>, so it runs before the manager reads the query string.
   (function () {
+    var root = document.documentElement;
+    root.setAttribute("data-product", "webapp");
     try {
       var url = new URL(window.location.href);
       var globals = url.searchParams.get("globals");
-      if (!globals || globals.indexOf("compare:") === -1) return;
+      if (!globals) return;
+
+      globals.split(";").forEach(function (pair) {
+        if (pair === "product:backoffice") root.setAttribute("data-product", "backoffice");
+      });
+
+      if (globals.indexOf("compare:") === -1) return;
       var kept = globals.split(";").filter(function (pair) {
         return pair.indexOf("compare:") !== 0;
       }).join(";");
@@ -32,14 +46,62 @@
   rel="stylesheet"
 />
 <style>
-  /* The wordmark, set the way the backoffice sets it: the mark, with the
+  /* ---------------------------------------------------------------------
+     The sidebar's palette, per product.
+
+     Literals, not var(--canvas): the manager is built as its own bundle and
+     never loads the library stylesheet, so the tokens do not exist in this
+     document. These are the light values of the two products, transcribed —
+     the same numbers theme.ts already transcribes, and the reason both files
+     say so out loud. If a token moves, these move with it.
+
+     Only the *light* palettes are here. The Mode toolbar governs the preview,
+     and a dark manager around a light story reads as a bug rather than a
+     setting; Storybook's own theme is light and stays light.
+     --------------------------------------------------------------------- */
+  :root {
+    --sb-canvas:      #FBF9FB;  /* --canvas */
+    --sb-border:      #EEE7EF;  /* --border */
+    --sb-sunken:      #F5F0F6;  /* --surface-sunken */
+    --sb-fg:          #432F4A;  /* --fg */
+    --sb-fg-subtle:   #7A5D80;  /* --fg-subtle */
+    --sb-selected-bg: #FAE4F7;  /* --selected-bg */
+    --sb-selected-fg: #8A3D86;  /* --selected-fg */
+  }
+
+  :root[data-product="backoffice"] {
+    --sb-canvas:      #FAFAFA;  /* --p-grey-50  */
+    --sb-border:      #E6E6E6;  /* --p-grey-200 */
+    --sb-sunken:      #F1F1F1;  /* --p-grey-100 */
+    --sb-fg:          #1F1F1F;  /* --p-grey-900 */
+    --sb-fg-subtle:   #6E6E6E;  /* --p-grey-500 */
+    --sb-selected-bg: #EAEAEA;  /* --p-grey-150 */
+    --sb-selected-fg: #1F1F1F;  /* --p-grey-900 */
+  }
+
+  /* The ground. Three surfaces, because Storybook paints the sidebar column
+     twice — the <nav> and the wrapper holding it — over a body that shows
+     through at the seam. Miss the wrapper and a 1px strip stays plum. */
+  body,
+  div:has(> nav.sidebar-container),
+  nav.sidebar-container {
+    background: var(--sb-canvas) !important;
+  }
+
+  nav.sidebar-container {
+    border-right-color: var(--sb-border) !important;
+  }
+
+  /* ---------------------------------------------------------------------
+     The wordmark, set the way the backoffice sets it: the mark, with the
      product name flush right underneath. brandTitle carries the markup;
-     this gives it its shape. */
+     this gives it its shape.
+     --------------------------------------------------------------------- */
   .smarta-brand {
     display: inline-flex;
     flex-direction: column;
     align-items: flex-end;
-    color: #432F4A;          /* --fg */
+    color: var(--sb-fg);
     line-height: 1;
   }
   .smarta-brand svg {
@@ -53,7 +115,7 @@
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.03em;
-    color: #7A5D80;          /* --fg-subtle */
+    color: var(--sb-fg-subtle);
   }
 
   /* Storybook sizes the brand slot for its own logo. Let ours set its height,
@@ -66,18 +128,29 @@
   }
   .sidebar-header img { display: none; }
 
-  /* The webapp's sidebar marks the active page with a pale pink pill and plum
-     text, not a solid fill. Storybook's colorSecondary drives selection AND
-     several unrelated accents, so the pill is restyled here rather than by
-     weakening that token. */
+  /* ---------------------------------------------------------------------
+     The tree.
+
+     The selected pill is the part that actually carries the product: both
+     canvases are near-white and a reader will not name the difference between
+     #FBF9FB and #FAFAFA, but pale pink against grey is unmistakable. The
+     webapp marks the active page with a tinted pill and brand-coloured text,
+     never a solid fill; the backoffice does the same in grey, because a
+     grayscale palette has no hue to spend on it.
+
+     Restyled here rather than through colorSecondary, which drives selection
+     AND several unrelated accents at once.
+     --------------------------------------------------------------------- */
   .sidebar-item[data-selected="true"] {
-    background: #FAE4F7 !important;   /* --selected-bg */
-    color: #8A3D86 !important;        /* --selected-fg */
+    background: var(--sb-selected-bg) !important;
+    color: var(--sb-selected-fg) !important;
     font-weight: 500;
   }
-  .sidebar-item[data-selected="true"] svg { color: #8A3D86 !important; }
+  .sidebar-item[data-selected="true"] svg {
+    color: var(--sb-selected-fg) !important;
+  }
 
   .sidebar-item:not([data-selected="true"]):hover {
-    background: #F5F0F6;              /* --surface-sunken */
+    background: var(--sb-sunken);
   }
 </style>

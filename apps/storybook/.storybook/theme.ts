@@ -3,10 +3,12 @@ import { create } from "storybook/theming";
 /**
  * Storybook's own chrome, in the webapp's palette.
  *
- * The manager is a single theme — it cannot follow the product/mode toolbars,
- * which govern the preview iframe only. Webapp light is the right choice: it is
- * the surface most of the team recognises, and it keeps Storybook's chrome
- * clearly distinct from a backoffice story rendering inside it.
+ * This is the base, not the last word. `create()` is read once at boot and
+ * cannot be swapped afterwards, so it stays webapp light; the sidebar is then
+ * repainted per product from `data-product` in manager-head.html, which the
+ * Product toolbar keeps current. What is left on these values is everything
+ * outside the sidebar — the toolbar accents, the addon panel, buttons and
+ * inputs — and that chrome is Storybook's own, not either product's.
  *
  * The values are the webapp's light tokens, copied rather than imported: the
  * manager bundle is built separately from the preview and never loads the
