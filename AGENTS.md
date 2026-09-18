@@ -100,6 +100,20 @@ Both come from the shipped prototypes and hold across the library:
 - Currency is formatted by the product before it reaches a component.
 - `prefers-reduced-motion` is honoured once, in `reset.css`. Do not add a second rule.
 
+## Sample data is published
+
+Storybook is deployed to a public URL, and the repository is public. Every story
+is therefore a published document. Write sample data accordingly:
+
+- **Tax numbers must fail their checksum.** A checksum-valid NIF or USt-IdNr is
+  somebody's real registration, and the tax-facing components — KeyValue, Panel,
+  Input — attract them. Change the last digit until it fails.
+- **No real street addresses.** `Musterstraße 12, 10969 Berlin` is the placeholder.
+- **No real people.** Invented names, not colleagues or customers.
+- Real supplier brands are fine — Galp, Vodafone, Continente. A reconciliation
+  screen reads wrong without them, and a brand name discloses nothing.
+- Card numbers stay masked to the last four, and the last four are invented.
+
 ## Traps that have already bitten
 
 - **`overflow-hidden` on a table wrapper** scopes `position: sticky` to the wrapper, so sticky headings scroll away. Clip corners on the cells instead.

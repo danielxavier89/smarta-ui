@@ -62,6 +62,10 @@ type Row = {
   why: string;
 };
 
+// Sample data. The suppliers are real brands because a reconciliation screen
+// reads wrong with invented ones — but every tax number here deliberately fails
+// its checksum, so none of them can be a real registration. Keep it that way:
+// Storybook is published to a public URL.
 const ROWS: Row[] = [
   { id: "r1", date: "3 Jun", supplier: "Staples Lisboa", amount: 86.4, status: "matched",
     account: "Visa ···· 4417", booked: "3 June 2026", nif: "503 214 665", net: 70.24, vat: 16.16,
@@ -70,7 +74,7 @@ const ROWS: Row[] = [
     account: "Visa ···· 4417", booked: "3 June 2026",
     why: "No receipt has been uploaded for this charge. Fuel needs one to be deductible." },
   { id: "r3", date: "5 Jun", supplier: "Vodafone", amount: 39.9, status: "matched",
-    account: "Direct debit", booked: "5 June 2026", nif: "502 544 180", net: 32.44, vat: 7.46,
+    account: "Direct debit", booked: "5 June 2026", nif: "502 544 187", net: 32.44, vat: 7.46,
     why: "Matched to the June invoice by reference number." },
   { id: "r4", date: "8 Jun", supplier: "Uber BV", amount: 12.1, status: "waiting",
     account: "Visa ···· 4417", booked: "8 June 2026",
