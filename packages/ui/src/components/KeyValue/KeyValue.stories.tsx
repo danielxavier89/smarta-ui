@@ -15,6 +15,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Every tax number below deliberately fails its checksum. KeyValue's whole job
+// is showing identifiers, so it attracts realistic ones — but these stories are
+// published to a public URL, and a checksum-valid NIF or USt-IdNr is somebody's
+// real registration whether or not it was invented here.
+
 export const InAPanel: Story = {
   render: () => (
     <div className="max-w-[360px] rounded-lg border border-border bg-surface p-[20px]">
@@ -113,7 +118,7 @@ export const Stacked: Story = {
         layout="stacked"
         rows={[
           { key: "Steuernummer", value: "151/815/08155" },
-          { key: "USt-IdNr", value: "DE 811 907 980" },
+          { key: "USt-IdNr", value: "DE 811 907 987" },
           { key: "Registered office", value: "Prinzenstraße 84, 10969 Berlin" },
         ]}
       />
