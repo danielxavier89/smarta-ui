@@ -15,10 +15,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Every tax number below deliberately fails its checksum, and the registered
-// office is a placeholder street. KeyValue's whole job is showing identifiers,
-// so it attracts realistic ones — but these stories are published to a public
-// URL, and a checksum-valid NIF or USt-IdNr is somebody's real registration.
+// Every tax number below deliberately fails its checksum. KeyValue's whole job
+// is showing identifiers, so it attracts realistic ones — but these stories are
+// published to a public URL, and a checksum-valid NIF or USt-IdNr is somebody's
+// real registration whether or not it was invented here.
 
 export const InAPanel: Story = {
   render: () => (
@@ -89,7 +89,7 @@ export const NarrowColumn: Story = {
             { key: "Charged", value: "€486.22", nowrap: true, note: "Converted at 1.1105 on 14 June." },
             { key: "Steuernummer", value: "151/815/08155", nowrap: true },
             { key: "Input VAT", value: "Not reclaimable", tone: "warn" },
-            { key: "Registered office", value: "Musterstraße 12, 10969 Berlin" },
+            { key: "Registered office", value: "Prinzenstraße 84, 10969 Berlin" },
           ]}
         />
       </div>
@@ -103,7 +103,7 @@ export const NarrowColumn: Story = {
             { key: "Charged", value: "€486.22", note: "Converted at 1.1105 on 14 June." },
             { key: "Steuernummer", value: "151/815/08155" },
             { key: "Input VAT", value: "Not reclaimable", tone: "warn" },
-            { key: "Registered office", value: "Musterstraße 12, 10969 Berlin" },
+            { key: "Registered office", value: "Prinzenstraße 84, 10969 Berlin" },
           ]}
         />
       </div>
@@ -119,7 +119,7 @@ export const Stacked: Story = {
         rows={[
           { key: "Steuernummer", value: "151/815/08155" },
           { key: "USt-IdNr", value: "DE 811 907 987" },
-          { key: "Registered office", value: "Musterstraße 12, 10969 Berlin" },
+          { key: "Registered office", value: "Prinzenstraße 84, 10969 Berlin" },
         ]}
       />
     </div>

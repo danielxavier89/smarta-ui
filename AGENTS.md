@@ -103,16 +103,19 @@ Both come from the shipped prototypes and hold across the library:
 ## Sample data is published
 
 Storybook is deployed to a public URL, and the repository is public. Every story
-is therefore a published document. Write sample data accordingly:
+is therefore a published document.
 
-- **Tax numbers must fail their checksum.** A checksum-valid NIF or USt-IdNr is
-  somebody's real registration, and the tax-facing components — KeyValue, Panel,
-  Input — attract them. Change the last digit until it fails.
-- **No real street addresses.** `Musterstraße 12, 10969 Berlin` is the placeholder.
-- **No real people.** Invented names, not colleagues or customers.
-- Real supplier brands are fine — Galp, Vodafone, Continente. A reconciliation
-  screen reads wrong without them, and a brand name discloses nothing.
-- Card numbers stay masked to the last four, and the last four are invented.
+The sample data is invented — the names, the companies, the addresses — and
+invented is enough. Keep writing it the way it is written: specific, plausible,
+and the kind of thing that makes a screen read like the real one. The one
+exception is arithmetic:
+
+- **Tax numbers must fail their checksum.** A NIF or a USt-IdNr is not just a
+  string of the right shape — it carries a check digit, so a number invented at
+  random can still land on a real registration. The tax-facing components —
+  KeyValue, Panel, Input — are the ones that attract them. Change the last digit
+  until the checksum fails, and it cannot be anybody's.
+- Card numbers stay masked to the last four.
 
 ## Traps that have already bitten
 
