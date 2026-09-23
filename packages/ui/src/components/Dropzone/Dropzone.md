@@ -48,11 +48,12 @@ A drop target that is also a button that is also a file input.
 
 ## Rules
 
-1. **Drag is the affordance, not the requirement.** The whole zone is a button and is reachable by keyboard, because dragging a file is impossible on a phone and awkward with a screen reader. Never ship a zone that can only be dropped on.
+1. **Drag is the affordance, not the requirement.** The whole zone is a `<label>` owning a real file input, so it is clickable and reachable by keyboard for free — dragging a file is impossible on a phone and awkward with a screen reader. Never ship a zone that can only be dropped on. (It used to be a `div role="button"` wrapping the input, which axe failed twice over: the input had no accessible name, and an interactive wrapper around an interactive input is `nested-interactive`.)
 2. **State the limits before the user hits them.** `hint="JPG, PNG or PDF, up to 10 MB each."`
 3. **Upload errors land here, not in a Toast.** A toast leaves before the user can act on it and cannot be re-read; the failure belongs beside the thing that failed.
 4. **The file input resets after every change**, so choosing the same file twice still fires.
-5. **Name the file in every message.** "That file is 14 MB. The limit is 10 MB." beats "Upload failed".
+5. **`hint` renders outside the label, on purpose.** Anything inside the label joins the input's accessible name, and a name that recites the size limit is read out in full every time the control takes focus. It is wired with `aria-describedby` instead.
+6. **Name the file in every message.** "That file is 14 MB. The limit is 10 MB." beats "Upload failed".
 
 ## Do and don't
 
