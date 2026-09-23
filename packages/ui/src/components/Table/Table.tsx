@@ -101,9 +101,16 @@ export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
    * A row is often full of its own controls — a menu, a copy button. Those
    * handle their own activation, and the row must not fire a second time on
    * top of them.
+   *
+   * The row itself matches INTERACTIVE once onActivate has given it a
+   * tabIndex, so `closest` finds the row when the click was on a plain cell.
+   * Only a match strictly between the target and the row counts.
    */
-  const fromChildControl = (target: EventTarget | null) =>
-    target instanceof Element && target.closest(INTERACTIVE) !== null;
+  const fromChildControl = (target: EventTarget | null, row: EventTarget | null) => {
+    if (!(target instanceof Element) || !(row instanceof Element)) return false;
+    const hit = target.closest(INTERACTIVE);
+    return hit !== null && hit !== row && row.contains(hit);
+  };
 
   return (
     <tr
@@ -113,7 +120,7 @@ export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
       onClick={(e) => {
         onClick?.(e);
         if (!onActivate || e.defaultPrevented) return;
-        if (e.target !== e.currentTarget && fromChildControl(e.target)) return;
+        if (fromChildControl(e.target, e.currentTarget)) return;
         onActivate(e);
       }}
       onKeyDown={(e) => {

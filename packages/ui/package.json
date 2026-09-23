@@ -32,8 +32,8 @@
     "build": "npm run build:js && npm run build:css",
     "build:js": "node ./scripts/build-js.mjs",
     "build:css": "node ./scripts/build-css.mjs",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "node ../../scripts/run-bin.mjs vitest run",
+    "test:watch": "node ../../scripts/run-bin.mjs vitest"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -50,10 +50,19 @@
   "devDependencies": {
     "@smarta/tokens": "*",
     "@tailwindcss/cli": "^4.3.3",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.2.0",
+    "axe-core": "^4.13.0",
+    "jsdom": "^26.1.0",
     "tailwindcss": "^4.1.13",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.7",
+    "vitest-axe": "^0.1.0"
   }
 }

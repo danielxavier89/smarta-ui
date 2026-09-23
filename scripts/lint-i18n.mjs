@@ -35,7 +35,9 @@ function walk(dir) {
   for (const e of readdirSync(dir)) {
     const p = join(dir, e);
     if (statSync(p).isDirectory()) walk(p);
-    else if (/\.tsx?$/.test(p) && !p.includes(".stories.")) files.push(p);
+    // Stories and tests are call sites: they pass copy in, which is exactly
+    // what a product does and what this rule is not about.
+    else if (/\.tsx?$/.test(p) && !p.includes(".stories.") && !p.includes(".test.")) files.push(p);
   }
 }
 for (const r of ROOTS) walk(r);

@@ -17,9 +17,17 @@
     "check": "npm run gen:inventory && npm run typecheck && npm run lint:tokens && npm run lint:i18n && npm run audit:contrast",
     "gen:inventory": "node scripts/gen-inventory.mjs",
     "test": "npm run test -w @smarta/ui",
-    "lint:i18n": "node scripts/lint-i18n.mjs"
+    "lint:i18n": "node scripts/lint-i18n.mjs",
+    "test:consumer": "node scripts/consumer-smoke.mjs"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "@vitejs/plugin-react": "^5.2.0",
+    "css-loader": "^7.1.5",
+    "esbuild-loader": "^4.5.0",
+    "style-loader": "^4.0.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.3.6",
+    "webpack": "^5.111.1",
+    "webpack-cli": "^6.0.1"
   }
 }
