@@ -28,6 +28,25 @@ export {
   type PartialLabels,
 } from "./lib/labels";
 
+/**
+ * Dates, numbers and money. Helpers a product calls before the value reaches a
+ * component — components still never format. See lib/format.ts.
+ */
+export {
+  formatCurrency,
+  formatSignedCurrency,
+  formatNumber,
+  formatPercent,
+  formatFileSize,
+  formatDate,
+  formatDateTime,
+  formatMonth,
+  formatRelativeDay,
+  type SmartaLocale,
+  type CurrencyOptions,
+  type DateInput,
+} from "./lib/format";
+
 // Actions
 export * from "./components/Button";
 export * from "./components/IconButton";

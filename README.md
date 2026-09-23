@@ -31,23 +31,29 @@ npm install
 npm run storybook        # http://localhost:6006
 ```
 
-**One thing to know before you plan around it:** `@smarta/ui` is currently
-`private: true` and ships raw TypeScript with no build step, so it cannot be
-installed from another repository yet — only used from inside this workspace.
-That is a deliberate not-yet, not an oversight. For reading and reviewing it
-changes nothing; it is the one blocker to actually building against it, and it
-is roughly half a day of packaging work.
+**It builds and installs now.** `npm run build` emits ESM, CJS, `.d.ts`,
+sourcemaps and compiled CSS to `packages/ui/dist`, and `npm run test:consumer`
+proves it by resolving the package through its `exports` map and building a
+real app with Webpack and with Vite. It is not published to a registry yet —
+see [docs/OWNERSHIP.md](docs/OWNERSHIP.md), which is the short list of things
+that need someone with admin on the GitHub account.
 
 ## Running it
 
 ```sh
 npm install
 npm run storybook        # http://localhost:6006
-npm run check            # typecheck + no hardcoded colours + contrast across 4 themes
+
+npm run check            # typecheck, no hardcoded colours, no hardcoded English,
+                         # contrast across the four themes
+npm run build            # the library, to packages/ui/dist
+npm test                 # behaviour and axe, in all four themes
+npm run test:consumer    # resolve and build the package with Webpack and Vite
 npm run build-storybook
 ```
 
-Node 20+. The workspace uses **npm workspaces** — no pnpm needed.
+Node 20+. The workspace uses **npm workspaces** — no pnpm needed. CI runs
+exactly the list above on every pull request; see `.github/workflows/ci.yml`.
 
 ## The four combinations
 
@@ -76,7 +82,10 @@ Omit `data-theme` and the surface follows `prefers-color-scheme`.
 import "@smarta/ui/styles.css";
 import { ThemeProvider, ToastProvider, TooltipProvider } from "@smarta/ui";
 
-<ThemeProvider asRoot product="backoffice" theme={userChoice}>
+// Outside render: this reaches every component below the provider.
+const labels = { close: "Schließen", search: "Suchen" };
+
+<ThemeProvider asRoot product="backoffice" theme={userChoice} labels={labels}>
   <TooltipProvider>
     <ToastProvider>
       <App />
@@ -87,6 +96,69 @@ import { ThemeProvider, ToastProvider, TooltipProvider } from "@smarta/ui";
 
 ```tsx
 import { Button, Card, Chip, Table } from "@smarta/ui";
+```
+
+### Two stylesheets, and which one you want
+
+```tsx
+import "@smarta/ui/styles.css";   // always: tokens and the components
+import "@smarta/ui/reset.css";    // only if this library owns the page
+```
+
+`styles.css` is scoped. Every rule in it either is a utility class the
+components use or sits under `[data-product]`, which `ThemeProvider` renders —
+so it cannot restyle a page's own buttons, inputs, body or focus rings. That
+matters because the backoffice runs Ant Design 4, Bootstrap and
+styled-components together, and the webapp is mid-migration from
+styled-components to Tailwind. A library that cannot be added to one screen
+without changing the other forty is a library nobody can adopt gradually.
+
+`reset.css` widens the same decisions to the whole document: `body`, all form
+controls, all `:focus-visible`. **Greenfield surfaces take it. Screens being
+migrated a component at a time do not.** Nothing in the library needs it.
+
+### The font
+
+The library names Plus Jakarta Sans and then inherits. It does not fetch it —
+a request to Google Fonts from inside a component library is a CSP entry and a
+privacy review the host did not ask for. Tell it what to use:
+
+```css
+:root { --smarta-font-product: "Inter", sans-serif; }   /* match the product */
+:root { --smarta-font-product: "Plus Jakarta Sans"; }   /* if you self-host it */
+```
+
+During the migration the first is the right answer.
+
+### Words the library says for itself
+
+A close button, a spinner, the pagination landmark. They default to English and
+a product overrides what it needs:
+
+```tsx
+import type { PartialLabels } from "@smarta/ui";
+
+const de: PartialLabels = {
+  close: "Schließen",
+  previousPage: "Vorherige Seite",
+  pageRange: (first, last, total) => `${first}–${last} von ${total}`,
+};
+```
+
+Interpolated ones are functions, not templates, because word order is not
+universal. Your own copy is still passed in as props, as it always was.
+
+### Dates, numbers and money
+
+Components never format a value — that has not changed, and it is why the
+product owns the locale. What is new is that everyone can get the same answer:
+
+```tsx
+import { formatCurrency, formatDate } from "@smarta/ui";
+
+formatCurrency(1234.56, "de-DE");   // "1.234,56 €"
+formatCurrency(1234.56, "en-GB");   // "€1,234.56"
+formatDate("2026-06-03", "de-DE");  // "3. Juni 2026"
 ```
 
 ## The one rule

@@ -28,12 +28,40 @@ If you need a colour that does not exist, **add a semantic token** in
 `prefers-color-scheme` blocks), map it in `theme.css`, describe it in
 `packages/tokens/src/index.ts`, then run `npm run audit:contrast`.
 
+## The second rule that matters
+
+**No component contains an English word it made up.** Everything a screen says
+is a prop and always was. What a component has to produce on its own — a close
+button's accessible name, a spinner's announcement, the pagination landmark —
+lives in `packages/ui/src/lib/labels.ts` and is read with `useLabels()`.
+
+The backoffice is German and the webapp is German and English. A hardcoded
+string makes a component belong to one language the same way a hardcoded colour
+makes it belong to one product, and an accessible name is the worst place to
+hide one: invisible on screen, and read aloud to the one user who cannot work
+around it. `npm run lint:tokens` enforces the first rule; `npm run lint:i18n`
+enforces this one.
+
+Adding a label: put it in `SmartaLabels`, give it an English default, read it
+with `useLabels()`. If it interpolates, make it a function — `${first}–${last}
+of ${total}` puts "von" in the middle in German.
+
 ## Before you finish
 
 ```sh
-npm run check            # typecheck + token lint + contrast audit
+npm run check            # typecheck, token lint, i18n lint, contrast audit
+npm test                 # behaviour and axe, in all four themes
+npm run build            # the library must still compile to dist/
+npm run test:consumer    # and still install into Webpack and Vite
 npm run build-storybook  # catches anything the types do not
 ```
+
+CI runs all of it on every pull request. The two that catch things the others
+cannot: `npm test` runs axe over a composed surface in all four product/mode
+combinations, and `npm run test:consumer` resolves the built package through
+its `exports` map and builds a real app with both products' bundlers — which is
+the check that would have caught the package being uninstallable while every
+other check was green.
 
 ## Adding a component
 
