@@ -30,12 +30,36 @@ nothing; "a clickable row now needs `onActivate`" tells them what to change.
 - **`TR`'s `onActivate`**, which makes a row activatable by mouse *and*
   keyboard in one prop.
 - **`CardTitle`'s `as`**, so a card can sit at the right heading level.
-- **Tests and CI.** 82 tests covering keyboard, focus, overlays, forms, upload,
-  disabled and loading states and the providers; axe over a composed surface in
-  all four product/mode combinations; a consumer smoke build against Webpack
-  and Vite. All of it on every pull request.
+- **Tests and CI.** 103 tests: 67 on component behaviour (keyboard, focus,
+  overlays opening and closing, menus, toasts, form wiring, upload, disabled
+  and loading, the providers and the labels layer), 24 on the formatting
+  helpers, and 12 axe runs over a composed surface. Plus a consumer check
+  that packs the tarball, unpacks it, and typechecks and builds against the
+  published layout with both Webpack and Vite. All of it on every pull
+  request.
 
 ### Changed
+
+- **`styles.css` no longer ships Tailwind's preflight.** Tailwind is imported
+  in pieces and preflight is left out, because it is ~150 lines of unscoped
+  element selectors that restyle every heading, list, image, form control and
+  table on the host page. The components get an equivalent scoped to
+  `[data-product]`. `reset.css` carries the real one, inlined, for a product
+  that owns its page.
+
+- **The tokens are no longer declared on `:root`.** They set `color-scheme`
+  there, which is unlayered and changes how the browser paints the whole
+  document's scrollbars and native controls — so importing the stylesheet
+  could flip an Ant Design page on a dark-OS machine. They live on
+  `[data-product]` now.
+
+  **What to do:** nothing, if you render `ThemeProvider` — including in
+  `asRoot` mode, where the attribute goes on `<html>`. A component rendered
+  outside a provider now has no tokens rather than webapp-light ones.
+
+- **`exports` nests `types` under each condition.** A CommonJS consumer on
+  `node16`/`nodenext` resolution could not import the package at all
+  (TS1479); the `.d.cts` being built and shipped was referenced by nothing.
 
 - **The stylesheet no longer restyles the page it lands on.** `styles.css` used
   to set `body`, every `button`/`input`/`select`/`textarea`, every
@@ -74,6 +98,16 @@ nothing; "a clickable row now needs `onActivate`" tells them what to change.
   with `onActivate={…}`.
 
 ### Fixed
+
+- A row with `onActivate` no longer double-fires when a `<label>` inside it
+  is clicked — which is the shape the library's own `Checkbox` renders, so
+  clicking the words beside a checkbox both toggled it and opened the panel.
+- `<TR onActivate tabIndex={-1}>` no longer takes an activatable row out of
+  the tab order. The negative value is ignored, with a warning.
+- `Button`'s `loadingLabel` is no longer discarded when the caller also
+  passes an `aria-label`, so the busy state is actually announced.
+- `ThemeProvider` compares `labels` by contents, so an inline object literal
+  no longer re-renders every component below the provider on each render.
 
 - A row with `onActivate` no longer fires when a button, link or menu inside it
   is clicked or activated by keyboard. The hand-written version at every call

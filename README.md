@@ -47,7 +47,7 @@ npm run storybook        # http://localhost:6006
 npm run check            # typecheck, no hardcoded colours, no hardcoded English,
                          # contrast across the four themes
 npm run build            # the library, to packages/ui/dist
-npm test                 # behaviour and axe, in all four themes
+npm test                 # behaviour, labels, formatting, and axe
 npm run test:consumer    # resolve and build the package with Webpack and Vite
 npm run build-storybook
 ```
@@ -105,13 +105,28 @@ import "@smarta/ui/styles.css";   // always: tokens and the components
 import "@smarta/ui/reset.css";    // only if this library owns the page
 ```
 
-`styles.css` is scoped. Every rule in it either is a utility class the
-components use or sits under `[data-product]`, which `ThemeProvider` renders —
-so it cannot restyle a page's own buttons, inputs, body or focus rings. That
-matters because the backoffice runs Ant Design 4, Bootstrap and
-styled-components together, and the webapp is mid-migration from
-styled-components to Tailwind. A library that cannot be added to one screen
-without changing the other forty is a library nobody can adopt gradually.
+`styles.css` paints nothing outside `[data-product]`, the attribute
+`ThemeProvider` renders. Every rule in it is either a utility class the
+components use or is scoped to that subtree — so it cannot restyle a page's own
+headings, lists, images, form controls, body or focus rings. That matters
+because the backoffice runs Ant Design 4, Bootstrap and styled-components
+together, and the webapp is mid-migration from styled-components to Tailwind. A
+library that cannot be added to one screen without changing the other forty is
+a library nobody can adopt gradually.
+
+This is checked, not asserted: `npm run build` reads the compiled stylesheet and
+fails on any element selector, any `:root` rule that paints, or any
+`color-scheme` outside `[data-product]`. It is checked because it was wrong
+once — the hand-written reset had been split out correctly while
+`@import "tailwindcss"` quietly kept pulling Tailwind's own preflight in, and
+the source gave no sign of it.
+
+One thing it does still put on your document: the design tokens themselves, as
+custom properties on `:root` — `--canvas`, `--fg`, `--border` and about sixty
+others. Those are inert, they render nothing on their own, and the components
+read them from inside their own subtree. But the names are generic, so if your
+page already defines `--border` for something else, one of you will win. Say so
+and we will namespace them.
 
 `reset.css` widens the same decisions to the whole document: `body`, all form
 controls, all `:focus-visible`. **Greenfield surfaces take it. Screens being
@@ -174,7 +189,7 @@ through a Tailwind utility, which is the enforcement.
 ```sh
 npm run check            # typecheck + token lint + contrast audit
 npm run lint:tokens      # no hardcoded colour in packages/ui/src
-npm run audit:contrast   # 104 text/background pairs x 4 themes, WCAG AA
+npm run audit:contrast   # 35 token pairs x 4 themes = 140 checks, WCAG AA
 ```
 
 The contrast audit is not decoration: it found two real defects the first time it
@@ -220,4 +235,6 @@ These come from the two shipped prototypes and are enforced across the library:
 - Reversible destructive actions get Undo; irreversible ones get a Dialog whose button names the act.
 - Validation is silent while typing, fires on blur, then goes live.
 - Currency is formatted by the product before it reaches a component.
-- `prefers-reduced-motion` is honoured once, globally, in `reset.css`.
+- `prefers-reduced-motion` is honoured for the library's own components in
+  `base.css`, scoped, and always ships. `reset.css` widens it to the whole
+  document, and is opt-in. Never a third rule in a component.

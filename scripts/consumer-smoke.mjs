@@ -8,10 +8,16 @@
  * Storybook defined. A green build told us nothing about the question that
  * mattered.
  *
- * So this one goes through the front door: it resolves the package the way npm
- * would, through the `exports` map, and builds a tiny app with the two bundlers
- * the products use — Webpack for the webapp, Vite for the backoffice — plus a
- * TypeScript pass against the emitted .d.ts.
+ * So this one goes through the front door. It runs `npm pack`, unpacks the
+ * tarball into the fixture's own node_modules and builds against THAT, not
+ * against packages/ui/dist through the workspace symlink. Only the packed copy
+ * exercises the `files` field and the published layout, which is where "works
+ * here, installs broken" lives.
+ *
+ * Then TypeScript twice — once with bundler resolution, once as CommonJS on
+ * node16, because those read the `exports` map differently and only the second
+ * can see a missing `require` types condition — and a build with each of the
+ * two bundlers the products use.
  *
  * It is deliberately boring about what the app does. A consumer that imports
  * one component and renders it exercises the whole chain: exports map, module
@@ -172,8 +178,58 @@ writeFileSync(
   ),
 );
 
-// --------------------------------------------------------------- 3a. tsc
-step("a. typechecking the consumer against dist/index.d.ts");
+// -------------------------------------------- 3a. pack it and install it
+step("a. packing the tarball and unpacking it into the fixture");
+{
+  // npm is the thing running this script, not a dependency, so it cannot be
+  // resolved out of node_modules. npm exports the path to its own CLI for
+  // exactly this; the fallback is for running the script with plain `node`.
+  const npmCli = process.env.npm_execpath;
+  if (!npmCli || !existsSync(npmCli)) {
+    fail("npm_execpath is not set. Run this through `npm run test:consumer`.");
+  }
+
+  const out = execFileSync(
+    process.execPath,
+    [npmCli, "pack", "-w", "@smarta/ui", "--pack-destination", work, "--silent"],
+    { cwd: ROOT, encoding: "utf8" },
+  );
+  const tarball = out.trim().split("\n").filter(Boolean).pop();
+  if (!tarball) fail("npm pack printed no tarball name");
+
+  const dest = join(work, "node_modules/@smarta/ui");
+  mkdirSync(dest, { recursive: true });
+  // npm tarballs put everything under package/.
+  execFileSync("tar", ["-xzf", join(work, tarball), "-C", dest, "--strip-components=1"], {
+    stdio: "inherit",
+  });
+
+  // Resolution from .consumer-smoke/src finds this copy before it walks up to
+  // the workspace symlink, so everything below is the published package rather
+  // than dist/ reached through a symlink. Only this exercises the `files` field
+  // and the packed layout — which is where "works here, installs broken" lives.
+  const required = [
+    "package.json",
+    "LICENSE",
+    "dist/index.js",
+    "dist/index.cjs",
+    "dist/index.d.ts",
+    "dist/index.d.cts",
+    "dist/styles.css",
+    "dist/reset.css",
+  ];
+  const absent = required.filter((f) => !existsSync(join(dest, f)));
+  if (absent.length) {
+    fail(
+      `the packed tarball is missing ${absent.join(", ")}.\n` +
+        `Check the "files" field in packages/ui/package.json.`,
+    );
+  }
+  console.log(`   ${tarball} unpacked; the published layout has everything a consumer imports`);
+}
+
+// --------------------------------------------------------------- 3b. tsc
+step("b. typechecking the consumer against the packed .d.ts");
 try {
   execFileSync(process.execPath, [bin("typescript", "tsc"), "-p", join(work, "tsconfig.json")], {
     stdio: "inherit",
@@ -184,8 +240,69 @@ try {
   fail("the consumer failed to typecheck against the emitted .d.ts");
 }
 
-// -------------------------------------------------------------- 3b. Vite
-step("b. building with Vite (the backoffice's bundler)");
+/**
+ * The CommonJS door, on node16 resolution.
+ *
+ * This is the shape that was broken and that nothing else here could see. The
+ * `exports` map used the flat form, with one `types` entry answering for both
+ * conditions; the package is `"type": "module"`, so a CJS consumer read
+ * index.d.ts as ESM and got TS1479 — "cannot be imported with require" — while
+ * the index.d.cts being built and shipped was referenced by nothing.
+ *
+ * The bundler-resolution check above cannot catch it: `moduleResolution:
+ * "Bundler"` ignores the conditions entirely. So this one pins node16 and
+ * commonjs on purpose.
+ */
+step("c. typechecking a CommonJS consumer on node16 resolution");
+{
+  const cjsDir = join(work, "cjs");
+  mkdirSync(join(cjsDir, "src"), { recursive: true });
+
+  writeFileSync(join(cjsDir, "package.json"), JSON.stringify({ type: "commonjs" }, null, 2));
+  writeFileSync(
+    join(cjsDir, "src/app.ts"),
+    `import { Button, formatCurrency } from "@smarta/ui";\n` +
+      `import type { Product } from "@smarta/ui";\n` +
+      `const p: Product = "backoffice";\n` +
+      `export { Button, formatCurrency, p };\n`,
+  );
+  writeFileSync(
+    join(cjsDir, "tsconfig.json"),
+    JSON.stringify(
+      {
+        compilerOptions: {
+          target: "ES2022",
+          lib: ["ES2022", "DOM"],
+          module: "Node16",
+          moduleResolution: "Node16",
+          jsx: "react-jsx",
+          strict: true,
+          noEmit: true,
+          skipLibCheck: true,
+        },
+        include: ["src"],
+      },
+      null,
+      2,
+    ),
+  );
+
+  try {
+    execFileSync(process.execPath, [bin("typescript", "tsc"), "-p", join(cjsDir, "tsconfig.json")], {
+      stdio: "inherit",
+      cwd: cjsDir,
+    });
+    console.log("   a CommonJS consumer resolves the .d.cts through the require condition");
+  } catch {
+    fail(
+      "a CommonJS consumer on node16 resolution cannot import the package.\n" +
+        'Check that "exports" nests "types" under each of "import" and "require".',
+    );
+  }
+}
+
+// -------------------------------------------------------------- 3d. Vite
+step("d. building with Vite (the backoffice's bundler)");
 writeFileSync(
   join(work, "vite.config.mjs"),
   `import { defineConfig } from "vite";
@@ -214,8 +331,8 @@ try {
   fail("the consumer failed to build with Vite");
 }
 
-// ------------------------------------------------------------ 3c. Webpack
-step("c. building with Webpack (the webapp's bundler)");
+// ------------------------------------------------------------ 3e. Webpack
+step("e. building with Webpack (the webapp's bundler)");
 writeFileSync(
   join(work, "webpack.config.cjs"),
   `const path = require("path");
@@ -246,4 +363,4 @@ try {
   fail("the consumer failed to build with Webpack");
 }
 
-console.log("\nconsumer-smoke: @smarta/ui installs, typechecks and builds in both bundlers.\n");
+console.log("\nconsumer-smoke: @smarta/ui packs, resolves, typechecks (bundler and CJS) and builds in both bundlers.\n");

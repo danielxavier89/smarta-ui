@@ -122,6 +122,71 @@ describe("Dropzone", () => {
     const { container } = wrap(<Dropzone onFiles={() => {}} disabled />);
     expect(container.querySelector('input[type="file"]')).toBeDisabled();
   });
+
+  /**
+   * The input's accessible name comes from the label that wraps it, so the hint
+   * has to sit outside that label and reach the input by aria-describedby —
+   * otherwise "PDF or a photograph, up to 10 MB" is read out in full every time
+   * the control takes focus. That placement is load-bearing and was asserted
+   * nowhere, so the whole wiring could be deleted with the suite still green.
+   */
+  it("names the input from the visible label, and describes it with the hint", () => {
+    const { container } = wrap(
+      <Dropzone onFiles={() => {}} label="Drop the statement here" hint="PDF, up to 10 MB." />,
+    );
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+
+    // The name comes from the wrapping label's text, not from an aria-label.
+    expect(input.getAttribute("aria-label")).toBeNull();
+    expect(input).toHaveAccessibleName(/Drop the statement here/);
+
+    // And the hint reaches it without joining that name.
+    expect(input).toHaveAccessibleDescription("PDF, up to 10 MB.");
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+  });
+
+  it("describes the input with its error and marks it invalid", () => {
+    const { container } = wrap(
+      <Dropzone
+        onFiles={() => {}}
+        label="Drop the statement here"
+        error="That file is 14 MB. The limit is 10 MB."
+      />,
+    );
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    expect(input).toHaveAccessibleDescription("That file is 14 MB. The limit is 10 MB.");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+});
+
+describe("Button's busy state", () => {
+  /**
+   * `{...props}` used to be spread after the aria-label, so a caller who set
+   * their own accessible name silently lost loadingLabel — and aria-busy on its
+   * own says "busy" without saying what is busy.
+   */
+  it("announces loadingLabel even when the caller set an aria-label", () => {
+    wrap(
+      <Button loading loadingLabel="Wird hochgeladen" aria-label="Hochladen">
+        Upload it
+      </Button>,
+    );
+    expect(screen.getByRole("button")).toHaveAccessibleName("Wird hochgeladen");
+  });
+
+  it("keeps the caller's aria-label when it is not loading", () => {
+    wrap(
+      <Button loadingLabel="Wird hochgeladen" aria-label="Hochladen">
+        Upload it
+      </Button>,
+    );
+    expect(screen.getByRole("button")).toHaveAccessibleName("Hochladen");
+  });
+
+  it("marks itself busy while loading", () => {
+    wrap(<Button loading>Upload it</Button>);
+    expect(screen.getByRole("button")).toHaveAttribute("aria-busy", "true");
+  });
 });
 
 describe("Button", () => {

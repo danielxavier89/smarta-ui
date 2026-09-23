@@ -50,18 +50,26 @@ of ${total}` puts "von" in the middle in German.
 
 ```sh
 npm run check            # typecheck, token lint, i18n lint, contrast audit
-npm test                 # behaviour and axe, in all four themes
+npm test                 # behaviour, the labels layer, formatting, and axe
 npm run build            # the library must still compile to dist/
 npm run test:consumer    # and still install into Webpack and Vite
 npm run build-storybook  # catches anything the types do not
 ```
 
-CI runs all of it on every pull request. The two that catch things the others
-cannot: `npm test` runs axe over a composed surface in all four product/mode
-combinations, and `npm run test:consumer` resolves the built package through
-its `exports` map and builds a real app with both products' bundlers — which is
-the check that would have caught the package being uninstallable while every
-other check was green.
+CI runs all of it on every pull request.
+
+`npm run test:consumer` is the one that catches what the others cannot. Every
+other check runs against `src` through a workspace symlink; this one packs the
+library, installs the tarball into a throwaway app and builds it with both
+products' bundlers. It is the check that would have caught the package being
+uninstallable while everything else was green.
+
+Two things `npm test` does not do, despite appearances. Its axe run loops over
+the four product/mode combinations, but no component branches on either and
+the tests load no CSS, so those four renders are the same DOM — it is three
+assertions run four times, kept as insurance rather than as evidence. And
+colour contrast cannot run under jsdom at all; `npm run audit:contrast` is
+what actually checks it, against the token values.
 
 ## Adding a component
 
@@ -126,7 +134,10 @@ Both come from the shipped prototypes and hold across the library:
 - Reversible destructive actions get Undo; irreversible ones get a Dialog naming the act.
 - Validation is silent while typing, fires on blur, then goes live.
 - Currency is formatted by the product before it reaches a component.
-- `prefers-reduced-motion` is honoured once, in `reset.css`. Do not add a second rule.
+- `prefers-reduced-motion` is honoured in exactly two places, both in
+  `packages/tokens/src`: `base.css` scopes it to `[data-product]` and always
+  ships, `reset.css` widens it to the document and is opt-in. A component
+  never adds a third.
 
 ## Sample data is published
 

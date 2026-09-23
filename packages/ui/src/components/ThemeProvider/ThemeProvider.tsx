@@ -3,6 +3,16 @@ import type { Product, Theme } from "@smarta/tokens";
 import { cn } from "../../lib/utils";
 import { mergeLabels, type PartialLabels, type SmartaLabels } from "../../lib/labels";
 
+/** One level deep, which is all a labels object ever is. */
+function shallowEqual(a?: PartialLabels, b?: PartialLabels): boolean {
+  if (a === b) return true;
+  if (!a || !b) return false;
+  const ka = Object.keys(a);
+  const kb = Object.keys(b);
+  if (ka.length !== kb.length) return false;
+  return ka.every((k) => a[k as keyof PartialLabels] === b[k as keyof PartialLabels]);
+}
+
 /** useLayoutEffect on the client, useEffect on the server, without the warning. */
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
@@ -83,9 +93,7 @@ export interface ThemeProviderProps extends React.HTMLAttributes<HTMLDivElement>
    * button's accessible name, the pagination landmark. Partial: anything
    * omitted stays English.
    *
-   * Define it outside render (a module constant) rather than inline. An object
-   * literal is a new reference every render, and this value reaches every
-   * component below the provider.
+   * Compared by contents, so an inline object literal is fine.
    */
   labels?: PartialLabels;
   children?: React.ReactNode;
@@ -118,7 +126,22 @@ export function ThemeProvider({
     else el.removeAttribute("data-theme");
   }, [asRoot, product, theme]);
 
-  const merged = React.useMemo(() => mergeLabels(labels), [labels]);
+  /**
+   * Compared by contents, not by identity.
+   *
+   * `labels={{ close: "Schließen" }}` is the shape everyone writes, including
+   * the README's own example, and an object literal is a new reference on every
+   * render. Keying the memo on identity meant the context value changed every
+   * time the provider's parent rendered, re-rendering every component beneath
+   * it — a performance footgun documented in a JSDoc nobody reads at the call
+   * site. A shallow compare costs a handful of key lookups once per render and
+   * removes it.
+   */
+  const labelsRef = React.useRef<PartialLabels | undefined>(labels);
+  if (!shallowEqual(labelsRef.current, labels)) labelsRef.current = labels;
+  const stableLabels = labelsRef.current;
+
+  const merged = React.useMemo(() => mergeLabels(stableLabels), [stableLabels]);
   const value = React.useMemo(
     () => ({ product, theme, labels: merged }),
     [product, theme, merged],

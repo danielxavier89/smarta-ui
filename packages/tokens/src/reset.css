@@ -24,6 +24,12 @@
    component at a time do not.
    ========================================================================== */
 
+/* Tailwind's own preflight, which styles.css deliberately leaves out. A
+   product that owns its page wants it; a product coexisting with Ant Design,
+   Bootstrap or styled-components very much does not. This is the line that
+   decides which of those you are. */
+@import "tailwindcss/preflight.css" layer(base);
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;

@@ -2,7 +2,7 @@ name: CI
 
 # The repository had no automated anything: no tests, no workflows, and the
 # accessibility addon set to "todo" so violations failed nothing. This is the
-# gate. Nothing merges past a red run — see .github/branch-protection.md for the
+# gate. Nothing merges past a red run — see .github/branch-protection.json for the
 # settings that make that true, which have to be applied in the repository's
 # own configuration and cannot live in a file.
 
@@ -55,8 +55,13 @@ jobs:
         run: npm run build
 
       # Behaviour, not appearance: keyboard, focus, overlays opening and
-      # closing, forms, upload, disabled and loading, the providers, and axe
-      # over a composed surface in all four product/mode combinations.
+      # closing, forms, upload, disabled and loading, the providers, the labels
+      # layer, the formatting helpers, and axe over a composed surface.
+      #
+      # The axe run loops the four product/mode combinations, but no component
+      # branches on either and the tests load no CSS — so it is three assertions
+      # run four times, kept as insurance rather than as evidence about theming.
+      # Contrast cannot run under jsdom; `npm run check` covers it.
       - name: Test
         run: npm test
 
@@ -65,6 +70,10 @@ jobs:
       - name: Consumer build (Webpack and Vite)
         run: npm run test:consumer
 
+      # Compiles the stories. It does NOT execute them, so the a11y addon's
+      # own run is not a gate here — that is packages/ui/src/test/a11y.test.tsx,
+      # in the Test step above. Making the addon block CI would mean adding
+      # @storybook/addon-vitest and a test-storybook step.
       - name: Build Storybook
         run: npm run build-storybook
 

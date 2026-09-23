@@ -58,9 +58,19 @@ export const TBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribu
   },
 );
 
-/** Anything inside the row that handles its own Enter, Space or click. */
+/**
+ * Anything inside the row that handles its own Enter, Space or click.
+ *
+ * `label` is in the list and is the one that is easy to miss. A label is not
+ * itself interactive, but clicking one forwards the click to the control it
+ * names — so without it, clicking the text beside a Checkbox toggled the
+ * checkbox AND activated the row. The library's own Checkbox renders exactly
+ * that shape: a Radix button for the box, and a sibling <label> for the words.
+ */
 const INTERACTIVE =
-  'button, a[href], input, select, textarea, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])';
+  'button, a[href], input, select, textarea, label, summary, ' +
+  '[role="button"], [role="link"], [role="checkbox"], [role="menuitem"], ' +
+  '[tabindex]:not([tabindex="-1"])';
 
 export interface TRProps extends React.HTMLAttributes<HTMLTableRowElement> {
   /**
@@ -87,15 +97,38 @@ export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
   { className, clickable = false, selected = false, onActivate, onClick, onKeyDown, tabIndex, ...props },
   ref,
 ) {
-  if (process.env.NODE_ENV !== "production" && clickable && !onActivate) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "[@smarta/ui] <TR clickable> without onActivate renders a row that looks " +
-        "pressable but cannot be reached or fired from a keyboard. Pass onActivate instead.",
-    );
-  }
-
   const activatable = Boolean(onActivate);
+
+  /**
+   * An activatable row is always in the tab order, even if the caller passed a
+   * negative tabIndex.
+   *
+   * `tabIndex` arrives through React.HTMLAttributes, so nothing stopped
+   * `<TR onActivate tabIndex={-1}>` — which rendered a row with the pressable
+   * appearance, a working click, and no way to reach it from a keyboard. That
+   * is precisely the defect onActivate exists to make impossible, reintroduced
+   * through a prop nobody would think to look at. The guarantee wins over the
+   * override; a warning says so rather than letting it pass silently.
+   */
+  const negativeTabIndex = activatable && typeof tabIndex === "number" && tabIndex < 0;
+  const resolvedTabIndex = activatable ? (negativeTabIndex ? 0 : (tabIndex ?? 0)) : tabIndex;
+
+  if (process.env.NODE_ENV !== "production") {
+    if (clickable && !onActivate) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[@smarta/ui] <TR clickable> without onActivate renders a row that looks " +
+          "pressable but cannot be reached or fired from a keyboard. Pass onActivate instead.",
+      );
+    }
+    if (negativeTabIndex) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[@smarta/ui] <TR onActivate> ignores a negative tabIndex, because it would " +
+          "take an activatable row out of the keyboard's reach. Using 0.",
+      );
+    }
+  }
 
   /**
    * A row is often full of its own controls — a menu, a copy button. Those
@@ -116,7 +149,7 @@ export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
     <tr
       ref={ref}
       aria-selected={selected || undefined}
-      tabIndex={activatable ? (tabIndex ?? 0) : tabIndex}
+      tabIndex={resolvedTabIndex}
       onClick={(e) => {
         onClick?.(e);
         if (!onActivate || e.defaultPrevented) return;

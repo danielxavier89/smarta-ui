@@ -1,7 +1,35 @@
 /* The library's own stylesheet. A product imports this once; it pulls in
    Tailwind and every token layer in the right order. */
-@import "tailwindcss";
+
+/* Tailwind is imported in pieces rather than as `@import "tailwindcss"`,
+   and the piece left out is the point.
+
+   `@import "tailwindcss"` is theme + preflight + utilities. Preflight is
+   Tailwind's own reset, and it is ~150 lines of unscoped element selectors:
+   `*` with margin/padding/border zeroed, `h1`–`h6` stripped of size and
+   weight, `ol`/`ul` stripped of bullets, `img` made a block, every
+   button/input/select/textarea given a transparent background and square
+   corners, `table` set to border-collapse, and `[hidden]` forced to
+   display:none with !important.
+
+   Splitting the hand-written reset out into reset.css and shipping this
+   anyway would have been theatre: preflight does the great majority of the
+   damage to a host page, and it is exactly the damage the backoffice cannot
+   take. Ant Design 4 and Bootstrap both survive a rule they explicitly
+   override — author styles beat any layer — but neither styles every heading,
+   list and image on every page, and those are what preflight silently
+   rewrites. `[hidden]` is worse: an important declaration inside a layer beats
+   an unlayered important one, so that rule wins unconditionally.
+
+   So preflight is not here. The components get an equivalent, scoped to
+   [data-product], in @smarta/tokens/base.css. A product that wants the real
+   thing document-wide imports @smarta/ui/reset.css, which carries it. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
 @import "@smarta/tokens/css";
+
 /* data-[state=open]:animate-in and friends. Tailwind v4 successor to
    tailwindcss-animate; without it those classes silently do nothing. */
 @import "tw-animate-css";
@@ -22,13 +50,3 @@
    grow use this; controls drawn at a fixed size use .touch-target in the
    token reset, which grows the tap and leaves the box alone. */
 @custom-variant touch (@media (pointer: coarse));
-
-/* Storybook and the products both render components inside a wrapper that
-   carries data-product/data-theme, so the wrapper — not just <body> — has to
-   paint its own ground. Without this a dark panel sits on a light page. */
-@layer base {
-  [data-product] {
-    background: var(--canvas);
-    color: var(--fg);
-  }
-}

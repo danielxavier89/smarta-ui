@@ -30,17 +30,28 @@ import { Panel } from "../components/Panel";
 import { Tooltip } from "../components/Tooltip";
 
 /**
- * axe as a gate, not a suggestion.
+ * axe as a gate, not a suggestion. These fail the build.
  *
- * The Storybook a11y addon was configured `test: "todo"`, which reports
- * violations and fails nothing. These fail the build.
+ * Be precise about what the four-way loop below is and is not. No component in
+ * this library branches its markup on product or theme — that is the entire
+ * point of the token layer — and `vitest.config.ts` sets `css: false`, so no
+ * token CSS is loaded here at all. The four renders therefore produce identical
+ * DOM apart from two attributes on a wrapper div. These are three distinct
+ * assertions run four times, not twelve.
  *
- * What axe cannot do here: colour contrast. jsdom has no layout and no computed
- * colours, so the contrast rule cannot run in this environment at all — it is
- * covered instead by `npm run audit:contrast`, which reads the token values
- * directly and checks all 140 pairs across the four themes. Leaving contrast
- * silently disabled here without saying so is how a suite ends up claiming more
- * than it checks.
+ * The loop is kept anyway, because it costs milliseconds and is the thing that
+ * would catch a component that started branching on product. It is not
+ * evidence that theming is accessible, and nothing here should be read that
+ * way.
+ *
+ * What axe cannot do in this environment at all: colour contrast. jsdom has no
+ * layout and no computed colours, so the rule comes back "incomplete" rather
+ * than passing. Contrast is covered by `npm run audit:contrast`, which reads
+ * the token values directly — 35 pairs across the four themes, 140 checks.
+ *
+ * Note also that `toHaveNoViolations` only inspects axe's `violations` bucket.
+ * Anything axe cannot determine lands in `incomplete` and is silently dropped.
+ * Today that is only contrast. It will not always be.
  */
 
 const COMBINATIONS: Array<{ product: Product; theme: Theme }> = [

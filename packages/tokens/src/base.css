@@ -14,7 +14,115 @@
    What must never move to reset.css: the focus ring and the reduced-motion
    rule. Both are accessibility guarantees this library makes about its own
    components, so both have to ship whether or not a product takes the reset.
+
+   This file also carries a scoped subset of Tailwind's preflight, because
+   styles.css deliberately does not import the real one. See the block below.
    ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   A preflight, scoped.
+
+   styles.css deliberately does not import Tailwind's own preflight, because it
+   is unscoped and would restyle every heading, list, image, form control and
+   table on the host page — see the comment there. The components were written
+   against it, though, so the parts they actually depend on are reproduced here
+   under [data-product], where they cannot reach past the library.
+
+   Kept deliberately shorter than the original. This is not "preflight with a
+   prefix": it is the subset the components rely on, and each rule is here
+   because something breaks without it.
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  /* The big one. Every component's spacing is expressed in utilities and
+     assumes it starts from zero; without this a <p> inside a Card inherits the
+     browser's 1em margin and every panel gains a gap nobody asked for. */
+  [data-product] *,
+  [data-product] *::before,
+  [data-product] *::after,
+  [data-product] *::backdrop {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+
+  /* Size and weight come from the type scale, not from the tag. A CardTitle is
+     an h2 or an h3 depending on where the page puts it, and it must look the
+     same either way — which is the whole reason CardTitle takes `as`. */
+  [data-product] h1,
+  [data-product] h2,
+  [data-product] h3,
+  [data-product] h4,
+  [data-product] h5,
+  [data-product] h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  /* TextLink is a <button> and links are styled by .smarta-link, so a bare <a>
+     should not arrive pre-decorated in the browser's blue. */
+  [data-product] a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  /* Every list in the library is a layout, not prose. */
+  [data-product] :is(ol, ul, menu) {
+    list-style: none;
+  }
+
+  /* Inline is the default and it leaves a descender's worth of space under
+     every icon and avatar. */
+  [data-product] :is(img, svg, video, canvas, audio, iframe, embed, object) {
+    display: block;
+    vertical-align: middle;
+  }
+
+  [data-product] :is(img, video) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Table draws its own borders and rounds its own corners. */
+  [data-product] table {
+    border-collapse: collapse;
+    border-color: inherit;
+    text-indent: 0;
+  }
+
+  /* Controls are drawn entirely by the component. Safari in particular gives
+     a button its own background and corner radius otherwise. */
+  [data-product] :is(button, input, select, textarea) {
+    background-color: transparent;
+    border-radius: 0;
+    opacity: 1;
+  }
+
+  [data-product] :is(button, [role="button"]) {
+    cursor: pointer;
+  }
+
+  [data-product] :is(button, input, select, optgroup, textarea):disabled {
+    cursor: default;
+  }
+
+  [data-product] ::placeholder {
+    opacity: 1;
+  }
+
+  [data-product] textarea {
+    resize: vertical;
+  }
+
+  /* Scoped, and without !important: the unconditional version belongs to a
+     product that took reset.css, not to a library dropped onto someone's page.
+     An important declaration inside a layer beats an unlayered important one,
+     which is the one way preflight's version could not be overridden at all. */
+  [data-product] [hidden]:where(:not([hidden="until-found"])) {
+    display: none;
+  }
+}
 
 @layer base {
   /* The wrapper — not just <body> — paints its own ground, so a dark panel

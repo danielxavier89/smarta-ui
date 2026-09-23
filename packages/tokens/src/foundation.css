@@ -88,7 +88,8 @@
 
   /* --- Motion ----------------------------------------------------------
      One curve for things that move, one for things that only tint.
-     prefers-reduced-motion is handled once, in reset.css. */
+     prefers-reduced-motion is handled in base.css (scoped, always shipped)
+     and widened in reset.css (opt-in). Never in a component. */
   --ease-out:    cubic-bezier(0.32, 0.72, 0, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -128,7 +129,7 @@
   --control-padding-x-lg: 16px;
 
   /* The minimum a finger can hit. Spent by the .touch-target utility in
-     reset.css, which grows the hit area without growing the drawn control. */
+     base.css, which grows the hit area without growing the drawn control. */
   --touch-target: 44px;
 
   /* --- Field type ------------------------------------------------------
