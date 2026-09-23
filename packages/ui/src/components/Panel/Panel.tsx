@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Dialog } from "radix-ui";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ThemeScope } from "@/components/ThemeProvider";
-import { IconButton } from "@/components/IconButton";
+import { cn } from "../../lib/utils";
+import { ThemeScope } from "../ThemeProvider";
+import { IconButton } from "../IconButton";
 
 export interface PanelProps {
   open: boolean;

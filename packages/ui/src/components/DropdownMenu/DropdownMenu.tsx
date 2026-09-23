@@ -1,8 +1,8 @@
 import * as React from "react";
 import { DropdownMenu as RMenu } from "radix-ui";
 import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ThemeScope } from "@/components/ThemeProvider";
+import { cn } from "../../lib/utils";
+import { ThemeScope } from "../ThemeProvider";
 
 export const DropdownMenu = RMenu.Root;
 export const DropdownMenuTrigger = RMenu.Trigger;

@@ -4,7 +4,7 @@ import { Panel, PanelSection } from "./Panel";
 import { Button } from "../Button";
 import { Chip } from "../Chip";
 import { KeyValue } from "../KeyValue";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Panel.md?raw";
 
 const meta = {

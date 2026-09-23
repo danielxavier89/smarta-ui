@@ -1,7 +1,7 @@
 import * as React from "react";
 import { UploadCloud } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { TextLink } from "@/components/TextLink";
+import { cn } from "../../lib/utils";
+import { TextLink } from "../TextLink";
 
 export interface DropzoneProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onDrop" | "children"> {

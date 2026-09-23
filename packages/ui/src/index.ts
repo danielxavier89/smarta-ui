@@ -10,6 +10,13 @@
 export * from "./components/ThemeProvider";
 export { cn } from "./lib/utils";
 
+/**
+ * Re-exported because @smarta/tokens is a workspace package that is never
+ * published: a consumer cannot import these from there, and ThemeProvider's
+ * props are unusable without them. The build inlines the definitions.
+ */
+export type { Product, Theme } from "@smarta/tokens";
+
 // Actions
 export * from "./components/Button";
 export * from "./components/IconButton";

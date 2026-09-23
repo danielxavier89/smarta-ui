@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Bell, MoreHorizontal, X, Download, Pencil, Trash2 } from "lucide-react";
 import { IconButton } from "./IconButton";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./IconButton.md?raw";
 
 const meta = {

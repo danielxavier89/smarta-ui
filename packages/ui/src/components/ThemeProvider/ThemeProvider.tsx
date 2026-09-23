@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { Product, Theme } from "@smarta/tokens";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 /** useLayoutEffect on the client, useEffect on the server, without the warning. */
 const useIsomorphicLayoutEffect =

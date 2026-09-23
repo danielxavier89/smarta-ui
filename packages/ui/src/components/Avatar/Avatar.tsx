@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Avatar as RAvatar } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 const avatarVariants = cva(
   "relative grid shrink-0 place-items-center overflow-hidden font-semibold select-none",

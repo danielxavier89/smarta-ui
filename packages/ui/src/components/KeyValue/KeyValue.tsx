@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Info } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Tooltip } from "@/components/Tooltip";
+import { cn } from "../../lib/utils";
+import { Tooltip } from "../Tooltip";
 
 export interface KeyValueRow {
   key: React.ReactNode;

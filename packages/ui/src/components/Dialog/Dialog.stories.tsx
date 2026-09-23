@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Dialog } from "./Dialog";
 import { Button } from "../Button";
 import { Textarea } from "../Textarea";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Dialog.md?raw";
 
 // Required props live on meta so each story can stay a plain render().

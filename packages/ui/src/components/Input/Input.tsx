@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { Field } from "@/components/Field";
+import { cn } from "../../lib/utils";
+import { Field } from "../Field";
 
 const inputShell = cva(
   [

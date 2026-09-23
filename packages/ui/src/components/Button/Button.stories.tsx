@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Plus, Check, Trash2, ArrowRight } from "lucide-react";
 import { Button } from "./Button";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Button.md?raw";
 
 const meta = {

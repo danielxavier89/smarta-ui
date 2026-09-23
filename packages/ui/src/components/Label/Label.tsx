@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Label as RLabel } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export interface LabelProps
   extends React.ComponentPropsWithoutRef<typeof RLabel.Root> {

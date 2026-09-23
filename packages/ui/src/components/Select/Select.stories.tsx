@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Select } from "./Select";
-import { docsPage } from "@/lib/docs";
+import { Select, type SelectProps } from "./Select";
+import { docsPage } from "../../lib/docs";
 import rules from "./Select.md?raw";
 
 const assignees = [
@@ -19,7 +19,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a) => <div className="max-w-[300px]"><Select {...a} /></div> };
+export const Playground: Story = { render: (a: SelectProps) => <div className="max-w-[300px]"><Select {...a} /></div> };
 
 export const Grouped: Story = {
   render: () => (

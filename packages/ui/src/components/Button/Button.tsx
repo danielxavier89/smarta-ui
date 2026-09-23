@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Slot } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { Spinner } from "@/components/Spinner";
+import { cn } from "../../lib/utils";
+import { Spinner } from "../Spinner";
 
 /**
  * Every value here is a token. There is no hex, no px radius and no literal

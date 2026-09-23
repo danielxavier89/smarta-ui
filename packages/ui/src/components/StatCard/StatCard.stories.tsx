@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Receipt, AlertTriangle, Mail } from "lucide-react";
-import { StatCard } from "./StatCard";
-import { docsPage } from "@/lib/docs";
+import { StatCard, type StatCardProps } from "./StatCard";
+import { docsPage } from "../../lib/docs";
 import rules from "./StatCard.md?raw";
 
 const meta = {
@@ -14,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a) => <div className="max-w-[240px]"><StatCard {...a} /></div> };
+export const Playground: Story = { render: (a: StatCardProps) => <div className="max-w-[240px]"><StatCard {...a} /></div> };
 
 export const ARow: Story = {
   render: () => (

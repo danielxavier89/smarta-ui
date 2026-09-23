@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Callout } from "./Callout";
 import { Button } from "../Button";
 import { TextLink } from "../TextLink";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Callout.md?raw";
 
 const meta = {

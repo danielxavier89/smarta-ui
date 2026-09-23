@@ -1,13 +1,13 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "@/components/Button";
-import { Callout } from "@/components/Callout";
-import { Input } from "@/components/Input";
-import { RadioGroup } from "@/components/RadioGroup";
-import { Select } from "@/components/Select";
-import { Textarea } from "@/components/Textarea";
-import { TextLink } from "@/components/TextLink";
-import { docsPage } from "@/lib/docs";
+import { Button } from "../components/Button";
+import { Callout } from "../components/Callout";
+import { Input } from "../components/Input";
+import { RadioGroup } from "../components/RadioGroup";
+import { Select } from "../components/Select";
+import { Textarea } from "../components/Textarea";
+import { TextLink } from "../components/TextLink";
+import { docsPage } from "../lib/docs";
 import recipe from "../../docs/recipes/form.md?raw";
 
 /**

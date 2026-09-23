@@ -1,20 +1,20 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MoreHorizontal, Copy } from "lucide-react";
-import { Button } from "@/components/Button";
-import { Chip } from "@/components/Chip";
-import { Dialog } from "@/components/Dialog";
+import { Button } from "../components/Button";
+import { Chip } from "../components/Chip";
+import { Dialog } from "../components/Dialog";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@/components/DropdownMenu";
-import { IconButton } from "@/components/IconButton";
-import { KeyValue } from "@/components/KeyValue";
-import { Panel, PanelSection } from "@/components/Panel";
-import { docsPage } from "@/lib/docs";
+} from "../components/DropdownMenu";
+import { IconButton } from "../components/IconButton";
+import { KeyValue } from "../components/KeyValue";
+import { Panel, PanelSection } from "../components/Panel";
+import { docsPage } from "../lib/docs";
 import recipe from "../../docs/recipes/detail-panel.md?raw";
 
 /**

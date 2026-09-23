@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Tabs as RTabs } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export const Tabs = RTabs.Root;
 

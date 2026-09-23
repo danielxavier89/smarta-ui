@@ -15,7 +15,8 @@
     "lint:tokens": "node scripts/lint-tokens.mjs",
     "audit:contrast": "node scripts/audit-contrast.mjs",
     "check": "npm run gen:inventory && npm run typecheck && npm run lint:tokens && npm run audit:contrast",
-    "gen:inventory": "node scripts/gen-inventory.mjs"
+    "gen:inventory": "node scripts/gen-inventory.mjs",
+    "test": "npm run test -w @smarta/ui"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

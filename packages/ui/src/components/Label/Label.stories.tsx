@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Label } from "./Label";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Label.md?raw";
 
 const meta = { title: "Form/Label", component: Label, args: { children: "Company name" } ,

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { IconButton } from "@/components/IconButton";
+import { cn } from "../../lib/utils";
+import { IconButton } from "../IconButton";
 
 export interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
   page: number;

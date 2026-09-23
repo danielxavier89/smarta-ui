@@ -4,7 +4,7 @@ import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "./Table";
 import { Chip } from "../Chip";
 import { EmptyState } from "../EmptyState";
 import { Button } from "../Button";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Table.md?raw";
 
 const rows = [

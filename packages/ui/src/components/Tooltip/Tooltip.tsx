@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Tooltip as RTooltip } from "radix-ui";
-import { cn } from "@/lib/utils";
-import { ThemeScope } from "@/components/ThemeProvider";
+import { cn } from "../../lib/utils";
+import { ThemeScope } from "../ThemeProvider";
 
 /**
  * True when an app has mounted TooltipProvider above us.
