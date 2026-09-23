@@ -31,23 +31,29 @@ npm install
 npm run storybook        # http://localhost:6006
 ```
 
-**One thing to know before you plan around it:** `@smarta/ui` is currently
-`private: true` and ships raw TypeScript with no build step, so it cannot be
-installed from another repository yet — only used from inside this workspace.
-That is a deliberate not-yet, not an oversight. For reading and reviewing it
-changes nothing; it is the one blocker to actually building against it, and it
-is roughly half a day of packaging work.
+**It builds and installs now.** `npm run build` emits ESM, CJS, `.d.ts`,
+sourcemaps and compiled CSS to `packages/ui/dist`, and `npm run test:consumer`
+proves it by resolving the package through its `exports` map and building a
+real app with Webpack and with Vite. It is not published to a registry yet —
+see [docs/OWNERSHIP.md](docs/OWNERSHIP.md), which is the short list of things
+that need someone with admin on the GitHub account.
 
 ## Running it
 
 ```sh
 npm install
 npm run storybook        # http://localhost:6006
-npm run check            # typecheck + no hardcoded colours + contrast across 4 themes
+
+npm run check            # typecheck, no hardcoded colours, no hardcoded English,
+                         # contrast across the four themes
+npm run build            # the library, to packages/ui/dist
+npm test                 # behaviour, labels, formatting, and axe
+npm run test:consumer    # resolve and build the package with Webpack and Vite
 npm run build-storybook
 ```
 
-Node 20+. The workspace uses **npm workspaces** — no pnpm needed.
+Node 20+. The workspace uses **npm workspaces** — no pnpm needed. CI runs
+exactly the list above on every pull request; see `.github/workflows/ci.yml`.
 
 ## The four combinations
 
@@ -76,7 +82,10 @@ Omit `data-theme` and the surface follows `prefers-color-scheme`.
 import "@smarta/ui/styles.css";
 import { ThemeProvider, ToastProvider, TooltipProvider } from "@smarta/ui";
 
-<ThemeProvider asRoot product="backoffice" theme={userChoice}>
+// Outside render: this reaches every component below the provider.
+const labels = { close: "Schließen", search: "Suchen" };
+
+<ThemeProvider asRoot product="backoffice" theme={userChoice} labels={labels}>
   <TooltipProvider>
     <ToastProvider>
       <App />
@@ -87,6 +96,84 @@ import { ThemeProvider, ToastProvider, TooltipProvider } from "@smarta/ui";
 
 ```tsx
 import { Button, Card, Chip, Table } from "@smarta/ui";
+```
+
+### Two stylesheets, and which one you want
+
+```tsx
+import "@smarta/ui/styles.css";   // always: tokens and the components
+import "@smarta/ui/reset.css";    // only if this library owns the page
+```
+
+`styles.css` paints nothing outside `[data-product]`, the attribute
+`ThemeProvider` renders. Every rule in it is either a utility class the
+components use or is scoped to that subtree — so it cannot restyle a page's own
+headings, lists, images, form controls, body or focus rings. That matters
+because the backoffice runs Ant Design 4, Bootstrap and styled-components
+together, and the webapp is mid-migration from styled-components to Tailwind. A
+library that cannot be added to one screen without changing the other forty is
+a library nobody can adopt gradually.
+
+This is checked, not asserted: `npm run build` reads the compiled stylesheet and
+fails on any element selector, any `:root` rule that paints, or any
+`color-scheme` outside `[data-product]`. It is checked because it was wrong
+once — the hand-written reset had been split out correctly while
+`@import "tailwindcss"` quietly kept pulling Tailwind's own preflight in, and
+the source gave no sign of it.
+
+One thing it does still put on your document: the design tokens themselves, as
+custom properties on `:root` — `--canvas`, `--fg`, `--border` and about sixty
+others. Those are inert, they render nothing on their own, and the components
+read them from inside their own subtree. But the names are generic, so if your
+page already defines `--border` for something else, one of you will win. Say so
+and we will namespace them.
+
+`reset.css` widens the same decisions to the whole document: `body`, all form
+controls, all `:focus-visible`. **Greenfield surfaces take it. Screens being
+migrated a component at a time do not.** Nothing in the library needs it.
+
+### The font
+
+The library names Plus Jakarta Sans and then inherits. It does not fetch it —
+a request to Google Fonts from inside a component library is a CSP entry and a
+privacy review the host did not ask for. Tell it what to use:
+
+```css
+:root { --smarta-font-product: "Inter", sans-serif; }   /* match the product */
+:root { --smarta-font-product: "Plus Jakarta Sans"; }   /* if you self-host it */
+```
+
+During the migration the first is the right answer.
+
+### Words the library says for itself
+
+A close button, a spinner, the pagination landmark. They default to English and
+a product overrides what it needs:
+
+```tsx
+import type { PartialLabels } from "@smarta/ui";
+
+const de: PartialLabels = {
+  close: "Schließen",
+  previousPage: "Vorherige Seite",
+  pageRange: (first, last, total) => `${first}–${last} von ${total}`,
+};
+```
+
+Interpolated ones are functions, not templates, because word order is not
+universal. Your own copy is still passed in as props, as it always was.
+
+### Dates, numbers and money
+
+Components never format a value — that has not changed, and it is why the
+product owns the locale. What is new is that everyone can get the same answer:
+
+```tsx
+import { formatCurrency, formatDate } from "@smarta/ui";
+
+formatCurrency(1234.56, "de-DE");   // "1.234,56 €"
+formatCurrency(1234.56, "en-GB");   // "€1,234.56"
+formatDate("2026-06-03", "de-DE");  // "3. Juni 2026"
 ```
 
 ## The one rule
@@ -102,7 +189,7 @@ through a Tailwind utility, which is the enforcement.
 ```sh
 npm run check            # typecheck + token lint + contrast audit
 npm run lint:tokens      # no hardcoded colour in packages/ui/src
-npm run audit:contrast   # 104 text/background pairs x 4 themes, WCAG AA
+npm run audit:contrast   # 35 token pairs x 4 themes = 140 checks, WCAG AA
 ```
 
 The contrast audit is not decoration: it found two real defects the first time it
@@ -148,4 +235,6 @@ These come from the two shipped prototypes and are enforced across the library:
 - Reversible destructive actions get Undo; irreversible ones get a Dialog whose button names the act.
 - Validation is silent while typing, fires on blur, then goes live.
 - Currency is formatted by the product before it reaches a component.
-- `prefers-reduced-motion` is honoured once, globally, in `reset.css`.
+- `prefers-reduced-motion` is honoured for the library's own components in
+  `base.css`, scoped, and always ships. `reset.css` widens it to the whole
+  document, and is opt-in. Never a third rule in a component.

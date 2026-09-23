@@ -4,7 +4,7 @@ import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "./Table";
 import { Chip } from "../Chip";
 import { EmptyState } from "../EmptyState";
 import { Button } from "../Button";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Table.md?raw";
 
 const rows = [
@@ -89,13 +89,8 @@ export const ClickableRows: Story = {
           {rows.map((r) => (
             <TR
               key={r.who}
-              clickable
               selected={picked === r.who}
-              tabIndex={0}
-              onClick={() => setPicked(r.who)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setPicked(r.who); }
-              }}
+              onActivate={() => setPicked(r.who)}
             >
               <TD>{r.who}</TD>
               <TD numeric>{r.amount}</TD>

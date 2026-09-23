@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Search, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export interface SearchInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {
@@ -25,8 +26,8 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     {
       className,
       containerClassName,
-      label = "Search",
-      placeholder = "Search",
+      label,
+      placeholder,
       onClear,
       size = "md",
       value,
@@ -34,6 +35,8 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     },
     ref,
   ) {
+    const labels = useLabels();
+
     const innerRef = React.useRef<HTMLInputElement>(null);
     React.useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
     const hasValue = String(value ?? "").length > 0;
@@ -56,8 +59,8 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
         <input
           ref={innerRef}
           type="search"
-          aria-label={label}
-          placeholder={placeholder}
+          aria-label={label ?? labels.search}
+          placeholder={placeholder ?? labels.search}
           value={value}
           className={cn(
             "w-full min-w-0 border-0 bg-transparent p-0 outline-none",
@@ -71,7 +74,7 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
         {onClear && hasValue && (
           <button
             type="button"
-            aria-label="Clear search"
+            aria-label={labels.clearSearch}
             onClick={() => {
               onClear();
               innerRef.current?.focus();

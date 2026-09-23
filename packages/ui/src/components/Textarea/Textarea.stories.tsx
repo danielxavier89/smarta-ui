@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Textarea } from "./Textarea";
-import { docsPage } from "@/lib/docs";
+import { Textarea, type TextareaProps } from "./Textarea";
+import { docsPage } from "../../lib/docs";
 import rules from "./Textarea.md?raw";
 
 const meta = {
@@ -13,7 +13,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a) => <div className="max-w-[420px]"><Textarea {...a} /></div> };
+export const Playground: Story = { render: (a: TextareaProps) => <div className="max-w-[420px]"><Textarea {...a} /></div> };
 
 export const Variants: Story = {
   render: () => (

@@ -1,5 +1,6 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export interface SpinnerProps extends React.SVGAttributes<SVGSVGElement> {
   /** Matches the control it sits in. Defaults to the parent's font size. */
@@ -12,16 +13,20 @@ export interface SpinnerProps extends React.SVGAttributes<SVGSVGElement> {
  * The one busy indicator. Inherits currentColor, so it is the right colour
  * inside a primary button, a ghost button and a table cell without being told.
  */
-export function Spinner({ size = 14, label = "Loading", className, ...props }: SpinnerProps) {
+export function Spinner({ size = 14, label, className, ...props }: SpinnerProps) {
+  const labels = useLabels();
+  // An explicit empty string means "decorative, do not announce"; undefined
+  // means the caller did not think about it, which is when we name it.
+  const name = label === undefined ? labels.loading : label;
   return (
     <svg
       viewBox="0 0 24 24"
       width={size}
       height={size}
       fill="none"
-      role={label ? "status" : undefined}
-      aria-label={label || undefined}
-      aria-hidden={label ? undefined : true}
+      role={name ? "status" : undefined}
+      aria-label={name || undefined}
+      aria-hidden={name ? undefined : true}
       className={cn("animate-[spin_1.1s_linear_infinite]", className)}
       {...props}
     >

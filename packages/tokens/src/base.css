@@ -1,0 +1,247 @@
+/* ==========================================================================
+   Layer 4a — Base, scoped
+   Everything the components themselves depend on, and nothing that reaches
+   past them.
+
+   Every rule here is scoped to [data-product], which ThemeProvider always
+   renders — so importing @smarta/ui/styles.css into a page that also runs Ant
+   Design, Bootstrap or styled-components cannot restyle that page's own
+   buttons, inputs, body or focus rings.
+
+   The page-level defaults that DO reach everything live in reset.css, which a
+   product opts into. See that file for why the split exists.
+
+   What must never move to reset.css: the focus ring and the reduced-motion
+   rule. Both are accessibility guarantees this library makes about its own
+   components, so both have to ship whether or not a product takes the reset.
+
+   This file also carries a scoped subset of Tailwind's preflight, because
+   styles.css deliberately does not import the real one. See the block below.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   A preflight, scoped.
+
+   styles.css deliberately does not import Tailwind's own preflight, because it
+   is unscoped and would restyle every heading, list, image, form control and
+   table on the host page — see the comment there. The components were written
+   against it, though, so the parts they actually depend on are reproduced here
+   under [data-product], where they cannot reach past the library.
+
+   Kept deliberately shorter than the original. This is not "preflight with a
+   prefix": it is the subset the components rely on, and each rule is here
+   because something breaks without it.
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  /* The big one. Every component's spacing is expressed in utilities and
+     assumes it starts from zero; without this a <p> inside a Card inherits the
+     browser's 1em margin and every panel gains a gap nobody asked for. */
+  [data-product] *,
+  [data-product] *::before,
+  [data-product] *::after,
+  [data-product] *::backdrop {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+
+  /* Size and weight come from the type scale, not from the tag. A CardTitle is
+     an h2 or an h3 depending on where the page puts it, and it must look the
+     same either way — which is the whole reason CardTitle takes `as`. */
+  [data-product] h1,
+  [data-product] h2,
+  [data-product] h3,
+  [data-product] h4,
+  [data-product] h5,
+  [data-product] h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  /* TextLink is a <button> and links are styled by .smarta-link, so a bare <a>
+     should not arrive pre-decorated in the browser's blue. */
+  [data-product] a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  /* Every list in the library is a layout, not prose. */
+  [data-product] :is(ol, ul, menu) {
+    list-style: none;
+  }
+
+  /* Inline is the default and it leaves a descender's worth of space under
+     every icon and avatar. */
+  [data-product] :is(img, svg, video, canvas, audio, iframe, embed, object) {
+    display: block;
+    vertical-align: middle;
+  }
+
+  [data-product] :is(img, video) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Table draws its own borders and rounds its own corners. */
+  [data-product] table {
+    border-collapse: collapse;
+    border-color: inherit;
+    text-indent: 0;
+  }
+
+  /* Controls are drawn entirely by the component. Safari in particular gives
+     a button its own background and corner radius otherwise. */
+  [data-product] :is(button, input, select, textarea) {
+    background-color: transparent;
+    border-radius: 0;
+    opacity: 1;
+  }
+
+  [data-product] :is(button, [role="button"]) {
+    cursor: pointer;
+  }
+
+  [data-product] :is(button, input, select, optgroup, textarea):disabled {
+    cursor: default;
+  }
+
+  [data-product] ::placeholder {
+    opacity: 1;
+  }
+
+  [data-product] textarea {
+    resize: vertical;
+  }
+
+  /* Scoped, and without !important: the unconditional version belongs to a
+     product that took reset.css, not to a library dropped onto someone's page.
+     An important declaration inside a layer beats an unlayered important one,
+     which is the one way preflight's version could not be overridden at all. */
+  [data-product] [hidden]:where(:not([hidden="until-found"])) {
+    display: none;
+  }
+}
+
+@layer base {
+  /* The wrapper — not just <body> — paints its own ground, so a dark panel
+     never sits on a light page. */
+  [data-product] {
+    background: var(--canvas);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Any column of currency lines up without anyone having to ask for it. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* One focus treatment for the whole system, scoped to it. A component adds a
+     halo on top where it has a fill of its own; nothing overrides the ring. */
+  [data-product] :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  [data-product] ::selection {
+    background: var(--selected-bg);
+    color: var(--selected-fg);
+  }
+
+  /* Inputs do not inherit type by default, and a 13px control next to a 14px
+     label is the sort of thing nobody can name but everybody sees. Scoped, so
+     a product's own form controls are left alone. */
+  [data-product] :is(button, input, select, textarea, optgroup) {
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+  }
+
+  /* Icons are sized by their box and coloured by their text. */
+  [data-product] svg {
+    flex: none;
+  }
+}
+
+/* A link is underlined in the backoffice and not in the webapp, because a
+   grayscale palette has no hue left to say "this is a link" with. The rule
+   lives on a token so a component never asks which product it is in. */
+@layer base {
+  .smarta-link {
+    color: var(--link);
+    text-decoration: var(--link-decoration);
+    text-underline-offset: 2px;
+  }
+  .smarta-link:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+  }
+}
+
+/* Hover never fires on touch, so anything revealed by hover is pinned to a
+   partial opacity instead of being unreachable. */
+@media (hover: none) {
+  @layer base {
+    .reveal-on-hover { opacity: 0.6 !important; }
+  }
+}
+
+/* Coarse pointers get a finger-sized target.
+
+   This used to read `button { min-height: var(--touch-target) }`, which was
+   the wrong shape of fix: min-height grows the box, and a great many of the
+   controls here are drawn at a fixed size on purpose. A 36px round IconButton
+   became a 36x44 oval; a 17px checkbox became a 17x44 slot next to its own
+   label; the 15px info icon in a KeyValue row pushed every row it appeared in
+   to 44px, so a column of figures gained gaps wherever a note existed. The
+   rule was invisible on every machine it was written on and wrong on every
+   phone.
+
+   So the hit area is separated from the drawn box. The pseudo-element is
+   centred on the control and takes the tap; the control keeps its size, its
+   roundness and its place in a row. Anything that can afford to grow — a menu
+   item, a tab — still just grows, in its own file. */
+@layer base {
+  .touch-target {
+    position: relative;
+  }
+}
+
+@media (pointer: coarse) {
+  @layer base {
+    .touch-target::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      /* At least a finger, and never smaller than the control it covers. */
+      width: 100%;
+      height: 100%;
+      min-width: var(--touch-target);
+      min-height: var(--touch-target);
+    }
+  }
+}
+
+/* Honoured once, here, for everything this library animates. Scoped rather
+   than global so it cannot fight a product's own motion policy — but still
+   unconditional, because a component that ignores this preference is a defect
+   whether or not the product took the reset. */
+@media (prefers-reduced-motion: reduce) {
+  @layer base {
+    [data-product],
+    [data-product] *,
+    [data-product] *::before,
+    [data-product] *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

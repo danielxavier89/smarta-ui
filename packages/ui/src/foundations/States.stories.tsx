@@ -1,19 +1,19 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Info } from "lucide-react";
-import { Button } from "@/components/Button";
-import { Callout } from "@/components/Callout";
-import { Card, CardHeader, CardTitle, CardBody } from "@/components/Card";
-import { Chip } from "@/components/Chip";
-import { EmptyState } from "@/components/EmptyState";
-import { Input } from "@/components/Input";
-import { KeyValue } from "@/components/KeyValue";
-import { List, ListItem } from "@/components/ListItem";
-import { Progress } from "@/components/Progress";
-import { SkeletonList } from "@/components/Skeleton";
-import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "@/components/Table";
-import { TextLink } from "@/components/TextLink";
-import { Tooltip } from "@/components/Tooltip";
+import { Button } from "../components/Button";
+import { Callout } from "../components/Callout";
+import { Card, CardHeader, CardTitle, CardBody } from "../components/Card";
+import { Chip } from "../components/Chip";
+import { EmptyState } from "../components/EmptyState";
+import { Input } from "../components/Input";
+import { KeyValue } from "../components/KeyValue";
+import { List, ListItem } from "../components/ListItem";
+import { Progress } from "../components/Progress";
+import { SkeletonList } from "../components/Skeleton";
+import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "../components/Table";
+import { TextLink } from "../components/TextLink";
+import { Tooltip } from "../components/Tooltip";
 
 /**
  * The six states, in one place.

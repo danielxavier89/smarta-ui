@@ -28,12 +28,48 @@ If you need a colour that does not exist, **add a semantic token** in
 `prefers-color-scheme` blocks), map it in `theme.css`, describe it in
 `packages/tokens/src/index.ts`, then run `npm run audit:contrast`.
 
+## The second rule that matters
+
+**No component contains an English word it made up.** Everything a screen says
+is a prop and always was. What a component has to produce on its own — a close
+button's accessible name, a spinner's announcement, the pagination landmark —
+lives in `packages/ui/src/lib/labels.ts` and is read with `useLabels()`.
+
+The backoffice is German and the webapp is German and English. A hardcoded
+string makes a component belong to one language the same way a hardcoded colour
+makes it belong to one product, and an accessible name is the worst place to
+hide one: invisible on screen, and read aloud to the one user who cannot work
+around it. `npm run lint:tokens` enforces the first rule; `npm run lint:i18n`
+enforces this one.
+
+Adding a label: put it in `SmartaLabels`, give it an English default, read it
+with `useLabels()`. If it interpolates, make it a function — `${first}–${last}
+of ${total}` puts "von" in the middle in German.
+
 ## Before you finish
 
 ```sh
-npm run check            # typecheck + token lint + contrast audit
+npm run check            # typecheck, token lint, i18n lint, contrast audit
+npm test                 # behaviour, the labels layer, formatting, and axe
+npm run build            # the library must still compile to dist/
+npm run test:consumer    # and still install into Webpack and Vite
 npm run build-storybook  # catches anything the types do not
 ```
+
+CI runs all of it on every pull request.
+
+`npm run test:consumer` is the one that catches what the others cannot. Every
+other check runs against `src` through a workspace symlink; this one packs the
+library, installs the tarball into a throwaway app and builds it with both
+products' bundlers. It is the check that would have caught the package being
+uninstallable while everything else was green.
+
+Two things `npm test` does not do, despite appearances. Its axe run loops over
+the four product/mode combinations, but no component branches on either and
+the tests load no CSS, so those four renders are the same DOM — it is three
+assertions run four times, kept as insurance rather than as evidence. And
+colour contrast cannot run under jsdom at all; `npm run audit:contrast` is
+what actually checks it, against the token values.
 
 ## Adding a component
 
@@ -98,7 +134,10 @@ Both come from the shipped prototypes and hold across the library:
 - Reversible destructive actions get Undo; irreversible ones get a Dialog naming the act.
 - Validation is silent while typing, fires on blur, then goes live.
 - Currency is formatted by the product before it reaches a component.
-- `prefers-reduced-motion` is honoured once, in `reset.css`. Do not add a second rule.
+- `prefers-reduced-motion` is honoured in exactly two places, both in
+  `packages/tokens/src`: `base.css` scopes it to `[data-product]` and always
+  ships, `reset.css` widens it to the document and is opt-in. A component
+  never adds a third.
 
 ## Sample data is published
 

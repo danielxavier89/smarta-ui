@@ -1,6 +1,17 @@
 import * as React from "react";
 import type { Product, Theme } from "@smarta/tokens";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { mergeLabels, type PartialLabels, type SmartaLabels } from "../../lib/labels";
+
+/** One level deep, which is all a labels object ever is. */
+function shallowEqual(a?: PartialLabels, b?: PartialLabels): boolean {
+  if (a === b) return true;
+  if (!a || !b) return false;
+  const ka = Object.keys(a);
+  const kb = Object.keys(b);
+  if (ka.length !== kb.length) return false;
+  return ka.every((k) => a[k as keyof PartialLabels] === b[k as keyof PartialLabels]);
+}
 
 /** useLayoutEffect on the client, useEffect on the server, without the warning. */
 const useIsomorphicLayoutEffect =
@@ -10,11 +21,14 @@ interface ThemeContextValue {
   product: Product;
   /** undefined means "follow the operating system". */
   theme: Theme | undefined;
+  /** Always complete: the product's partial overrides merged over English. */
+  labels: SmartaLabels;
 }
 
 const ThemeContext = React.createContext<ThemeContextValue>({
   product: "webapp",
   theme: undefined,
+  labels: mergeLabels(),
 });
 
 /**
@@ -27,6 +41,18 @@ const ThemeContext = React.createContext<ThemeContextValue>({
  */
 export function useTheme() {
   return React.useContext(ThemeContext);
+}
+
+/**
+ * The words the library says on its own behalf — a close button's accessible
+ * name, a spinner's announcement, the pagination landmark.
+ *
+ * Always returns a complete set, so a component reads one without checking
+ * whether the product supplied it. Outside a ThemeProvider it is English,
+ * which keeps an unwrapped component legible rather than blank.
+ */
+export function useLabels(): SmartaLabels {
+  return React.useContext(ThemeContext).labels;
 }
 
 /**
@@ -62,6 +88,14 @@ export interface ThemeProviderProps extends React.HTMLAttributes<HTMLDivElement>
    * combinations on one page.
    */
   asRoot?: boolean;
+  /**
+   * Overrides for the strings the components produce themselves — a close
+   * button's accessible name, the pagination landmark. Partial: anything
+   * omitted stays English.
+   *
+   * Compared by contents, so an inline object literal is fine.
+   */
+  labels?: PartialLabels;
   children?: React.ReactNode;
 }
 
@@ -76,6 +110,7 @@ export function ThemeProvider({
   product = "webapp",
   theme,
   asRoot = false,
+  labels,
   className,
   children,
   ...props
@@ -91,7 +126,26 @@ export function ThemeProvider({
     else el.removeAttribute("data-theme");
   }, [asRoot, product, theme]);
 
-  const value = React.useMemo(() => ({ product, theme }), [product, theme]);
+  /**
+   * Compared by contents, not by identity.
+   *
+   * `labels={{ close: "Schließen" }}` is the shape everyone writes, including
+   * the README's own example, and an object literal is a new reference on every
+   * render. Keying the memo on identity meant the context value changed every
+   * time the provider's parent rendered, re-rendering every component beneath
+   * it — a performance footgun documented in a JSDoc nobody reads at the call
+   * site. A shallow compare costs a handful of key lookups once per render and
+   * removes it.
+   */
+  const labelsRef = React.useRef<PartialLabels | undefined>(labels);
+  if (!shallowEqual(labelsRef.current, labels)) labelsRef.current = labels;
+  const stableLabels = labelsRef.current;
+
+  const merged = React.useMemo(() => mergeLabels(stableLabels), [stableLabels]);
+  const value = React.useMemo(
+    () => ({ product, theme, labels: merged }),
+    [product, theme, merged],
+  );
 
   if (asRoot) {
     return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Skeleton, SkeletonList } from "./Skeleton";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Skeleton.md?raw";
 
 const meta = { title: "Status/Skeleton", component: Skeleton ,

@@ -47,11 +47,12 @@ Panel             opens on a row click, over the list
 - **Tab counts derive from the rows the tab renders.** `count={rows.length}` for
   the same array the panel shows. A count fetched separately will eventually
   disagree with the list under it.
-- **A clickable row needs `tabIndex={0}` and a key handler.** The component gives
-  you hover and the focus ring; it cannot give you the keyboard.
-- **A clickable row may not contain another button** unless it stops
-  propagation. If rows need their own actions, use `ListItem` without
-  `clickable` and put a `Button` in `actions`.
+- **An activatable row uses `onActivate`.** One prop gives you the appearance,
+  `tabIndex`, the click and Enter/Space at once, so they cannot come apart. The
+  deprecated `clickable` gave you only the look, and a row that looks pressable
+  but does nothing under the keyboard is a screen a keyboard user cannot use.
+- **A row with `onActivate` may still carry its own controls.** A button or menu
+  inside it handles its own click and Enter, and the row does not fire on top.
 - **Selecting a row marks it.** `selected` on the row whose `Panel` is open, so
   the user does not lose their place when they look right.
 - **Never paginate a list whose total you cannot state.** "Page 2 of ?" is a dead
@@ -84,9 +85,8 @@ const rows = useRows(filters);
           <THead sticky><TR><TH>Date</TH><TH>Supplier</TH><TH align="right">Amount</TH><TH>Status</TH></TR></THead>
           <TBody>
             {rows.map((r) => (
-              <TR key={r.id} clickable tabIndex={0} selected={openId === r.id}
-                  onClick={() => setOpenId(r.id)}
-                  onKeyDown={(e) => { if (e.key === "Enter") setOpenId(r.id); }}>
+              <TR key={r.id} selected={openId === r.id}
+                  onActivate={() => setOpenId(r.id)}>
                 <TD muted>{r.date}</TD>
                 <TD>{r.supplier}</TD>
                 <TD numeric>{eur(r.amount)}</TD>

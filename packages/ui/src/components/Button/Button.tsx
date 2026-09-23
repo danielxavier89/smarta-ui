@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Slot } from "radix-ui";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { Spinner } from "@/components/Spinner";
+import { cn } from "../../lib/utils";
+import { Spinner } from "../Spinner";
 
 /**
  * Every value here is a token. There is no hex, no px radius and no literal
@@ -99,8 +99,17 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       className={cn(buttonVariants({ variant, size, fullWidth }), className)}
       disabled={asChild ? undefined : disabled || loading}
       aria-busy={loading || undefined}
-      aria-label={loading ? loadingLabel : props["aria-label"]}
       {...props}
+      // After the spread, not before it.
+      //
+      // Before, `{...props}` put the caller's own aria-label back on top and
+      // loadingLabel was silently dropped for every button that had one — so
+      // the busy state was announced only to the callers who had not thought
+      // about the accessible name at all. aria-busy alone is not enough: a
+      // screen reader says "busy" without saying what is busy.
+      //
+      // While not loading, the caller's aria-label is still exactly what it was.
+      aria-label={loading && loadingLabel ? loadingLabel : props["aria-label"]}
     >
       {loading ? <Spinner size={iconSize} label="" /> : iconLeft}
       {children}

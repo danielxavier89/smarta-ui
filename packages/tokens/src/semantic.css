@@ -19,12 +19,25 @@
    With data-theme absent the page follows prefers-color-scheme. An explicit
    data-theme always wins, in both directions.
 
-   :root falls back to webapp light, so a page that forgets the attributes
+   There is no :root fallback: a surface with no data-product has no tokens,
+   deliberately — see the webapp/light block. A page that forgets the attributes
    still renders something coherent rather than unstyled.
    ========================================================================== */
 
-/* -------------------------------------------------- webapp / light ------- */
-:root,
+/* -------------------------------------------------- webapp / light -------
+
+   Note what is NOT in this selector list: :root.
+
+   It used to be, as a default for an unwrapped component. The cost was that
+   importing the stylesheet set color-scheme and forty custom properties on the
+   host document — and color-scheme is unlayered, so it outranked anything the
+   host could say. A backoffice page on a dark-OS machine would have flipped its
+   scrollbars and native controls merely because this file was loaded.
+
+   ThemeProvider always renders [data-product], including in asRoot mode where
+   it goes on <html> and still matches here. A component rendered with no
+   provider now has no tokens, which is the honest answer: it never had a
+   correct appearance, it had a webapp-light one. */
 [data-product="webapp"] {
   color-scheme: light;
 
@@ -238,8 +251,7 @@
    Declared once against both light selectors rather than copied into each,
    so the two can never drift. */
 [data-product="webapp"],
-[data-product="backoffice"],
-:root {
+[data-product="backoffice"] {
   --ok:      var(--p-green-600);
   --ok-bg:   var(--p-green-tint);
   --ok-fg:   var(--p-green-600);
@@ -295,7 +307,6 @@
    Only reached when data-theme is absent. An explicit data-theme="light"
    opts out, which is what :not() is doing here. */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]),
   [data-product="webapp"]:not([data-theme="light"]) {
     color-scheme: dark;
     --canvas:          var(--p-plum-1000);
@@ -362,7 +373,6 @@
     --shadow-color:          0 0 0;
   }
 
-  :root:not([data-theme="light"]),
   [data-product="webapp"]:not([data-theme="light"]),
   [data-product="backoffice"]:not([data-theme="light"]) {
     --ok:      var(--p-green-400);

@@ -3,7 +3,7 @@ import { Copy } from "lucide-react";
 import { KeyValue } from "./KeyValue";
 import { IconButton } from "../IconButton";
 import { Chip } from "../Chip";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./KeyValue.md?raw";
 
 const meta = {

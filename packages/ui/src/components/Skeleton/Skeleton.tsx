@@ -1,5 +1,6 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   /** CSS width: "100%", "180px", "12ch". */
@@ -34,8 +35,9 @@ export function Skeleton({ className, width, height, shape = "line", ...props }:
 
 /** A run of skeleton rows shaped like a list. */
 export function SkeletonList({ rows = 4, className }: { rows?: number; className?: string }) {
+  const labels = useLabels();
   return (
-    <div className={cn("flex flex-col", className)} role="status" aria-label="Loading">
+    <div className={cn("flex flex-col", className)} role="status" aria-label={labels.loading}>
       {Array.from({ length: rows }).map((_, i) => (
         <div
           key={i}

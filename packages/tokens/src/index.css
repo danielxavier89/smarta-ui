@@ -3,16 +3,21 @@
    Import order is load-bearing: primitives define the ramps, semantics pick
    from them per product and mode, foundation registers the non-colour scales
    with Tailwind, theme bridges semantics into Tailwind's colour namespace,
-   and base applies the page defaults last.
+   and base applies the scoped defaults the components rely on.
 
    Consumers import Tailwind first, then this file:
 
        @import "tailwindcss";
        @import "@smarta/tokens/css";
+
+   reset.css is deliberately NOT imported here. It restyles the whole document,
+   which the backoffice (Ant Design 4, Bootstrap, styled-components) and the
+   mid-migration webapp cannot take. A product opts into it separately, and
+   nothing in this library needs it — see the header of base.css.
    ========================================================================== */
 
 @import "./primitives.css";
 @import "./semantic.css";
 @import "./foundation.css";
 @import "./theme.css";
-@import "./reset.css";
+@import "./base.css";

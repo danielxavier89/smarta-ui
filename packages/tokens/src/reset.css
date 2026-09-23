@@ -1,9 +1,34 @@
 /* ==========================================================================
-   Layer 4 — Base
-   The handful of page-level defaults every smarta surface assumes. Kept in
-   the token package rather than in a component because each of these is a
-   decision about the product, not about any one element.
+   Layer 4b — Page reset, opt-in
+   The page-level defaults a smarta surface assumes when smarta owns the page.
+
+   THIS FILE IS NOT IN @smarta/ui/styles.css. A product imports it separately:
+
+       import "@smarta/ui/styles.css";   // always
+       import "@smarta/ui/reset.css";    // only if this library owns the page
+
+   Why it is opt-in: every rule below is unscoped, and two of the three smarta
+   products cannot take that. The backoffice runs Ant Design 4, Bootstrap and
+   styled-components together; the webapp is mid-migration from
+   styled-components to Tailwind. Restyling every button, input and
+   :focus-visible on those pages does not improve them, it breaks them — a
+   library that cannot be added to one screen without changing the other forty
+   is a library nobody can adopt incrementally.
+
+   The components do not need any of this. Everything they rely on — the focus
+   ring, the reduced-motion guarantee, the type inheritance, the ground colour
+   — is in base.css, scoped to [data-product], and ships unconditionally. This
+   file only widens those same decisions to the whole document.
+
+   So: greenfield surfaces and new products take it. Screens being migrated a
+   component at a time do not.
    ========================================================================== */
+
+/* Tailwind's own preflight, which styles.css deliberately leaves out. A
+   product that owns its page wants it; a product coexisting with Ant Design,
+   Bootstrap or styled-components very much does not. This is the line that
+   decides which of those you are. */
+@import "tailwindcss/preflight.css" layer(base);
 
 @layer base {
   html {
@@ -24,8 +49,8 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* One focus treatment for the whole system. Components add a halo on top
-     where the control has a fill of its own; nothing overrides the ring. */
+  /* The same ring base.css gives the library's own controls, widened to the
+     product's controls too. */
   :focus-visible {
     outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
@@ -55,67 +80,8 @@
   }
 }
 
-/* A link is underlined in the backoffice and not in the webapp, because a
-   grayscale palette has no hue left to say "this is a link" with. The rule
-   lives on a token so a component never asks which product it is in. */
-@layer base {
-  .smarta-link {
-    color: var(--link);
-    text-decoration: var(--link-decoration);
-    text-underline-offset: 2px;
-  }
-  .smarta-link:hover {
-    color: var(--link-hover);
-    text-decoration: underline;
-  }
-}
-
-/* Hover never fires on touch, so anything revealed by hover is pinned to a
-   partial opacity instead of being unreachable. */
-@media (hover: none) {
-  @layer base {
-    .reveal-on-hover { opacity: 0.6 !important; }
-  }
-}
-
-/* Coarse pointers get a finger-sized target.
-   
-   This used to read `button { min-height: var(--touch-target) }`, which was
-   the wrong shape of fix: min-height grows the box, and a great many of the
-   controls here are drawn at a fixed size on purpose. A 36px round IconButton
-   became a 36x44 oval; a 17px checkbox became a 17x44 slot next to its own
-   label; the 15px info icon in a KeyValue row pushed every row it appeared in
-   to 44px, so a column of figures gained gaps wherever a note existed. The
-   rule was invisible on every machine it was written on and wrong on every
-   phone.
-   
-   So the hit area is separated from the drawn box. The pseudo-element is
-   centred on the control and takes the tap; the control keeps its size, its
-   roundness and its place in a row. Anything that can afford to grow — a menu
-   item, a tab — still just grows, in its own file. */
-@layer base {
-  .touch-target {
-    position: relative;
-  }
-}
-
-@media (pointer: coarse) {
-  @layer base {
-    .touch-target::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      translate: -50% -50%;
-      /* At least a finger, and never smaller than the control it covers. */
-      width: 100%;
-      height: 100%;
-      min-width: var(--touch-target);
-      min-height: var(--touch-target);
-    }
-  }
-}
-
+/* The document-wide counterpart to the scoped rule in base.css. A product that
+   owns its page usually wants this to reach its own animations too. */
 @media (prefers-reduced-motion: reduce) {
   @layer base {
     *, *::before, *::after {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 /**
  * A table, as a card.
@@ -58,24 +58,119 @@ export const TBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribu
   },
 );
 
+/**
+ * Anything inside the row that handles its own Enter, Space or click.
+ *
+ * `label` is in the list and is the one that is easy to miss. A label is not
+ * itself interactive, but clicking one forwards the click to the control it
+ * names — so without it, clicking the text beside a Checkbox toggled the
+ * checkbox AND activated the row. The library's own Checkbox renders exactly
+ * that shape: a Radix button for the box, and a sibling <label> for the words.
+ */
+const INTERACTIVE =
+  'button, a[href], input, select, textarea, label, summary, ' +
+  '[role="button"], [role="link"], [role="checkbox"], [role="menuitem"], ' +
+  '[tabindex]:not([tabindex="-1"])';
+
 export interface TRProps extends React.HTMLAttributes<HTMLTableRowElement> {
-  /** Adds hover, cursor and a focus ring. Give it a tabIndex and a key handler too. */
+  /**
+   * Makes the row activatable — the whole thing, by mouse and by keyboard.
+   *
+   * This is the only supported way to make a row do something. It supplies the
+   * appearance, `tabIndex`, the click handler and Enter/Space itself, because
+   * the previous API supplied only the appearance and asked every caller to
+   * remember the rest. Callers reliably did not, and a row that looks pressable
+   * and does nothing under the keyboard is not a styling slip — it is a screen
+   * a keyboard user cannot operate.
+   */
+  onActivate?: (event: React.MouseEvent | React.KeyboardEvent) => void;
+  /**
+   * @deprecated Use `onActivate`. This gives a row the appearance of being
+   * pressable without making it so; on its own it produces exactly the defect
+   * described above. It is kept only so existing screens keep rendering.
+   */
   clickable?: boolean;
   selected?: boolean;
 }
 
 export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
-  { className, clickable = false, selected = false, ...props },
+  { className, clickable = false, selected = false, onActivate, onClick, onKeyDown, tabIndex, ...props },
   ref,
 ) {
+  const activatable = Boolean(onActivate);
+
+  /**
+   * An activatable row is always in the tab order, even if the caller passed a
+   * negative tabIndex.
+   *
+   * `tabIndex` arrives through React.HTMLAttributes, so nothing stopped
+   * `<TR onActivate tabIndex={-1}>` — which rendered a row with the pressable
+   * appearance, a working click, and no way to reach it from a keyboard. That
+   * is precisely the defect onActivate exists to make impossible, reintroduced
+   * through a prop nobody would think to look at. The guarantee wins over the
+   * override; a warning says so rather than letting it pass silently.
+   */
+  const negativeTabIndex = activatable && typeof tabIndex === "number" && tabIndex < 0;
+  const resolvedTabIndex = activatable ? (negativeTabIndex ? 0 : (tabIndex ?? 0)) : tabIndex;
+
+  if (process.env.NODE_ENV !== "production") {
+    if (clickable && !onActivate) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[@smarta/ui] <TR clickable> without onActivate renders a row that looks " +
+          "pressable but cannot be reached or fired from a keyboard. Pass onActivate instead.",
+      );
+    }
+    if (negativeTabIndex) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[@smarta/ui] <TR onActivate> ignores a negative tabIndex, because it would " +
+          "take an activatable row out of the keyboard's reach. Using 0.",
+      );
+    }
+  }
+
+  /**
+   * A row is often full of its own controls — a menu, a copy button. Those
+   * handle their own activation, and the row must not fire a second time on
+   * top of them.
+   *
+   * The row itself matches INTERACTIVE once onActivate has given it a
+   * tabIndex, so `closest` finds the row when the click was on a plain cell.
+   * Only a match strictly between the target and the row counts.
+   */
+  const fromChildControl = (target: EventTarget | null, row: EventTarget | null) => {
+    if (!(target instanceof Element) || !(row instanceof Element)) return false;
+    const hit = target.closest(INTERACTIVE);
+    return hit !== null && hit !== row && row.contains(hit);
+  };
+
   return (
     <tr
       ref={ref}
       aria-selected={selected || undefined}
+      tabIndex={resolvedTabIndex}
+      onClick={(e) => {
+        onClick?.(e);
+        if (!onActivate || e.defaultPrevented) return;
+        if (fromChildControl(e.target, e.currentTarget)) return;
+        onActivate(e);
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (!onActivate || e.defaultPrevented) return;
+        if (e.key !== "Enter" && e.key !== " ") return;
+        // A control inside the row owns its own keys.
+        if (e.target !== e.currentTarget) return;
+        // Space scrolls the page otherwise, and Enter can submit a form.
+        e.preventDefault();
+        onActivate(e);
+      }}
       className={cn(
         "border-b border-border-soft last:border-b-0",
-        clickable && "cursor-pointer hover:bg-surface-hover",
-        clickable && "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring",
+        (clickable || activatable) && "cursor-pointer hover:bg-surface-hover",
+        (clickable || activatable) &&
+          "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring",
         selected && "bg-accent-soft",
         className,
       )}

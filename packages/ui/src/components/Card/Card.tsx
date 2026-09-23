@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Slot } from "radix-ui";
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export interface CardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onClick"> {
@@ -54,6 +55,8 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
   },
   ref,
 ) {
+  const labels = useLabels();
+
   const Comp = (asChild ? Slot.Root : "div") as React.ElementType;
   const tones = {
     default: "border-border",
@@ -112,7 +115,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
         "group-hover:text-link-hover group-hover:underline",
       )}
     >
-      {affordanceLabel ?? "See more"}
+      {affordanceLabel ?? labels.cardSeeMore}
       <ArrowRight
         size={13}
         aria-hidden
@@ -133,7 +136,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
         "group-hover:border-border-strong group-hover:bg-surface-hover",
       )}
     >
-      {affordanceLabel ?? "Open"}
+      {affordanceLabel ?? labels.cardOpen}
       <ArrowRight size={13} aria-hidden />
     </button>
   );
@@ -192,10 +195,22 @@ export const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
   },
 );
 
-export const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  function CardTitle({ className, ...props }, ref) {
+export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  /**
+   * The heading level. `h3` is the common case — a card inside a section
+   * inside a page — but only the page knows its own outline, and a card
+   * directly under an `h1` needs `h2` or the document skips a level.
+   *
+   * Size is a token, not a consequence of the tag, so changing this changes
+   * the structure and not the look.
+   */
+  as?: "h2" | "h3" | "h4" | "h5" | "h6";
+}
+
+export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
+  function CardTitle({ className, as: Tag = "h3", ...props }, ref) {
     return (
-      <h3
+      <Tag
         ref={ref}
         className={cn("m-0 text-lg font-semibold tracking-tight text-fg", className)}
         {...props}

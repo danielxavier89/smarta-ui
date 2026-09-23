@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Progress } from "./Progress";
-import { docsPage } from "@/lib/docs";
+import { Progress, type ProgressProps } from "./Progress";
+import { docsPage } from "../../lib/docs";
 import rules from "./Progress.md?raw";
 
 const meta = { title: "Status/Progress", component: Progress, args: { value: 62, label: "Uploading receipts" } ,
@@ -9,7 +9,7 @@ const meta = { title: "Status/Progress", component: Progress, args: { value: 62,
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a) => <div className="max-w-[320px]"><Progress {...a} /></div> };
+export const Playground: Story = { render: (a: ProgressProps) => <div className="max-w-[320px]"><Progress {...a} /></div> };
 
 export const Variants: Story = {
   render: () => (

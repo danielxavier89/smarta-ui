@@ -1,24 +1,24 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SlidersHorizontal } from "lucide-react";
-import { Button } from "@/components/Button";
-import { Chip } from "@/components/Chip";
+import { Button } from "../components/Button";
+import { Chip } from "../components/Chip";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
   DropdownMenuLabel,
-} from "@/components/DropdownMenu";
-import { EmptyState } from "@/components/EmptyState";
-import { KeyValue } from "@/components/KeyValue";
-import { Pagination } from "@/components/Pagination";
-import { Panel, PanelSection } from "@/components/Panel";
-import { SearchInput } from "@/components/SearchInput";
-import { SkeletonList } from "@/components/Skeleton";
-import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "@/components/Table";
-import { Tabs, TabsList, Tab, TabPanel } from "@/components/Tabs";
-import { docsPage } from "@/lib/docs";
+} from "../components/DropdownMenu";
+import { EmptyState } from "../components/EmptyState";
+import { KeyValue } from "../components/KeyValue";
+import { Pagination } from "../components/Pagination";
+import { Panel, PanelSection } from "../components/Panel";
+import { SearchInput } from "../components/SearchInput";
+import { SkeletonList } from "../components/Skeleton";
+import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "../components/Table";
+import { Tabs, TabsList, Tab, TabPanel } from "../components/Tabs";
+import { docsPage } from "../lib/docs";
 import recipe from "../../docs/recipes/list-page.md?raw";
 
 /**
@@ -174,16 +174,8 @@ export const TheScreen: Story = {
                 {rows.map((r) => (
                   <TR
                     key={r.id}
-                    clickable
-                    tabIndex={0}
                     selected={openId === r.id}
-                    onClick={() => setOpenId(r.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setOpenId(r.id);
-                      }
-                    }}
+                    onActivate={() => setOpenId(r.id)}
                   >
                     <TD muted>{r.date}</TD>
                     <TD>{r.supplier}</TD>

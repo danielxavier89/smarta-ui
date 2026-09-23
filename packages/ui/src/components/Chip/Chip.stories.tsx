@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Check, Clock, AlertTriangle } from "lucide-react";
 import { Chip } from "./Chip";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Chip.md?raw";
 
 const meta = {

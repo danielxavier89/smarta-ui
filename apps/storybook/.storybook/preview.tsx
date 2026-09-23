@@ -230,7 +230,13 @@ const preview: Preview = {
         ],
       },
     },
-    a11y: { test: "todo" },
+    // "todo" reports violations in the panel and fails nothing, which is how a
+    // design system accumulates them. "error" makes the addon's own run fail.
+    //
+    // The build-blocking gate is packages/ui/src/test/a11y.test.tsx, which runs
+    // axe over a composed surface in all four product/mode combinations. This
+    // is the same check where a designer will actually see it.
+    a11y: { test: "error" },
     backgrounds: { disable: true },
     viewport: { options: viewports },
   },

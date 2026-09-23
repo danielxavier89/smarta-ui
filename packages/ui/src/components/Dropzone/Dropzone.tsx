@@ -1,10 +1,11 @@
 import * as React from "react";
 import { UploadCloud } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { TextLink } from "@/components/TextLink";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
+import { TextLink } from "../TextLink";
 
 export interface DropzoneProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onDrop" | "children"> {
+  extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "onDrop" | "children"> {
   onFiles: (files: File[]) => void;
   /** Passed straight to the input, e.g. "image/*,.pdf". */
   accept?: string;
@@ -21,11 +22,20 @@ export interface DropzoneProps
 }
 
 /**
- * A drop target that is also a button that is also a file input.
+ * A drop target that is also a file input.
  *
  * Drag is the affordance, not the requirement: the whole zone is clickable and
  * reachable by keyboard, because dragging a file is impossible on a phone and
  * awkward with a screen reader.
+ *
+ * The zone is a <label> owning a real file input, not a div with
+ * role="button". The div version failed axe twice over, and both were real:
+ * the input inside it had no accessible name, and an interactive wrapper
+ * containing an interactive input is nested-interactive, which leaves screen
+ * readers disagreeing about what the control even is. A label gives the input
+ * its name from the visible text, opens the picker natively on click, and
+ * needs no key handler of its own — Enter and Space on a focused file input
+ * already open it.
  */
 export function Dropzone({
   className,
@@ -33,13 +43,15 @@ export function Dropzone({
   accept,
   multiple = true,
   disabled = false,
-  label = "Drop files here",
+  label,
   hint,
   error,
   uploading = false,
   children,
   ...props
 }: DropzoneProps) {
+  const labels = useLabels();
+
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [over, setOver] = React.useState(false);
   const blocked = disabled || uploading;
@@ -54,21 +66,16 @@ export function Dropzone({
     if (files.length) onFiles(multiple ? files : files.slice(0, 1));
   };
 
+  const hintId = React.useId();
+  const errorId = React.useId();
+  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(" ");
+
   return (
     <div className="flex flex-col gap-[6px]">
-      <div
-        role="button"
-        tabIndex={blocked ? -1 : 0}
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- the
+          input is a child, which is the association. */}
+      <label
         aria-disabled={blocked || undefined}
-        aria-describedby={undefined}
-        onClick={() => !blocked && inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (blocked) return;
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            inputRef.current?.click();
-          }
-        }}
         onDragEnter={(e) => {
           e.preventDefault();
           depth.current += 1;
@@ -91,7 +98,9 @@ export function Dropzone({
           "bg-surface px-[24px] py-[26px] text-sm text-fg-subtle",
           "transition-[border-color,background-color] duration-[var(--duration-fast)]",
           !blocked && "cursor-pointer hover:border-border-strong",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
+          // The input takes the focus and is visually hidden, so the zone draws
+          // the ring on its behalf.
+          "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus-ring",
           over && "border-accent bg-accent-soft",
           error && "border-bad",
           blocked && "cursor-not-allowed opacity-60",
@@ -103,12 +112,11 @@ export function Dropzone({
           <>
             <UploadCloud size={22} aria-hidden className="text-fg-faint" />
             <p className="m-0 text-base text-fg">
-              {label}{" "}
+              {label ?? labels.dropFiles}{" "}
               <TextLink asChild>
-                <span>or choose them</span>
+                <span>{labels.chooseFiles}</span>
               </TextLink>
             </p>
-            {hint && <p className="m-0 text-xs text-fg-subtle">{hint}</p>}
           </>
         )}
         <input
@@ -117,6 +125,8 @@ export function Dropzone({
           accept={accept}
           multiple={multiple}
           disabled={blocked}
+          aria-describedby={describedBy || undefined}
+          aria-invalid={error ? true : undefined}
           className="sr-only"
           onChange={(e) => {
             handleFiles(e.target.files);
@@ -124,9 +134,19 @@ export function Dropzone({
             e.target.value = "";
           }}
         />
-      </div>
+      </label>
+
+      {/* Outside the label on purpose: anything inside it becomes part of the
+          input's accessible name, and a name that recites the size limit is
+          read out in full every time the control takes focus. */}
+      {hint && (
+        <p id={hintId} className="m-0 text-xs text-fg-subtle">
+          {hint}
+        </p>
+      )}
+
       {error && (
-        <p role="alert" className="text-xs text-bad-fg">
+        <p id={errorId} role="alert" className="text-xs text-bad-fg">
           {error}
         </p>
       )}

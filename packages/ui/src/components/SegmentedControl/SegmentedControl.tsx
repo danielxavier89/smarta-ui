@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ToggleGroup } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export interface SegmentOption {
   value: string;

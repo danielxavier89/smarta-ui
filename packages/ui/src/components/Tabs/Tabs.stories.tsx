@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Tabs, TabsList, Tab, TabPanel } from "./Tabs";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Tabs.md?raw";
 
 const meta = { title: "Navigation/Tabs", component: Tabs ,

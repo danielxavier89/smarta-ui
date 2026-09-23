@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Dialog } from "radix-ui";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ThemeScope } from "@/components/ThemeProvider";
-import { IconButton } from "@/components/IconButton";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
+import { ThemeScope } from "../ThemeProvider";
+import { IconButton } from "../IconButton";
 
 export interface PanelProps {
   open: boolean;
@@ -45,6 +46,8 @@ export function Panel({
   width = "default",
   className,
 }: PanelProps) {
+  const labels = useLabels();
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -92,7 +95,7 @@ export function Panel({
             </div>
             {headerAction}
             <Dialog.Close asChild>
-              <IconButton variant="ghost" size="sm" label="Close" icon={<X size={16} />} />
+              <IconButton variant="ghost" size="sm" label={labels.close} icon={<X size={16} />} />
             </Dialog.Close>
           </div>
 

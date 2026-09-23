@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Input } from "./Input";
-import { docsPage } from "@/lib/docs";
+import { Input, type InputProps } from "./Input";
+import { docsPage } from "../../lib/docs";
 import rules from "./Input.md?raw";
 
 const meta = {
@@ -14,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a) => <div className="max-w-[360px]"><Input {...a} /></div> };
+export const Playground: Story = { render: (a: InputProps) => <div className="max-w-[360px]"><Input {...a} /></div> };
 
 export const States: Story = {
   render: () => (

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Checkbox as RCheckbox } from "radix-ui";
 import { Check, Minus } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export interface CheckboxProps
   extends Omit<React.ComponentPropsWithoutRef<typeof RCheckbox.Root>, "children"> {

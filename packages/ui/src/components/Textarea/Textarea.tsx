@@ -1,6 +1,6 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Field } from "@/components/Field";
+import { cn } from "../../lib/utils";
+import { Field } from "../Field";
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {

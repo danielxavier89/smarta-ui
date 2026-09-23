@@ -1,0 +1,116 @@
+# Changelog
+
+Kept by hand, in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
+order, and versioned per [SemVer](https://semver.org/) — with the readings of
+minor and major that matter for a design system written down in
+[docs/OWNERSHIP.md](docs/OWNERSHIP.md).
+
+Entries are written for the person upgrading. "Refactored Table" tells them
+nothing; "a clickable row now needs `onActivate`" tells them what to change.
+
+## Unreleased
+
+### Added
+
+- **The package builds.** `@smarta/ui` now emits ESM, CJS, `.d.ts` and
+  sourcemaps to `dist/`, plus compiled CSS. It could not be installed before:
+  it was `private: true` and pointed at raw TypeScript, which every product's
+  bundler skips.
+- **`@smarta/ui/reset.css`**, the page-level reset, as a separate opt-in
+  import.
+- **Labels.** Everything the library says on its own behalf — a close button's
+  accessible name, a spinner's announcement, the pagination landmark — is
+  overridable through `ThemeProvider`'s `labels` prop. English is the fallback.
+  `useLabels()`, `SmartaLabels`, `defaultLabels`, `mergeLabels`.
+- **Formatting helpers**: `formatCurrency`, `formatSignedCurrency`,
+  `formatNumber`, `formatPercent`, `formatFileSize`, `formatDate`,
+  `formatDateTime`, `formatMonth`, `formatRelativeDay`. For `de-DE`, `pt-PT`
+  and `en-GB`. Components still never format — these are for the product to
+  call before the value reaches one.
+- **`TR`'s `onActivate`**, which makes a row activatable by mouse *and*
+  keyboard in one prop.
+- **`CardTitle`'s `as`**, so a card can sit at the right heading level.
+- **Tests and CI.** 103 tests: 67 on component behaviour (keyboard, focus,
+  overlays opening and closing, menus, toasts, form wiring, upload, disabled
+  and loading, the providers and the labels layer), 24 on the formatting
+  helpers, and 12 axe runs over a composed surface. Plus a consumer check
+  that packs the tarball, unpacks it, and typechecks and builds against the
+  published layout with both Webpack and Vite. All of it on every pull
+  request.
+
+### Changed
+
+- **`styles.css` no longer ships Tailwind's preflight.** Tailwind is imported
+  in pieces and preflight is left out, because it is ~150 lines of unscoped
+  element selectors that restyle every heading, list, image, form control and
+  table on the host page. The components get an equivalent scoped to
+  `[data-product]`. `reset.css` carries the real one, inlined, for a product
+  that owns its page.
+
+- **The tokens are no longer declared on `:root`.** They set `color-scheme`
+  there, which is unlayered and changes how the browser paints the whole
+  document's scrollbars and native controls — so importing the stylesheet
+  could flip an Ant Design page on a dark-OS machine. They live on
+  `[data-product]` now.
+
+  **What to do:** nothing, if you render `ThemeProvider` — including in
+  `asRoot` mode, where the attribute goes on `<html>`. A component rendered
+  outside a provider now has no tokens rather than webapp-light ones.
+
+- **`exports` nests `types` under each condition.** A CommonJS consumer on
+  `node16`/`nodenext` resolution could not import the package at all
+  (TS1479); the `.d.cts` being built and shipped was referenced by nothing.
+
+- **The stylesheet no longer restyles the page it lands on.** `styles.css` used
+  to set `body`, every `button`/`input`/`select`/`textarea`, every
+  `:focus-visible` and every element under `prefers-reduced-motion`, globally.
+  Those moved to the opt-in `reset.css`. The focus ring and the reduced-motion
+  rule stayed, scoped to `[data-product]`, because they are promises the library
+  makes about its own components.
+
+  **What to do:** a greenfield surface adds `import "@smarta/ui/reset.css"`
+  after `styles.css`. A screen being migrated alongside Ant Design, Bootstrap
+  or styled-components does not, and gets the correct behaviour by default for
+  the first time.
+
+- **The font is inherited, not loaded.** `--font-sans` now falls back through
+  `--smarta-font-product` to whatever the product is already using. It was
+  naming Plus Jakarta Sans while only Storybook ever fetched it, so products
+  silently rendered in the system font. Set
+  `:root { --smarta-font-product: "…" }` to choose.
+
+- **`Dropzone` is a `<label>` owning a real file input**, rather than a
+  `div role="button"` containing one. The old markup had no accessible name on
+  the input and was nested-interactive. Its `hint` now renders outside the
+  label, so it no longer joins the input's accessible name.
+
+- **`@smarta/tokens` moved to devDependencies** of `@smarta/ui` and its types
+  are inlined into the emitted declarations. It is never published, so a bare
+  import of it would break every consumer's typecheck.
+
+### Deprecated
+
+- **`TR`'s `clickable`.** It gives a row the appearance of being pressable
+  without making it so, which is the defect `onActivate` exists to remove. It
+  still renders, and warns in development.
+
+  **What to do:** replace `clickable tabIndex={0} onClick={…} onKeyDown={…}`
+  with `onActivate={…}`.
+
+### Fixed
+
+- A row with `onActivate` no longer double-fires when a `<label>` inside it
+  is clicked — which is the shape the library's own `Checkbox` renders, so
+  clicking the words beside a checkbox both toggled it and opened the panel.
+- `<TR onActivate tabIndex={-1}>` no longer takes an activatable row out of
+  the tab order. The negative value is ignored, with a warning.
+- `Button`'s `loadingLabel` is no longer discarded when the caller also
+  passes an `aria-label`, so the busy state is actually announced.
+- `ThemeProvider` compares `labels` by contents, so an inline object literal
+  no longer re-renders every component below the provider on each render.
+
+- A row with `onActivate` no longer fires when a button, link or menu inside it
+  is clicked or activated by keyboard. The hand-written version at every call
+  site did fire twice.
+- `KeyValue`'s info control no longer lowercases the row's key to build its
+  accessible name, which was wrong in German.

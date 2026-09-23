@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Checks every semantic text/background pair against WCAG AA (4.5:1), in all
+ * Checks a maintained list of semantic text/background pairs against WCAG AA (4.5:1), in all
  * four combinations of product and mode.
  *
  * Worth having as a script rather than a one-off: the dark palettes were

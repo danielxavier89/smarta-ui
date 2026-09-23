@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Slot } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 const base = [
   "inline items-baseline p-0 bg-transparent border-0 align-baseline",

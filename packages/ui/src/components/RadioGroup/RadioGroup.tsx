@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RadioGroup as RRadioGroup } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export interface RadioOption {
   value: string;

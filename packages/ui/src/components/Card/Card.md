@@ -51,20 +51,27 @@ A bordered surface holding one thing.
 | `tone` | `default \| warn \| bad \| accent` | no | `default` | |
 | `disabled` | `boolean` | no | `false` | Muted and inert: a closed period. |
 
+**`CardTitle`**
+
+| Prop | Type | Required | Default | Notes |
+|---|---|---|---|---|
+| `as` | `h2 \| h3 \| h4 \| h5 \| h6` | no | `h3` | The heading level. Size is a token, so this changes the document outline and not the look. |
+
 ## States
 
 Default · Hover (border strengthens, 1px lift, **and the affordance reacts**) · Focus-visible (same treatment, driven by `has-[:focus-visible]`) · Disabled.
 
 ## Rules
 
-1. **A clickable card always shows what it does.** Never a surface that turns out to be pressable. Pick `arrow` when the title already says where it goes, `link` when the destination needs naming ("See the 12 charges"), `button` for a heavier action.
-2. **The card is a `<div>`, never a `<button>`.** The affordance is the real control, stretched over the surface with `::after`. Wrapping the card in a button makes every control inside it invalid HTML and unreachable by keyboard — the browser flattens nested interactive content.
-3. **Anything interactive inside goes in `CardFooter` or `CardAction`**, which sit above the stretched layer. That is the whole reason for the pattern: the card navigates *and* keeps its own buttons.
-4. **One destination per card.** Two competing navigations on one surface is a coin toss.
-5. **The hover state is on the affordance, not only the border** — that is what tells the user the surface is live.
-6. **The affordance sits on the card's own grid.** All three inset by `--density-card-p`, the same padding `CardHeader` and `CardBody` use, so the arrow's top-right corner matches the title's top-left and the link lines up under the body text. The in-flow affordances are pinned to the foot, so a row of equal-height cards has its affordances on one baseline rather than floating at different heights.
-7. **The lift is suppressed under `prefers-reduced-motion`**, globally. Do not re-add it.
-8. **Tone is a status, not a theme.** `warn`/`bad` mean the content is in that state, not that it is important.
+1. **Set `as` on `CardTitle` when the page needs it.** `h3` suits a card inside a section inside a page, but only the page knows its own outline — a card directly under an `h1` needs `h2`, or the document skips a level and axe says so.
+2. **A clickable card always shows what it does.** Never a surface that turns out to be pressable. Pick `arrow` when the title already says where it goes, `link` when the destination needs naming ("See the 12 charges"), `button` for a heavier action.
+3. **The card is a `<div>`, never a `<button>`.** The affordance is the real control, stretched over the surface with `::after`. Wrapping the card in a button makes every control inside it invalid HTML and unreachable by keyboard — the browser flattens nested interactive content.
+4. **Anything interactive inside goes in `CardFooter` or `CardAction`**, which sit above the stretched layer. That is the whole reason for the pattern: the card navigates *and* keeps its own buttons.
+5. **One destination per card.** Two competing navigations on one surface is a coin toss.
+6. **The hover state is on the affordance, not only the border** — that is what tells the user the surface is live.
+7. **The affordance sits on the card's own grid.** All three inset by `--density-card-p`, the same padding `CardHeader` and `CardBody` use, so the arrow's top-right corner matches the title's top-left and the link lines up under the body text. The in-flow affordances are pinned to the foot, so a row of equal-height cards has its affordances on one baseline rather than floating at different heights.
+8. **The lift is suppressed under `prefers-reduced-motion`**, globally. Do not re-add it.
+9. **Tone is a status, not a theme.** `warn`/`bad` mean the content is in that state, not that it is important.
 
 ## Do and don't
 

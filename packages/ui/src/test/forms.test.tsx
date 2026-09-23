@@ -1,0 +1,216 @@
+import * as React from "react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { ThemeProvider } from "../components/ThemeProvider";
+import { Input } from "../components/Input";
+import { Textarea } from "../components/Textarea";
+import { Checkbox } from "../components/Checkbox";
+import { SearchInput } from "../components/SearchInput";
+import { Dropzone } from "../components/Dropzone";
+import { Button } from "../components/Button";
+
+const wrap = (ui: React.ReactNode) => render(<ThemeProvider>{ui}</ThemeProvider>);
+
+describe("Input wiring", () => {
+  it("associates its label with the control", () => {
+    wrap(<Input label="Company name" />);
+    expect(screen.getByLabelText("Company name")).toBeInTheDocument();
+  });
+
+  it("describes the control with its hint", () => {
+    wrap(<Input label="NIF" hint="Nine digits, no spaces." />);
+    expect(screen.getByLabelText("NIF")).toHaveAccessibleDescription("Nine digits, no spaces.");
+  });
+
+  /**
+   * The house rule is that an error replaces the hint rather than stacking
+   * under it — two lines of advice under one field is how a user reads neither.
+   */
+  it("replaces the hint with the error, and marks the control invalid", () => {
+    wrap(<Input label="NIF" hint="Nine digits, no spaces." error="A NIF is nine digits. This one has six." />);
+    const input = screen.getByLabelText("NIF");
+    expect(input).toHaveAccessibleDescription("A NIF is nine digits. This one has six.");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(screen.queryByText("Nine digits, no spaces.")).not.toBeInTheDocument();
+  });
+
+  it("is not marked invalid without an error", () => {
+    wrap(<Input label="NIF" />);
+    expect(screen.getByLabelText("NIF")).not.toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("accepts typing", async () => {
+    const user = userEvent.setup();
+    wrap(<Input label="Company name" />);
+    const input = screen.getByLabelText("Company name");
+    await user.type(input, "Marcondes");
+    expect(input).toHaveValue("Marcondes");
+  });
+});
+
+describe("Textarea", () => {
+  it("associates its label", () => {
+    wrap(<Textarea label="What should Ana know?" />);
+    expect(screen.getByLabelText("What should Ana know?")).toBeInTheDocument();
+  });
+});
+
+describe("Checkbox", () => {
+  it("toggles from the keyboard", async () => {
+    const onCheckedChange = vi.fn();
+    const user = userEvent.setup();
+    wrap(<Checkbox label="I have checked the NIF" onCheckedChange={onCheckedChange} />);
+
+    await user.tab();
+    await user.keyboard(" ");
+
+    expect(onCheckedChange).toHaveBeenCalled();
+  });
+
+  it("toggles by clicking its label", async () => {
+    const onCheckedChange = vi.fn();
+    const user = userEvent.setup();
+    wrap(<Checkbox label="I have checked the NIF" onCheckedChange={onCheckedChange} />);
+
+    await user.click(screen.getByText("I have checked the NIF"));
+
+    expect(onCheckedChange).toHaveBeenCalled();
+  });
+});
+
+describe("SearchInput", () => {
+  it("clears and returns focus to the field", async () => {
+    const onClear = vi.fn();
+    const user = userEvent.setup();
+    wrap(<SearchInput value="staples" onChange={() => {}} onClear={onClear} />);
+
+    await user.click(screen.getByRole("button", { name: "Clear search" }));
+
+    expect(onClear).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("searchbox")).toHaveFocus();
+  });
+
+  it("shows no clear button when it is empty", () => {
+    wrap(<SearchInput value="" onChange={() => {}} onClear={() => {}} />);
+    expect(screen.queryByRole("button", { name: "Clear search" })).not.toBeInTheDocument();
+  });
+});
+
+describe("Dropzone", () => {
+  it("reports the files chosen through the input", async () => {
+    const onFiles = vi.fn();
+    const user = userEvent.setup();
+    const { container } = wrap(<Dropzone onFiles={onFiles} />);
+
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    const file = new File(["receipt"], "receipt.pdf", { type: "application/pdf" });
+    await user.upload(input, file);
+
+    expect(onFiles).toHaveBeenCalledTimes(1);
+    expect(onFiles.mock.calls[0][0][0]).toBe(file);
+  });
+
+  it("takes no files while it is uploading", async () => {
+    const onFiles = vi.fn();
+    const { container } = wrap(<Dropzone onFiles={onFiles} uploading />);
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    expect(input).toBeDisabled();
+  });
+
+  it("takes no files while it is disabled", () => {
+    const { container } = wrap(<Dropzone onFiles={() => {}} disabled />);
+    expect(container.querySelector('input[type="file"]')).toBeDisabled();
+  });
+
+  /**
+   * The input's accessible name comes from the label that wraps it, so the hint
+   * has to sit outside that label and reach the input by aria-describedby —
+   * otherwise "PDF or a photograph, up to 10 MB" is read out in full every time
+   * the control takes focus. That placement is load-bearing and was asserted
+   * nowhere, so the whole wiring could be deleted with the suite still green.
+   */
+  it("names the input from the visible label, and describes it with the hint", () => {
+    const { container } = wrap(
+      <Dropzone onFiles={() => {}} label="Drop the statement here" hint="PDF, up to 10 MB." />,
+    );
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+
+    // The name comes from the wrapping label's text, not from an aria-label.
+    expect(input.getAttribute("aria-label")).toBeNull();
+    expect(input).toHaveAccessibleName(/Drop the statement here/);
+
+    // And the hint reaches it without joining that name.
+    expect(input).toHaveAccessibleDescription("PDF, up to 10 MB.");
+    expect(input.getAttribute("aria-describedby")).toBeTruthy();
+  });
+
+  it("describes the input with its error and marks it invalid", () => {
+    const { container } = wrap(
+      <Dropzone
+        onFiles={() => {}}
+        label="Drop the statement here"
+        error="That file is 14 MB. The limit is 10 MB."
+      />,
+    );
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+    expect(input).toHaveAccessibleDescription("That file is 14 MB. The limit is 10 MB.");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+});
+
+describe("Button's busy state", () => {
+  /**
+   * `{...props}` used to be spread after the aria-label, so a caller who set
+   * their own accessible name silently lost loadingLabel — and aria-busy on its
+   * own says "busy" without saying what is busy.
+   */
+  it("announces loadingLabel even when the caller set an aria-label", () => {
+    wrap(
+      <Button loading loadingLabel="Wird hochgeladen" aria-label="Hochladen">
+        Upload it
+      </Button>,
+    );
+    expect(screen.getByRole("button")).toHaveAccessibleName("Wird hochgeladen");
+  });
+
+  it("keeps the caller's aria-label when it is not loading", () => {
+    wrap(
+      <Button loadingLabel="Wird hochgeladen" aria-label="Hochladen">
+        Upload it
+      </Button>,
+    );
+    expect(screen.getByRole("button")).toHaveAccessibleName("Hochladen");
+  });
+
+  it("marks itself busy while loading", () => {
+    wrap(<Button loading>Upload it</Button>);
+    expect(screen.getByRole("button")).toHaveAttribute("aria-busy", "true");
+  });
+});
+
+describe("Button", () => {
+  it("does not fire while loading", async () => {
+    const onClick = vi.fn();
+    const user = userEvent.setup();
+    wrap(
+      <Button loading onClick={onClick}>
+        Upload it
+      </Button>,
+    );
+    await user.click(screen.getByRole("button"));
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it("does not fire while disabled", async () => {
+    const onClick = vi.fn();
+    const user = userEvent.setup();
+    wrap(
+      <Button disabled onClick={onClick}>
+        Upload it
+      </Button>,
+    );
+    await user.click(screen.getByRole("button"));
+    expect(onClick).not.toHaveBeenCalled();
+  });
+});

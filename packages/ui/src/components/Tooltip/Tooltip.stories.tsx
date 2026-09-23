@@ -3,7 +3,7 @@ import { Info, HelpCircle } from "lucide-react";
 import { Tooltip } from "./Tooltip";
 import { IconButton } from "../IconButton";
 import { Button } from "../Button";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Tooltip.md?raw";
 
 const meta = {

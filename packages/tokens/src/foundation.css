@@ -16,8 +16,31 @@
 @theme {
   /* --- Type ------------------------------------------------------------
      Plus Jakarta Sans at 400 and 500. 600 is reserved for headings and the
-     one or two places that mean "unread". There is no 700 anywhere. */
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+     one or two places that mean "unread". There is no 700 anywhere.
+
+     The library does not load the font. It names it and then falls back,
+     through --smarta-font-product, to whatever the product is already using.
+
+     This is deliberate, and it is the smaller of the two options. The font was
+     only ever loaded by Storybook, from Google Fonts — so a product importing
+     this library got a stylesheet asking for a face nobody had fetched, and
+     silently rendered in the system font while every measurement here was
+     drawn against Jakarta. Loading it ourselves would have fixed the metrics
+     and broken other things: a request to fonts.gstatic.com from inside a
+     component library is a CSP entry the backoffice has to add and a
+     third-party request the privacy review has to sign off, neither of which
+     a library should impose on its host.
+
+     So a product decides, in one line:
+
+       :root { --smarta-font-product: "Inter", sans-serif; }   inherit
+       :root { --smarta-font-product: "Plus Jakarta Sans"; }   self-hosted
+
+     During the migration the first is the right answer: the library matches
+     the page it is on instead of introducing a second typeface halfway down
+     a screen. See packages/tokens/README.md. */
+  --font-sans: var(--smarta-font-product, "Plus Jakarta Sans"), ui-sans-serif,
+               system-ui, -apple-system,
                "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
                "Liberation Mono", monospace;
@@ -65,7 +88,8 @@
 
   /* --- Motion ----------------------------------------------------------
      One curve for things that move, one for things that only tint.
-     prefers-reduced-motion is handled once, in reset.css. */
+     prefers-reduced-motion is handled in base.css (scoped, always shipped)
+     and widened in reset.css (opt-in). Never in a component. */
   --ease-out:    cubic-bezier(0.32, 0.72, 0, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -105,7 +129,7 @@
   --control-padding-x-lg: 16px;
 
   /* The minimum a finger can hit. Spent by the .touch-target utility in
-     reset.css, which grows the hit area without growing the drawn control. */
+     base.css, which grows the hit area without growing the drawn control. */
   --touch-target: 44px;
 
   /* --- Field type ------------------------------------------------------
