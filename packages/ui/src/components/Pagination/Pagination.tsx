@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 import { IconButton } from "../IconButton";
 
 export interface PaginationProps extends React.HTMLAttributes<HTMLElement> {
@@ -45,21 +46,23 @@ export function Pagination({
   showNumbers = true,
   ...props
 }: PaginationProps) {
+  const labels = useLabels();
+
   const first = pageSize ? (page - 1) * pageSize + 1 : undefined;
   const last =
     pageSize && totalItems ? Math.min(page * pageSize, totalItems) : undefined;
 
   return (
     <nav
-      aria-label="Pagination"
+      aria-label={labels.pagination}
       className={cn("flex flex-wrap items-center justify-between gap-[10px]", className)}
       {...props}
     >
       {totalItems !== undefined && (
         <p className="m-0 text-xs text-fg-subtle tabular-nums">
           {first !== undefined && last !== undefined
-            ? `${first}–${last} of ${totalItems}`
-            : `${totalItems} in total`}
+            ? labels.pageRange(first, last, totalItems)
+            : labels.totalItems(totalItems)}
         </p>
       )}
 
@@ -67,7 +70,7 @@ export function Pagination({
         <IconButton
           variant="ghost"
           size="sm"
-          label="Previous page"
+          label={labels.previousPage}
           icon={<ChevronLeft size={16} />}
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
@@ -87,7 +90,7 @@ export function Pagination({
               <button
                 key={p}
                 type="button"
-                aria-label={`Page ${p}`}
+                aria-label={labels.page(p)}
                 aria-current={p === page ? "page" : undefined}
                 onClick={() => onPageChange(p)}
                 className={cn(
@@ -109,7 +112,7 @@ export function Pagination({
         <IconButton
           variant="ghost"
           size="sm"
-          label="Next page"
+          label={labels.nextPage}
           icon={<ChevronRight size={16} />}
           disabled={page >= pageCount}
           onClick={() => onPageChange(page + 1)}

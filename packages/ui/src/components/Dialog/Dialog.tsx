@@ -2,6 +2,7 @@ import * as React from "react";
 import { Dialog as RDialog } from "radix-ui";
 import { X } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 import { ThemeScope } from "../ThemeProvider";
 import { Button } from "../Button";
 import { IconButton } from "../IconButton";
@@ -44,10 +45,12 @@ export function Dialog({
   description,
   children,
   confirm,
-  cancelLabel = "Cancel",
+  cancelLabel,
   blocking = false,
   size = "sm",
 }: DialogProps) {
+  const labels = useLabels();
+
   const stop = blocking ? (e: Event) => e.preventDefault() : undefined;
   const widths = { sm: "max-w-[420px]", md: "max-w-[560px]", lg: "max-w-[720px]" }[size];
 
@@ -92,7 +95,7 @@ export function Dialog({
             </div>
             {!blocking && (
               <RDialog.Close asChild>
-                <IconButton variant="ghost" size="sm" label="Close" icon={<X size={16} />} />
+                <IconButton variant="ghost" size="sm" label={labels.close} icon={<X size={16} />} />
               </RDialog.Close>
             )}
           </div>
@@ -118,7 +121,7 @@ export function Dialog({
             >
               <RDialog.Close asChild>
                 <Button variant="ghost" className="w-full sm:w-auto">
-                  {cancelLabel}
+                  {cancelLabel ?? labels.cancel}
                 </Button>
               </RDialog.Close>
               <Button

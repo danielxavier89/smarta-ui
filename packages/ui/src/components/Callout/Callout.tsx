@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Info, CheckCircle2, AlertTriangle, XCircle, Lock } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export interface CalloutProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
@@ -38,6 +39,8 @@ export function Callout({
   children,
   ...props
 }: CalloutProps) {
+  const labels = useLabels();
+
   const { box, icon: DefaultIcon } = toneMap[tone];
   return (
     <div
@@ -63,7 +66,7 @@ export function Callout({
         <button
           type="button"
           onClick={onDismiss}
-          aria-label="Dismiss"
+          aria-label={labels.dismiss}
           className="ml-[4px] shrink-0 self-start rounded-xs opacity-60 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-focus-ring"
         >
           <XCircle size={15} aria-hidden />

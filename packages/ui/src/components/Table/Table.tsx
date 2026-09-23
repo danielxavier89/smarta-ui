@@ -58,24 +58,79 @@ export const TBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribu
   },
 );
 
+/** Anything inside the row that handles its own Enter, Space or click. */
+const INTERACTIVE =
+  'button, a[href], input, select, textarea, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])';
+
 export interface TRProps extends React.HTMLAttributes<HTMLTableRowElement> {
-  /** Adds hover, cursor and a focus ring. Give it a tabIndex and a key handler too. */
+  /**
+   * Makes the row activatable — the whole thing, by mouse and by keyboard.
+   *
+   * This is the only supported way to make a row do something. It supplies the
+   * appearance, `tabIndex`, the click handler and Enter/Space itself, because
+   * the previous API supplied only the appearance and asked every caller to
+   * remember the rest. Callers reliably did not, and a row that looks pressable
+   * and does nothing under the keyboard is not a styling slip — it is a screen
+   * a keyboard user cannot operate.
+   */
+  onActivate?: (event: React.MouseEvent | React.KeyboardEvent) => void;
+  /**
+   * @deprecated Use `onActivate`. This gives a row the appearance of being
+   * pressable without making it so; on its own it produces exactly the defect
+   * described above. It is kept only so existing screens keep rendering.
+   */
   clickable?: boolean;
   selected?: boolean;
 }
 
 export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
-  { className, clickable = false, selected = false, ...props },
+  { className, clickable = false, selected = false, onActivate, onClick, onKeyDown, tabIndex, ...props },
   ref,
 ) {
+  if (process.env.NODE_ENV !== "production" && clickable && !onActivate) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "[@smarta/ui] <TR clickable> without onActivate renders a row that looks " +
+        "pressable but cannot be reached or fired from a keyboard. Pass onActivate instead.",
+    );
+  }
+
+  const activatable = Boolean(onActivate);
+
+  /**
+   * A row is often full of its own controls — a menu, a copy button. Those
+   * handle their own activation, and the row must not fire a second time on
+   * top of them.
+   */
+  const fromChildControl = (target: EventTarget | null) =>
+    target instanceof Element && target.closest(INTERACTIVE) !== null;
+
   return (
     <tr
       ref={ref}
       aria-selected={selected || undefined}
+      tabIndex={activatable ? (tabIndex ?? 0) : tabIndex}
+      onClick={(e) => {
+        onClick?.(e);
+        if (!onActivate || e.defaultPrevented) return;
+        if (e.target !== e.currentTarget && fromChildControl(e.target)) return;
+        onActivate(e);
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (!onActivate || e.defaultPrevented) return;
+        if (e.key !== "Enter" && e.key !== " ") return;
+        // A control inside the row owns its own keys.
+        if (e.target !== e.currentTarget) return;
+        // Space scrolls the page otherwise, and Enter can submit a form.
+        e.preventDefault();
+        onActivate(e);
+      }}
       className={cn(
         "border-b border-border-soft last:border-b-0",
-        clickable && "cursor-pointer hover:bg-surface-hover",
-        clickable && "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring",
+        (clickable || activatable) && "cursor-pointer hover:bg-surface-hover",
+        (clickable || activatable) &&
+          "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring",
         selected && "bg-accent-soft",
         className,
       )}

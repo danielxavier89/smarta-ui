@@ -2,6 +2,7 @@ import * as React from "react";
 import { Toast as RToast } from "radix-ui";
 import { CheckCircle2, AlertTriangle, XCircle, Info, X } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export type ToastTone = "ok" | "warn" | "bad" | "info";
 
@@ -46,6 +47,7 @@ export function ToastProvider({
   children: React.ReactNode;
   swipeDirection?: "right" | "up" | "down" | "left";
 }) {
+  const labels = useLabels();
   const [messages, setMessages] = React.useState<ToastMessage[]>([]);
 
   const dismiss = React.useCallback((id: string) => {
@@ -107,7 +109,7 @@ export function ToastProvider({
                 </RToast.Action>
               )}
               <RToast.Close
-                aria-label="Dismiss"
+                aria-label={labels.dismiss}
                 className="touch-target shrink-0 rounded-xs text-fg-faint hover:text-fg-muted focus-visible:outline-2 focus-visible:outline-focus-ring"
               >
                 <X size={14} aria-hidden />

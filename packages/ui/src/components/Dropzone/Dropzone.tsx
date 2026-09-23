@@ -1,6 +1,7 @@
 import * as React from "react";
 import { UploadCloud } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 import { TextLink } from "../TextLink";
 
 export interface DropzoneProps
@@ -33,13 +34,15 @@ export function Dropzone({
   accept,
   multiple = true,
   disabled = false,
-  label = "Drop files here",
+  label,
   hint,
   error,
   uploading = false,
   children,
   ...props
 }: DropzoneProps) {
+  const labels = useLabels();
+
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [over, setOver] = React.useState(false);
   const blocked = disabled || uploading;
@@ -103,9 +106,9 @@ export function Dropzone({
           <>
             <UploadCloud size={22} aria-hidden className="text-fg-faint" />
             <p className="m-0 text-base text-fg">
-              {label}{" "}
+              {label ?? labels.dropFiles}{" "}
               <TextLink asChild>
-                <span>or choose them</span>
+                <span>{labels.chooseFiles}</span>
               </TextLink>
             </p>
             {hint && <p className="m-0 text-xs text-fg-subtle">{hint}</p>}

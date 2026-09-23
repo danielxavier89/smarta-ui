@@ -2,6 +2,7 @@ import * as React from "react";
 import { Slot } from "radix-ui";
 import { ArrowRight } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export interface CardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onClick"> {
@@ -54,6 +55,8 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
   },
   ref,
 ) {
+  const labels = useLabels();
+
   const Comp = (asChild ? Slot.Root : "div") as React.ElementType;
   const tones = {
     default: "border-border",
@@ -112,7 +115,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
         "group-hover:text-link-hover group-hover:underline",
       )}
     >
-      {affordanceLabel ?? "See more"}
+      {affordanceLabel ?? labels.cardSeeMore}
       <ArrowRight
         size={13}
         aria-hidden
@@ -133,7 +136,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
         "group-hover:border-border-strong group-hover:bg-surface-hover",
       )}
     >
-      {affordanceLabel ?? "Open"}
+      {affordanceLabel ?? labels.cardOpen}
       <ArrowRight size={13} aria-hidden />
     </button>
   );

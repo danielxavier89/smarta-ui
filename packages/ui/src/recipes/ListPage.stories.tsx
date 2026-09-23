@@ -174,16 +174,8 @@ export const TheScreen: Story = {
                 {rows.map((r) => (
                   <TR
                     key={r.id}
-                    clickable
-                    tabIndex={0}
                     selected={openId === r.id}
-                    onClick={() => setOpenId(r.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setOpenId(r.id);
-                      }
-                    }}
+                    onActivate={() => setOpenId(r.id)}
                   >
                     <TD muted>{r.date}</TD>
                     <TD>{r.supplier}</TD>

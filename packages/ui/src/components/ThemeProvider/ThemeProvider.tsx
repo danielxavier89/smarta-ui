@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { Product, Theme } from "@smarta/tokens";
 import { cn } from "../../lib/utils";
+import { mergeLabels, type PartialLabels, type SmartaLabels } from "../../lib/labels";
 
 /** useLayoutEffect on the client, useEffect on the server, without the warning. */
 const useIsomorphicLayoutEffect =
@@ -10,11 +11,14 @@ interface ThemeContextValue {
   product: Product;
   /** undefined means "follow the operating system". */
   theme: Theme | undefined;
+  /** Always complete: the product's partial overrides merged over English. */
+  labels: SmartaLabels;
 }
 
 const ThemeContext = React.createContext<ThemeContextValue>({
   product: "webapp",
   theme: undefined,
+  labels: mergeLabels(),
 });
 
 /**
@@ -27,6 +31,18 @@ const ThemeContext = React.createContext<ThemeContextValue>({
  */
 export function useTheme() {
   return React.useContext(ThemeContext);
+}
+
+/**
+ * The words the library says on its own behalf — a close button's accessible
+ * name, a spinner's announcement, the pagination landmark.
+ *
+ * Always returns a complete set, so a component reads one without checking
+ * whether the product supplied it. Outside a ThemeProvider it is English,
+ * which keeps an unwrapped component legible rather than blank.
+ */
+export function useLabels(): SmartaLabels {
+  return React.useContext(ThemeContext).labels;
 }
 
 /**
@@ -62,6 +78,16 @@ export interface ThemeProviderProps extends React.HTMLAttributes<HTMLDivElement>
    * combinations on one page.
    */
   asRoot?: boolean;
+  /**
+   * Overrides for the strings the components produce themselves — a close
+   * button's accessible name, the pagination landmark. Partial: anything
+   * omitted stays English.
+   *
+   * Define it outside render (a module constant) rather than inline. An object
+   * literal is a new reference every render, and this value reaches every
+   * component below the provider.
+   */
+  labels?: PartialLabels;
   children?: React.ReactNode;
 }
 
@@ -76,6 +102,7 @@ export function ThemeProvider({
   product = "webapp",
   theme,
   asRoot = false,
+  labels,
   className,
   children,
   ...props
@@ -91,7 +118,11 @@ export function ThemeProvider({
     else el.removeAttribute("data-theme");
   }, [asRoot, product, theme]);
 
-  const value = React.useMemo(() => ({ product, theme }), [product, theme]);
+  const merged = React.useMemo(() => mergeLabels(labels), [labels]);
+  const value = React.useMemo(
+    () => ({ product, theme, labels: merged }),
+    [product, theme, merged],
+  );
 
   if (asRoot) {
     return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

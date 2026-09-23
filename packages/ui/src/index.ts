@@ -17,6 +17,17 @@ export { cn } from "./lib/utils";
  */
 export type { Product, Theme } from "@smarta/tokens";
 
+/**
+ * The strings the components say on their own behalf. A product passes a
+ * partial override to ThemeProvider; English fills the rest. See lib/labels.ts.
+ */
+export {
+  defaultLabels,
+  mergeLabels,
+  type SmartaLabels,
+  type PartialLabels,
+} from "./lib/labels";
+
 // Actions
 export * from "./components/Button";
 export * from "./components/IconButton";

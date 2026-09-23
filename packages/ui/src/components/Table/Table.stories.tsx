@@ -89,13 +89,8 @@ export const ClickableRows: Story = {
           {rows.map((r) => (
             <TR
               key={r.who}
-              clickable
               selected={picked === r.who}
-              tabIndex={0}
-              onClick={() => setPicked(r.who)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setPicked(r.who); }
-              }}
+              onActivate={() => setPicked(r.who)}
             >
               <TD>{r.who}</TD>
               <TD numeric>{r.amount}</TD>

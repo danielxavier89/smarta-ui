@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Info } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 import { Tooltip } from "../Tooltip";
 
 export interface KeyValueRow {
@@ -58,8 +59,9 @@ export interface KeyValueProps extends React.HTMLAttributes<HTMLDListElement> {
  * unreachable.
  */
 function NoteTip({ label, note }: { label: React.ReactNode; note: React.ReactNode }) {
+  const labels = useLabels();
   const [open, setOpen] = React.useState(false);
-  const name = typeof label === "string" ? `About ${label.toLowerCase()}` : "More about this value";
+  const name = labels.aboutValue(typeof label === "string" ? label : undefined);
 
   return (
     <Tooltip content={note} open={open} onOpenChange={setOpen} side="top">
