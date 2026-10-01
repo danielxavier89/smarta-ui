@@ -67,6 +67,8 @@ export * from "./components/DatePicker";
 export * from "./components/DateRangePicker";
 export * from "./components/Textarea";
 export * from "./components/Select";
+export * from "./components/Combobox";
+export * from "./components/MultiSelect";
 export * from "./components/SearchInput";
 export * from "./components/Checkbox";
 export * from "./components/RadioGroup";

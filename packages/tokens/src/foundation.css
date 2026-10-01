@@ -157,10 +157,12 @@
      Named, because a raw z-index is a number nobody can rank six months on. */
   --z-base:     0;
   --z-sticky:   10;
-  --z-dropdown: 20;
   --z-overlay:  30;
   --z-panel:    40;
   --z-dialog:   50;
+  /* Above the dialog: a menu or a calendar opened from inside a Panel or a
+     Dialog is portalled to <body>, and at 20 it opened behind its own form. */
+  --z-dropdown: 55;
   --z-toast:    60;
   --z-tooltip:  70;
 
