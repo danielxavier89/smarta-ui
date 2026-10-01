@@ -51,8 +51,10 @@ export const AtTheEnds: Story = {
   render: function AtTheEnds() {
     return (
       <div className="sui:flex sui:max-w-[560px] sui:flex-col sui:gap-[20px]">
-        <Pagination page={1} pageCount={9} onPageChange={() => {}} totalItems={172} pageSize={20} />
-        <Pagination page={9} pageCount={9} onPageChange={() => {}} totalItems={172} pageSize={20} />
+        {/* Two on one page need two names, or a screen reader lists two
+            identical "Pagination" landmarks and cannot tell them apart. */}
+        <Pagination aria-label="Charges, first page" page={1} pageCount={9} onPageChange={() => {}} totalItems={172} pageSize={20} />
+        <Pagination aria-label="Charges, last page" page={9} pageCount={9} onPageChange={() => {}} totalItems={172} pageSize={20} />
         <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           The arrow that has nowhere to go is disabled rather than hidden, so the control
           keeps its shape and the row does not shift under the pointer between the first

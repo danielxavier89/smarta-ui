@@ -230,12 +230,14 @@ const preview: Preview = {
         ],
       },
     },
-    // "todo" reports violations in the panel and fails nothing, which is how a
-    // design system accumulates them. "error" makes the addon's own run fail.
+    // The addon's own panel, where a designer will actually see a violation.
     //
-    // The build-blocking gate is packages/ui/src/test/a11y.test.tsx, which runs
-    // axe over a composed surface in all four product/mode combinations. This
-    // is the same check where a designer will actually see it.
+    // It is not what blocks a merge: building Storybook compiles the stories
+    // without running them, so nothing in CI ever executed this. What blocks a
+    // merge is scripts/browser-gate.mjs, which loads every one of these
+    // stories in Chromium, in all four product/mode combinations, at a phone
+    // width and a desktop one, and runs axe with colour contrast on. Its first
+    // run found five defects the jsdom tests could not see.
     a11y: { test: "error" },
     backgrounds: { disable: true },
     viewport: { options: viewports },

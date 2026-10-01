@@ -14,8 +14,10 @@ const STEPS = [
   ["test", ["test"]],
   ["consumer", ["run", "test:consumer"]],
   ["coexistence", ["run", "test:coexistence"]],
-  ["browser gate", ["run", "test:browser"]],
   ["storybook", ["run", "build-storybook"]],
+  // After the build, never before: the gate reads storybook-static, and run
+  // first it would check whatever was built last time.
+  ["browser gate", ["run", "test:browser"]],
 ];
 
 const npm = process.env.npm_execpath;

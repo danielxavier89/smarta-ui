@@ -226,6 +226,60 @@ describe("TR onActivate, against a negative tabIndex", () => {
   });
 });
 
+/**
+ * A table wider than its card scrolls sideways, and a scroll container with
+ * nothing focusable inside it cannot be scrolled from a keyboard. The browser
+ * gate found it at 390px. jsdom has no layout, so the widths are set by hand.
+ */
+describe("Table's scroll container", () => {
+  function withWidths(scroll: number, client: number, fn: () => void) {
+    const sw = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "scrollWidth");
+    const cw = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "clientWidth");
+    Object.defineProperty(HTMLElement.prototype, "scrollWidth", { configurable: true, get: () => scroll });
+    Object.defineProperty(HTMLElement.prototype, "clientWidth", { configurable: true, get: () => client });
+    try {
+      fn();
+    } finally {
+      if (sw) Object.defineProperty(HTMLElement.prototype, "scrollWidth", sw);
+      if (cw) Object.defineProperty(HTMLElement.prototype, "clientWidth", cw);
+    }
+  }
+
+  it("becomes a named, focusable region when the table overflows", () => {
+    withWidths(900, 360, () => {
+      render(
+        <Table>
+          <TBody><TR><TD>Vodafone</TD></TR></TBody>
+        </Table>,
+      );
+      const region = screen.getByRole("region", { name: "Table, scrolls sideways" });
+      expect(region).toHaveAttribute("tabindex", "0");
+    });
+  });
+
+  it("uses the table's own name when it has one", () => {
+    withWidths(900, 360, () => {
+      render(
+        <Table aria-label="June charges">
+          <TBody><TR><TD>Vodafone</TD></TR></TBody>
+        </Table>,
+      );
+      expect(screen.getByRole("region", { name: "June charges" })).toBeInTheDocument();
+    });
+  });
+
+  it("is not a tab stop when everything fits", () => {
+    withWidths(360, 360, () => {
+      render(
+        <Table>
+          <TBody><TR><TD>Vodafone</TD></TR></TBody>
+        </Table>,
+      );
+      expect(screen.queryByRole("region")).not.toBeInTheDocument();
+    });
+  });
+});
+
 describe("TR clickable, the deprecated path", () => {
   it("warns in development when used without onActivate", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});

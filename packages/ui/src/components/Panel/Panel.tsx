@@ -131,10 +131,14 @@ export function PanelSection({
 }: React.HTMLAttributes<HTMLDivElement> & { title?: React.ReactNode }) {
   return (
     <section className={cn("sui:border-b sui:border-border-soft sui:px-[20px] sui:py-[16px] sui:last:border-b-0", className)} {...props}>
+      {/* h3, because the panel's own title is the h2 Radix renders for the
+          dialog. It was h4, which skipped a level in every panel in both
+          products; a real-browser axe run on the detail-panel recipe found it.
+          The size comes from the classes, so the tag only changes the outline. */}
       {title && (
-        <h4 className="sui:m-0 sui:mb-[8px] sui:text-xs sui:font-medium sui:uppercase sui:tracking-wide sui:text-fg-subtle">
+        <h3 className="sui:m-0 sui:mb-[8px] sui:text-xs sui:font-medium sui:uppercase sui:tracking-wide sui:text-fg-subtle">
           {title}
-        </h4>
+        </h3>
       )}
       {children}
     </section>

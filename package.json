@@ -23,7 +23,8 @@
     "lint:prefix": "node scripts/prefix-classes.mjs --check",
     "test:coexistence": "node scripts/coexistence.mjs",
     "visual-diff": "node scripts/visual-diff.mjs",
-    "ci": "node scripts/ci-local.mjs"
+    "ci": "node scripts/ci-local.mjs",
+    "test:browser": "node scripts/browser-gate.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.2.0",

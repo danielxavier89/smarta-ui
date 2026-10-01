@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 /**
  * A table, as a card.
@@ -14,8 +15,36 @@ export const Table = React.forwardRef<
   HTMLTableElement,
   React.TableHTMLAttributes<HTMLTableElement> & { containerClassName?: string }
 >(function Table({ className, containerClassName, ...props }, ref) {
+  const labels = useLabels();
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [scrolls, setScrolls] = React.useState(false);
+
+  /**
+   * A table wider than its card scrolls sideways — on a phone, most of them.
+   * A scroll container with nothing focusable inside it cannot be scrolled from
+   * a keyboard at all, so while it overflows the container becomes a named,
+   * focusable region (axe: scrollable-region-focusable, found by the real-
+   * browser gate at 390px). While it fits, it is not a tab stop: an extra stop
+   * on every table on a desktop would be noise in exchange for nothing.
+   */
+  React.useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const check = () => setScrolls(el.scrollWidth > el.clientWidth + 1);
+    check();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    if (el.firstElementChild) ro.observe(el.firstElementChild);
+    return () => ro.disconnect();
+  }, []);
+
   return (
     <div
+      ref={scrollRef}
+      tabIndex={scrolls ? 0 : undefined}
+      role={scrolls ? "region" : undefined}
+      aria-label={scrolls ? (props["aria-label"] ?? labels.scrollableTable) : undefined}
       className={cn(
         "sui:rounded-lg sui:border sui:border-border sui:bg-surface",
         // Horizontal scroll only, so sticky headings still resolve vertically.

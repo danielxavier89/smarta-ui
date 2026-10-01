@@ -35,18 +35,24 @@ export function Progress({
 }: ProgressProps) {
   const pct = value === null ? null : Math.max(0, Math.min(100, value));
   const fill = { accent: "sui:bg-accent", ok: "sui:bg-ok", warn: "sui:bg-warn", bad: "sui:bg-bad" }[tone];
+  const labelId = React.useId();
 
   return (
     <div className="sui:flex sui:flex-col sui:gap-[5px]">
       {showLabel && (
         <div className="sui:flex sui:items-baseline sui:justify-between sui:gap-[10px] sui:text-xs">
-          <span className="sui:text-fg-muted">{label}</span>
+          <span id={labelId} className="sui:text-fg-muted">{label}</span>
           {pct !== null && <span className="sui:tabular-nums sui:text-fg-subtle">{Math.round(pct)}%</span>}
         </div>
       )}
+      {/* Named either way. With showLabel the visible text names the bar
+          through aria-labelledby; it used to drop the aria-label on the
+          assumption the visible text was enough, connected to nothing, and a
+          screen reader announced an unnamed progress bar. */}
       <RProgress.Root
         value={pct}
         aria-label={showLabel ? undefined : label}
+        aria-labelledby={showLabel ? labelId : undefined}
         className={cn(
           "sui:relative sui:w-full sui:overflow-hidden sui:rounded-full sui:bg-surface-sunken",
           size === "sm" ? "sui:h-[4px]" : "sui:h-[7px]",

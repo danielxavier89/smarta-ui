@@ -9,6 +9,7 @@ import { Checkbox } from "../components/Checkbox";
 import { SearchInput } from "../components/SearchInput";
 import { Dropzone } from "../components/Dropzone";
 import { Button } from "../components/Button";
+import { Progress } from "../components/Progress";
 
 const wrap = (ui: React.ReactNode) => render(<ThemeProvider>{ui}</ThemeProvider>);
 
@@ -156,6 +157,19 @@ describe("Dropzone", () => {
     const input = container.querySelector('input[type="file"]') as HTMLInputElement;
     expect(input).toHaveAccessibleDescription("That file is 14 MB. The limit is 10 MB.");
     expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+});
+
+describe("Progress", () => {
+  it("is named by its label when the label is hidden", () => {
+    wrap(<Progress value={40} label="Uploading receipts" />);
+    expect(screen.getByRole("progressbar")).toHaveAccessibleName("Uploading receipts");
+  });
+
+  /** It used to drop its name here, on the assumption the visible text was enough. */
+  it("is named by its visible label when it shows one", () => {
+    wrap(<Progress value={40} label="Uploading receipts" showLabel />);
+    expect(screen.getByRole("progressbar")).toHaveAccessibleName("Uploading receipts");
   });
 });
 

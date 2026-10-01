@@ -84,6 +84,15 @@ const PAIRS = [
   ["on-status", "neutral"], ["fg", "skeleton"], ["fg-muted", "surface-hover"],
   ["accent-soft-fg", "selected-bg"], ["ok", "surface"], ["warn", "surface"],
   ["bad", "surface"], ["info", "surface"], ["bad", "canvas"],
+  // The secondary text tokens on every tinted ground a component puts them on.
+  // Missing until scripts/browser-gate.mjs ran axe on rendered colours and
+  // found the backoffice's fg-subtle at 4.47:1 on accent-soft — a selected
+  // ListItem's description, a selected RadioGroup card's hint. The list here
+  // was only ever the pairs someone had thought of; the browser gate checks the
+  // pairs the components actually produce.
+  ["fg-subtle", "surface-sunken"], ["fg-subtle", "surface-hover"], ["fg-subtle", "accent-soft"],
+  ["fg-subtle", "selected-bg"], ["fg-muted", "surface-sunken"], ["fg-muted", "accent-soft"],
+  ["fg-muted", "selected-bg"],
 ];
 
 const MIN = 4.5;

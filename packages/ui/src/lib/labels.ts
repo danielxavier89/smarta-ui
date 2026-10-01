@@ -64,6 +64,13 @@ export interface SmartaLabels {
   totalItems: (total: number) => string;
 
   /**
+   * Names a Table's scroll container while — and only while — the table is
+   * wider than its card, which is when a keyboard user needs to reach it to
+   * scroll. A table's own aria-label is used instead when it has one.
+   */
+  scrollableTable: string;
+
+  /**
    * Accessible name for the info control beside a KeyValue row.
    * `label` is the row's key when it is a string.
    */
@@ -97,6 +104,8 @@ export const defaultLabels: SmartaLabels = {
   nextPage: "Next page",
   pageRange: (first, last, total) => `${first}–${last} of ${total}`,
   totalItems: (total) => `${total} in total`,
+
+  scrollableTable: "Table, scrolls sideways",
 
   // Lowercased because that is English sentence style; German overrides this
   // with a function that does not, since German nouns keep their capital.

@@ -42,14 +42,20 @@
   /* --- Grey: the backoffice neutral. Deliberately hue-free. --------------
      grey-500 is the quiet text grey and carries the same constraint as the
      webapp's: it must clear 4.5:1 on --canvas. The prototype's #7C7C7C was
-     4.0:1 — it only ever sat on white in practice — so it is nudged here. */
+     4.0:1 — it only ever sat on white in practice — so it is nudged here.
+
+     And nudged again, from #6E6E6E: that cleared --canvas and --surface, which
+     were the only grounds anyone had checked, and failed on the tinted ones the
+     components actually put it on — 4.47:1 on --accent-soft under a selected
+     ListItem's description, 4.24:1 on --selected-bg. A real-browser axe run
+     found it. #686868 is the lightest grey that clears the darkest of them. */
   --p-grey-50:   #FAFAFA;
   --p-grey-100:  #F1F1F1;
   --p-grey-150:  #EAEAEA;
   --p-grey-200:  #E6E6E6;
   --p-grey-300:  #BDBDBD;
   --p-grey-400:  #9A9A9A;
-  --p-grey-500:  #6E6E6E;
+  --p-grey-500:  #686868;
   --p-grey-600:  #4A4A4A;
   --p-grey-700:  #3A3A3A;
   --p-grey-800:  #2B2B2B;
