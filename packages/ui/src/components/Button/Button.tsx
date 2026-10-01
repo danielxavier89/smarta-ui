@@ -112,7 +112,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       aria-label={loading && loadingLabel ? loadingLabel : props["aria-label"]}
     >
       {loading ? <Spinner size={iconSize} label="" /> : iconLeft}
-      {children}
+      {/* With asChild, the child becomes the button and the icons go inside it.
+          Without Slottable, Slot was handed three children and threw. */}
+      {asChild ? <Slot.Slottable>{children}</Slot.Slottable> : children}
       {!loading && iconRight}
     </Comp>
   );

@@ -46,7 +46,10 @@ export interface IconButtonProps
    */
   label: string;
   icon: React.ReactNode;
+  /** Renders the child — an <a>, a router Link — as the button, with the icon inside it. */
   asChild?: boolean;
+  /** Only with asChild: the element to render as. */
+  children?: React.ReactElement;
   loading?: boolean;
   /** A small dot in the top-right corner: unread mail, a pending change. */
   indicator?: boolean;
@@ -68,6 +71,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       indicatorTone = "bad",
       disabled,
       type,
+      children,
       ...props
     },
     ref,
@@ -91,6 +95,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         aria-busy={loading || undefined}
         {...props}
       >
+        {asChild && <Slot.Slottable>{children}</Slot.Slottable>}
         {loading ? <Spinner size={16} label="" /> : icon}
         {indicator && (
           <span

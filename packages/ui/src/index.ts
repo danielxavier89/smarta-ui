@@ -73,6 +73,7 @@ export * from "./components/SearchInput";
 export * from "./components/Checkbox";
 export * from "./components/RadioGroup";
 export * from "./components/Dropzone";
+export * from "./components/Upload";
 
 // Status and identity
 export * from "./components/Chip";
@@ -89,6 +90,7 @@ export * from "./components/Table";
 export * from "./components/ListItem";
 export * from "./components/KeyValue";
 export * from "./components/EmptyState";
+export * from "./components/FilePreview";
 
 // Navigation
 export * from "./components/Tabs";
