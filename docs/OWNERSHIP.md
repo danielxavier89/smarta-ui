@@ -5,77 +5,81 @@ settings that can only be changed in GitHub's own configuration, by someone
 with admin on the account. This file is the list, so it is tracked rather than
 remembered.
 
-## Done, in this repository
+## Done
 
 | | |
 |---|---|
 | **Licence** | `LICENSE` — proprietary, all rights reserved, taxit-tech. No licence file previously meant the same thing by accident. |
 | **Code owners** | `.github/CODEOWNERS`. |
-| **CI** | `.github/workflows/ci.yml` — check, build, tests, axe, consumer builds, Storybook, audit. |
-| **Versioning** | SemVer, with the rules below. |
-| **Changelog** | `CHANGELOG.md`, Keep a Changelog format. |
+| **CI** | `.github/workflows/ci.yml` — check, build, unit tests, consumer build, coexistence with Ant Design / Bootstrap / Tailwind, every story in a real browser, a changeset on every library change, and `npm audit`. |
+| **Versioning and changelog** | SemVer with the rules below, written automatically by Changesets — see "Releasing". |
+| **Merges need a green CI** | Branch protection on `main`, applied 2026-10-01 from `.github/branch-protection.json`: `verify` and `audit` must pass on an up-to-date branch, one approval from a code owner, conversations resolved, no force pushes, no deletions. |
+| **The release workflow may open its pull request** | Settings → Actions → "Allow GitHub Actions to create and approve pull requests", on. |
 
-## Still to do, and only you can do it
+One consequence of the protection worth knowing: CODEOWNERS names a single
+person, and GitHub does not let anyone approve their own pull request. Until a
+second owner is added, merging needs an administrator to use "merge without
+waiting for requirements" — which `enforce_admins: false` allows, and which is
+visible in the pull request's history. Add a second owner to CODEOWNERS as soon
+as the team exists.
 
-These need admin on the GitHub account. They are listed in the order that
-matters.
+## Still to do — each needs something this account does not have
 
-### 1. The repository is public
+### 1. Make the repository private — after giving Alisson access
 
-It is the design system for an internal backoffice, on a personal account. Make
-it private or internal, and do that before anything else on this list.
+It is the design system for an internal backoffice, on a personal account, and
+it is public. It should be private.
+
+But Alisson is reviewing it and is not a collaborator: making it private now
+cuts him off from the pull request that answers his review. So, in this order,
+with his GitHub username:
 
 ```sh
-gh repo edit danielxavier89/smarta-ui --visibility private \
-  --accept-visibility-change-consequences
+gh api -X PUT repos/danielxavier89/smarta-ui/collaborators/<his-username> -f permission=pull
+gh repo edit danielxavier89/smarta-ui --visibility private --accept-visibility-change-consequences
 ```
 
-Note that the Netlify deploy keeps serving the built Storybook at its public URL
-either way — that is a separate setting, and the built site contains the whole
-component source. Password protection is a paid feature on Netlify and on
-Vercel.
+A Netlify deploy, if one is ever connected, keeps serving the built Storybook at
+a public URL regardless — and the built site contains the whole component
+source. Password protection is a paid feature on Netlify and on Vercel.
 
 ### 2. Transfer to `taxit-tech`
 
-A shared design system on an individual's account is a single point of failure
-for access, for billing and for whoever inherits it. Transferring preserves
-issues, pull requests and stars, and leaves a redirect from the old URL.
+The account that owns this repository is not a member of the taxit-tech
+organisation, so the transfer needs someone who can create repositories there.
+Transferring keeps issues, pull requests and branch protection, and leaves a
+redirect from the old URL.
 
 ```sh
 gh api -X POST repos/danielxavier89/smarta-ui/transfer -f new_owner=taxit-tech
 ```
 
-Afterwards: update `origin` in every clone, and update the Netlify site's
-repository link.
+Afterwards: update `origin` in every clone, and replace the single person in
+CODEOWNERS with a team.
 
-### 3. Require CI to pass before merge
+### 3. Build the library into the real products in CI
 
-The workflow exists, but nothing yet stops a merge when it is red. On `main`,
-require:
-
-- a pull request before merging, with at least one approval
-- review from Code Owners
-- status checks `verify` and `audit` to pass, and branches to be up to date
-- conversation resolution
-- no force pushes, no deletions
-
-```sh
-gh api -X PUT repos/taxit-tech/smarta-ui/branches/main/protection \
-  --input .github/branch-protection.json
-```
+The `products` job in `ci.yml` installs the packed library into
+kontax-webapp and kontax-backoffice and runs their own builds — Alisson's
+consumer-build requirement, for real. It skips with a visible warning until
+someone with access to those repositories sets `KONTAX_WEBAPP_REPO`,
+`KONTAX_BACKOFFICE_REPO` and a `PRODUCTS_TOKEN` secret. The job's header in
+`ci.yml` lists exactly what to set.
 
 ### 4. Publish somewhere the products can install from
 
-The package builds and is `publishConfig.access: restricted`, but it is not
-published anywhere yet, so a product still has to consume it through the
-workspace. Either:
+The package builds, packs and is `publishConfig.access: restricted`, and the
+release workflow will publish it — but it has nowhere to publish to yet.
 
-- **GitHub Packages** — no new vendor, `.npmrc` per consumer pointing
-  `@smarta:registry` at `npm.pkg.github.com`, and a token in each product's CI.
-- **A private npm organisation** — simpler for consumers, another subscription.
+- **GitHub Packages** requires the package scope to match the repository owner.
+  After the transfer that means renaming the package `@taxit-tech/ui`; from a
+  personal account it cannot work at all.
+- **A private npm organisation named `smarta`** keeps `@smarta/ui`, and costs a
+  subscription.
 
-Until one of those exists, a product can depend on a git URL and a tag. That
-works and is worth saying out loud rather than leaving people to discover.
+Choose one, then set `PUBLISH_ENABLED` and `NPM_TOKEN` as the header of
+`.github/workflows/release.yml` describes. Until then a product can depend on
+a git URL and a tag, which works and is worth saying out loud.
 
 ## Versioning
 
