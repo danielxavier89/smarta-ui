@@ -24,9 +24,14 @@
     "test:coexistence": "node scripts/coexistence.mjs",
     "visual-diff": "node scripts/visual-diff.mjs",
     "ci": "node scripts/ci-local.mjs",
-    "test:browser": "node scripts/browser-gate.mjs"
+    "test:browser": "node scripts/browser-gate.mjs",
+    "changeset": "node scripts/run-bin.mjs @changesets/cli::changeset",
+    "changeset:status": "node scripts/run-bin.mjs @changesets/cli::changeset status --since=origin/main",
+    "version-packages": "node scripts/run-bin.mjs @changesets/cli::changeset version",
+    "release": "npm run build && node scripts/run-bin.mjs @changesets/cli::changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "@vitejs/plugin-react": "^5.2.0",
     "antd": "^4.24.16",
     "bootstrap": "^5.3.8",

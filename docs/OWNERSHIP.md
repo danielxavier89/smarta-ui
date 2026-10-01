@@ -99,12 +99,27 @@ Two things that are easy to get wrong here:
 
 ## Releasing
 
-1. `npm run check && npm run build && npm test && npm run test:consumer`
-2. Move `CHANGELOG.md`'s `Unreleased` entries under a new version heading.
-3. `npm version <patch|minor|major> -w @smarta/ui` — and the same for
-   `@smarta/tokens` if its tokens moved, since the two are versioned together.
-4. Tag `v<version>`, push the tag.
-5. Publish, once a registry exists.
+Automated, with [Changesets](https://github.com/changesets/changesets).
 
-Nothing here is automated yet. It is written down first because an automated
-release that nobody has done by hand is an automated release nobody can debug.
+1. **Every pull request that changes the library carries a note** in
+   `.changeset/` — `npm run changeset` asks for the bump and the text. CI
+   fails a pull request that changes `packages/ui` or `packages/tokens`
+   without one. A change with nothing for a product to know gets
+   `npm run changeset -- --empty`.
+2. **On `main`, `.github/workflows/release.yml` opens a "Version packages"
+   pull request** that turns the pending notes into a version bump and
+   `packages/ui/CHANGELOG.md`. It updates itself as more notes land.
+3. **Merging that pull request is the release.** Once a registry is configured
+   (`PUBLISH_ENABLED` and `NPM_TOKEN`, see the workflow's header) the same
+   workflow builds and publishes; until then it versions and stops.
+
+To see what the next release would be without making it:
+
+```sh
+npm run changeset:status
+```
+
+The release workflow needs one repository setting to open its pull request:
+Settings → Actions → General → "Allow GitHub Actions to create and approve pull
+requests".
+

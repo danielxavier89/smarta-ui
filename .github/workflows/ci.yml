@@ -28,6 +28,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history: the changeset check below compares against the base
+          # branch, and needs the merge base to do it.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -40,6 +44,13 @@ jobs:
       # package.json and package-lock.json disagree.
       - name: Install
         run: npm ci
+
+      # A pull request that changes what a product installs must say so, in a
+      # .changeset/ note: which version bump, and what to do when upgrading.
+      # That note is the changelog. See .changeset/README.md.
+      - name: A changeset accompanies every library change
+        if: github.event_name == 'pull_request'
+        run: node scripts/run-bin.mjs @changesets/cli::changeset status --since="origin/${{ github.base_ref }}"
 
       # typecheck, no hardcoded colours, no hardcoded English, contrast across
       # the four themes, and the component inventory regenerated from source.

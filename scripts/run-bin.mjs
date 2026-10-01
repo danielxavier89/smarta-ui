@@ -28,11 +28,15 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 
-const [name, ...args] = process.argv.slice(2);
-if (!name) {
-  console.error("usage: node ./scripts/run-bin.mjs <package> [args...]");
+const [spec, ...args] = process.argv.slice(2);
+if (!spec) {
+  console.error("usage: node ./scripts/run-bin.mjs <package>[::<bin>] [args...]");
   process.exit(2);
 }
+
+// Usually the CLI is named after its package. When it is not — Changesets
+// ships `changeset` from @changesets/cli — say which: @changesets/cli::changeset.
+const [name, binName = name] = spec.split("::");
 
 const require = createRequire(import.meta.url);
 const pkgJsonPath = require.resolve(`${name}/package.json`);
@@ -40,9 +44,9 @@ const pkg = JSON.parse(readFileSync(pkgJsonPath, "utf8"));
 
 // `bin` is either a string (the package's own name) or a map of names to paths.
 const binField = pkg.bin;
-const relative = typeof binField === "string" ? binField : binField?.[name];
+const relative = typeof binField === "string" ? binField : binField?.[binName];
 if (!relative) {
-  console.error(`${name} declares no bin entry called "${name}"`);
+  console.error(`${name} declares no bin entry called "${binName}"`);
   process.exit(2);
 }
 
