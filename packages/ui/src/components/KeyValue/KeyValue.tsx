@@ -73,10 +73,10 @@ function NoteTip({ label, note }: { label: React.ReactNode; note: React.ReactNod
           // 15px of icon, 44px of tap on a phone. A min-height here instead
           // would set the height of the whole row, and a column of figures
           // would gain a gap wherever a note happened to exist.
-          "touch-target grid size-[15px] shrink-0 place-items-center rounded-full",
-          "text-fg-faint transition-colors duration-[var(--duration-fast)]",
-          "hover:text-fg-subtle",
-          "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring",
+          "sui-touch-target sui:grid sui:size-[15px] sui:shrink-0 sui:place-items-center sui:rounded-full",
+          "sui:text-fg-faint sui:transition-colors sui:duration-[var(--duration-fast)]",
+          "sui:hover:text-fg-subtle",
+          "sui:focus-visible:outline-2 sui:focus-visible:outline-offset-1 sui:focus-visible:outline-focus-ring",
         )}
       >
         <Info size={13} aria-hidden />
@@ -87,10 +87,10 @@ function NoteTip({ label, note }: { label: React.ReactNode; note: React.ReactNod
 
 export function KeyValue({ className, rows, layout = "rows", size = "md", ...props }: KeyValueProps) {
   const toneClass = {
-    default: "text-fg",
-    ok: "text-ok-fg",
-    warn: "text-warn-fg",
-    bad: "text-bad-fg",
+    default: "sui:text-fg",
+    ok: "sui:text-ok-fg",
+    warn: "sui:text-warn-fg",
+    bad: "sui:text-bad-fg",
   };
 
   return (
@@ -101,9 +101,9 @@ export function KeyValue({ className, rows, layout = "rows", size = "md", ...pro
         // key; below that it stops degrading and starts destroying — a nowrap
         // figure gets clipped, a long word gets shredded. Rather than guess,
         // the rows fall back to stacked, which is correct at any width.
-        "m-0 grid @container",
-        layout === "rows" ? "gap-y-[9px] @max-[260px]:gap-y-[12px]" : "gap-y-[12px]",
-        size === "sm" ? "text-sm" : "text-base",
+        "sui:m-0 sui:grid sui:@container",
+        layout === "rows" ? "sui:gap-y-[9px] sui:@max-[260px]:gap-y-[12px]" : "sui:gap-y-[12px]",
+        size === "sm" ? "sui:text-sm" : "sui:text-base",
         className,
       )}
       {...props}
@@ -116,42 +116,42 @@ export function KeyValue({ className, rows, layout = "rows", size = "md", ...pro
         <div
           key={i}
           className={cn(
-            "grid",
+            "sui:grid",
             layout === "rows"
               ? [
-                  "grid-cols-[minmax(0,auto)_minmax(0,1fr)] items-start gap-x-[16px] gap-y-[2px]",
-                  "@max-[260px]:grid-cols-1 @max-[260px]:gap-y-[1px]",
+                  "sui:grid-cols-[minmax(0,auto)_minmax(0,1fr)] sui:items-start sui:gap-x-[16px] sui:gap-y-[2px]",
+                  "sui:@max-[260px]:grid-cols-1 sui:@max-[260px]:gap-y-[1px]",
                 ]
-              : "grid-cols-1 gap-y-[1px]",
+              : "sui:grid-cols-1 sui:gap-y-[1px]",
           )}
         >
           <dt
             className={cn(
-              "m-0 flex min-w-0 items-center gap-[4px] text-fg-subtle",
+              "sui:m-0 sui:flex sui:min-w-0 sui:items-center sui:gap-[4px] sui:text-fg-subtle",
               // The key gives way before the value does: a long label may wrap,
               // so the figure beside it keeps its room.
-              layout === "stacked" && "text-xs",
-              layout === "rows" && "@max-[260px]:text-xs",
+              layout === "stacked" && "sui:text-xs",
+              layout === "rows" && "sui:@max-[260px]:text-xs",
             )}
           >
-            <span className="min-w-0">{r.key}</span>
+            <span className="sui:min-w-0">{r.key}</span>
             {r.note && <NoteTip label={r.key} note={r.note} />}
           </dt>
           <dd
             className={cn(
-              "m-0 flex min-w-0 items-start gap-[6px] font-medium",
-              layout === "rows" && "justify-end text-right",
-              layout === "rows" && "@max-[260px]:justify-start @max-[260px]:text-left",
+              "sui:m-0 sui:flex sui:min-w-0 sui:items-start sui:gap-[6px] sui:font-medium",
+              layout === "rows" && "sui:justify-end sui:text-right",
+              layout === "rows" && "sui:@max-[260px]:justify-start sui:@max-[260px]:text-left",
               toneClass[r.tone ?? "default"],
             )}
           >
             <span
               className={cn(
-                "min-w-0",
+                "sui:min-w-0",
                 // break-words is the last resort, not the plan: it only splits a
                 // word that cannot fit on a line by itself. nowrap opts out of
                 // even that, for values a break would falsify.
-                r.nowrap ? "whitespace-nowrap" : "break-words",
+                r.nowrap ? "sui:whitespace-nowrap" : "sui:break-words",
               )}
             >
               {r.value}

@@ -81,7 +81,7 @@ Everything that exists, on one page, so nothing gets rebuilt that is already her
 
 | Component | What it is | Exports |
 |---|---|---|
-| `ThemeProvider` | Owns a theme scope: which product's tokens resolve, and in which mode. | `ThemeProvider`, `ThemeScope` |
+| `ThemeProvider` | Owns a theme scope: which product's tokens resolve, and in which mode. | `ThemeProvider`, `ThemeScope`, `ROOT_CLASS` |
 
 ## Semantic colour tokens
 

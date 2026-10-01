@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Sizes: Story = {
   render: () => (
-    <div className="flex items-center gap-[16px] text-fg-muted">
+    <div className="sui:flex sui:items-center sui:gap-[16px] sui:text-fg-muted">
       <Spinner size={12} />
       <Spinner size={16} />
       <Spinner size={22} />
@@ -24,11 +24,11 @@ export const Sizes: Story = {
 export const InheritsColour: Story = {
   name: "It inherits currentColor",
   render: () => (
-    <div className="flex flex-wrap items-center gap-[12px]">
+    <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[12px]">
       <Button variant="primary" loading>Sending</Button>
       <Button loading>Checking</Button>
-      <span className="inline-flex items-center gap-[6px] text-bad"><Spinner size={13} label="" /> Retrying</span>
-      <span className="inline-flex items-center gap-[6px] text-fg-subtle"><Spinner size={13} label="" /> Reading the statement</span>
+      <span className="sui:inline-flex sui:items-center sui:gap-[6px] sui:text-bad"><Spinner size={13} label="" /> Retrying</span>
+      <span className="sui:inline-flex sui:items-center sui:gap-[6px] sui:text-fg-subtle"><Spinner size={13} label="" /> Reading the statement</span>
     </div>
   ),
 };

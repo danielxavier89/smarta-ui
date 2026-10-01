@@ -60,7 +60,7 @@ const globalTypes = {
  * phone` is the one that finds things; 320px is still a live width and almost
  * nothing is designed at it.
  *
- * Touch behaviour does NOT follow from these. `touch:` and `.touch-target` key
+ * Touch behaviour does NOT follow from these. `touch:` and `.sui-touch-target` key
  * off `pointer: coarse`, and a desktop browser reports a mouse however narrow
  * the frame is. To see the 44px targets, open the preview in device emulation
  * (or on a phone) — that is the only place the pointer changes.
@@ -113,14 +113,14 @@ function Surface({
       // The border is inside the provider so it can use a token. An outer
       // wrapper sits outside the theme scope and would have to hardcode a
       // colour, which is invisible against a dark cell.
-      className={label ? "overflow-hidden rounded-lg border border-border-strong" : ""}
+      className={label ? "sui:overflow-hidden sui:rounded-lg sui:border sui:border-border-strong" : ""}
     >
       {label && (
-        <div className="border-b border-border-soft bg-surface-sunken px-[14px] py-[7px] text-2xs font-medium uppercase tracking-wide text-fg-subtle">
+        <div className="sui:border-b sui:border-border-soft sui:bg-surface-sunken sui:px-[14px] sui:py-[7px] sui:text-2xs sui:font-medium sui:uppercase sui:tracking-wide sui:text-fg-subtle">
           {label}
         </div>
       )}
-      <div className="p-[20px]">{children}</div>
+      <div className="sui:p-[20px]">{children}</div>
     </ThemeProvider>
   );
 }

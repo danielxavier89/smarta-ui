@@ -18,8 +18,8 @@ type Story = StoryObj<typeof meta>;
 
 export const FourVariants: Story = {
   render: () => (
-    <div className="grid gap-[12px] lg:grid-cols-2">
-      <div className="rounded-lg border border-border bg-surface">
+    <div className="sui:grid sui:gap-[12px] sui:lg:grid-cols-2">
+      <div className="sui:rounded-lg sui:border sui:border-border sui:bg-surface">
         <EmptyState
           variant="first-run"
           icon={<Receipt size={20} />}
@@ -28,7 +28,7 @@ export const FourVariants: Story = {
           action={<Button variant="primary" size="sm">Upload the first one</Button>}
         />
       </div>
-      <div className="rounded-lg border border-border bg-surface">
+      <div className="sui:rounded-lg sui:border sui:border-border sui:bg-surface">
         <EmptyState
           variant="no-results"
           icon={<SearchX size={20} />}
@@ -37,7 +37,7 @@ export const FourVariants: Story = {
           action={<Button size="sm">Clear the search</Button>}
         />
       </div>
-      <div className="rounded-lg border border-border bg-surface">
+      <div className="sui:rounded-lg sui:border sui:border-border sui:bg-surface">
         <EmptyState
           variant="locked"
           icon={<Lock size={20} />}
@@ -47,7 +47,7 @@ export const FourVariants: Story = {
           secondaryAction={<TextLink muted>Ask Ana to reopen it</TextLink>}
         />
       </div>
-      <div className="rounded-lg border border-border bg-surface">
+      <div className="sui:rounded-lg sui:border sui:border-border sui:bg-surface">
         <EmptyState
           variant="error"
           icon={<CloudOff size={20} />}
@@ -63,12 +63,12 @@ export const FourVariants: Story = {
 export const NeverJustNoData: Story = {
   name: "Never just “No data”",
   render: () => (
-    <div className="flex max-w-[64ch] flex-col gap-[12px]">
-      <div className="grid gap-[12px] sm:grid-cols-2">
-        <div className="rounded-lg border border-border bg-surface">
+    <div className="sui:flex sui:max-w-[64ch] sui:flex-col sui:gap-[12px]">
+      <div className="sui:grid sui:gap-[12px] sui:sm:grid-cols-2">
+        <div className="sui:rounded-lg sui:border sui:border-border sui:bg-surface">
           <EmptyState size="sm" title="No data" />
         </div>
-        <div className="rounded-lg border border-border bg-surface">
+        <div className="sui:rounded-lg sui:border sui:border-border sui:bg-surface">
           <EmptyState
             size="sm"
             icon={<Receipt size={18} />}
@@ -77,7 +77,7 @@ export const NeverJustNoData: Story = {
           />
         </div>
       </div>
-      <p className="m-0 text-sm text-fg-subtle">
+      <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
         An empty state explains the situation and offers the next action. The one on the
         left tells the user nothing they did not already know from looking at the screen.
       </p>

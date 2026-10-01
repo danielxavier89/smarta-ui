@@ -77,26 +77,106 @@ Omit `data-theme` and the surface follows `prefers-color-scheme`.
 
 ## Using it in a product
 
+There are two ways in, and which one you want depends on whether this library
+owns the page.
+
+**Migrating a screen inside an existing app** — the backoffice, the webapp
+today. Wrap the screen, not the app:
+
 ```tsx
-// once, at the root
+// once, anywhere
 import "@smarta/ui/styles.css";
 import { ThemeProvider, ToastProvider, TooltipProvider } from "@smarta/ui";
 
-// Outside render: this reaches every component below the provider.
-const labels = { close: "Schließen", search: "Suchen" };
-
-<ThemeProvider asRoot product="backoffice" theme={userChoice} labels={labels}>
+<ThemeProvider product="backoffice" theme={userChoice} labels={{ close: "Schließen" }}>
   <TooltipProvider>
     <ToastProvider>
-      <App />
+      <MigratedScreen />
     </ToastProvider>
   </TooltipProvider>
 </ThemeProvider>
 ```
 
+That renders a `<div class="smarta-ui">`, and everything the library paints is
+scoped to it. The rest of the page — its Ant Design, its Bootstrap, its own
+Tailwind — is untouched, and the library's components are untouched by them.
+
+**A page this library owns** — something new, built on it from the start:
+
+```tsx
+import "@smarta/ui/styles.css";
+import "@smarta/ui/reset.css";
+
+<ThemeProvider asRoot product="webapp" theme={userChoice}>
+  <App />
+</ThemeProvider>
+```
+
+`asRoot` puts the theme on `<html>` and the `.smarta-ui` root on `<body>`, which
+makes the whole document an island. Don't use it on a page that also runs Ant
+Design or Bootstrap: it is exactly as invasive as it sounds.
+
 ```tsx
 import { Button, Card, Chip, Table } from "@smarta/ui";
 ```
+
+### Why it can share a page
+
+Alisson's P0-2 was that this stylesheet would break the pages it lands on. It
+did, and then — once the reset was split out — it was broken BY them instead,
+which nobody had checked. `npm run test:coexistence` now loads the library into
+a page running Ant Design 4, Bootstrap 5 and a host Tailwind, in both import
+orders, and fails on any of:
+
+- **the host changing.** Every host element computes the same styles with our
+  stylesheet loaded as without.
+- **us changing.** Every element of our components computes the same styles on
+  that page as on a page with nothing but our CSS. This is the half that used to
+  fail: Bootstrap's `h3 { font-size: 1.75rem }` rendered every `CardTitle` in the
+  backoffice at 28px.
+- **capture.** Host content placed inside one of our panels, carrying the host's
+  own `text-base`, keeps the host's value.
+- **the focus ring.** It tabs through our controls and checks the ring survives
+  Ant Design's `a:focus { outline: 0 }`.
+
+Three decisions make that hold:
+
+1. **Every utility is prefixed** — `sui:flex`, `sui:text-base`. The webapp's own
+   Tailwind also defines `.text-base`, at 16px where ours is 14px; without the
+   prefix, whichever stylesheet loaded last restyled the other's elements.
+2. **The CSS is unlayered.** Bootstrap's reboot and Ant Design's globals are
+   unlayered, and unlayered CSS beats any cascade layer regardless of
+   specificity. Inside `@layer`, the library lost every fight.
+3. **A deliberate specificity ladder.** Host element rules (`h3`, `p`) sit
+   below our scoped base; host *classes* (`.ant-btn`) sit above it, so an Ant
+   Design button you place inside one of our panels still looks like one; our
+   utilities sit above both. The full ladder is in `scripts/gen-preflight.mjs`.
+
+### Overriding a component
+
+`<Button className="…">` used to be the way to restyle a button. It no longer
+is, and on purpose: your app's classes are your stylesheet's, ours are
+`sui:`-prefixed in ours, and `cn()` will not merge across the two.
+
+A class of yours that only ADDS something the component does not set — a
+margin to space it from its neighbour, a width — works exactly as before. You
+need more only to CHANGE something the component already sets. Our utilities
+are a single class, so a single class of yours ties with them and the stylesheet
+loaded later wins — which works if yours loads after ours, and silently doesn't
+if it ever loads first. One more class wins in either order, and
+`npm run test:coexistence` checks all three cases:
+
+```css
+/* styled-components */
+const WideButton = styled(Button)`&& { padding-inline: 24px; }`;
+
+/* plain CSS */
+.checkout .my-wide-button { padding-inline: 24px; }
+```
+
+The `&&` is the usual styled-components idiom for exactly this, and the same
+thing you would write to override Ant Design. If you are reaching for it often,
+the component is missing a prop — say so.
 
 ### Two stylesheets, and which one you want
 
@@ -105,32 +185,21 @@ import "@smarta/ui/styles.css";   // always: tokens and the components
 import "@smarta/ui/reset.css";    // only if this library owns the page
 ```
 
-`styles.css` paints nothing outside `[data-product]`, the attribute
-`ThemeProvider` renders. Every rule in it is either a utility class the
-components use or is scoped to that subtree — so it cannot restyle a page's own
-headings, lists, images, form controls, body or focus rings. That matters
-because the backoffice runs Ant Design 4, Bootstrap and styled-components
-together, and the webapp is mid-migration from styled-components to Tailwind. A
-library that cannot be added to one screen without changing the other forty is
-a library nobody can adopt gradually.
+`styles.css` paints nothing outside `.smarta-ui`. The build checks that against
+the compiled output, not the source — it fails on any unscoped element
+selector, any `:root` rule that paints, or any `color-scheme` outside the
+island — because the source once gave no sign of a problem that was entirely in
+the output: `@import "tailwindcss"` had kept pulling Tailwind's preflight in.
 
-This is checked, not asserted: `npm run build` reads the compiled stylesheet and
-fails on any element selector, any `:root` rule that paints, or any
-`color-scheme` outside `[data-product]`. It is checked because it was wrong
-once — the hand-written reset had been split out correctly while
-`@import "tailwindcss"` quietly kept pulling Tailwind's own preflight in, and
-the source gave no sign of it.
+What it does still put on your document: Tailwind's theme variables, as
+`--sui-*` custom properties on `:root`. They are inert and namespaced. The
+semantic tokens — `--canvas`, `--fg`, `--border` — live on the `[data-product]`
+element, not on `:root`, so they only exist inside an island.
 
-One thing it does still put on your document: the design tokens themselves, as
-custom properties on `:root` — `--canvas`, `--fg`, `--border` and about sixty
-others. Those are inert, they render nothing on their own, and the components
-read them from inside their own subtree. But the names are generic, so if your
-page already defines `--border` for something else, one of you will win. Say so
-and we will namespace them.
-
-`reset.css` widens the same decisions to the whole document: `body`, all form
-controls, all `:focus-visible`. **Greenfield surfaces take it. Screens being
-migrated a component at a time do not.** Nothing in the library needs it.
+`reset.css` is Tailwind's preflight plus the page-level rules — `body`, every
+form control, every `:focus-visible` — for the whole document. **A page this
+library owns takes it. A screen being migrated does not.** Nothing in the
+library needs it.
 
 ### The font
 

@@ -70,6 +70,19 @@ jobs:
       - name: Consumer build (Webpack and Vite)
         run: npm run test:consumer
 
+      # Everything below runs CSS in a real browser, which nothing above does.
+      - name: Install Chromium for the browser checks
+        run: npx playwright install --with-deps chromium
+
+      # The library on a page running Ant Design 4, Bootstrap 5 and a host
+      # Tailwind, measured in both directions and both import orders: the host's
+      # computed styles unchanged by ours, ours unchanged by the host's, host
+      # content inside our island keeping its own classes, and the focus ring
+      # surviving the host's :focus rules. This is Alisson's P0-2 as a test —
+      # and the half of it that only ever failed in the second direction.
+      - name: Coexistence with Ant Design, Bootstrap and Tailwind
+        run: npm run test:coexistence
+
       # Compiles the stories. It does NOT execute them, so the a11y addon's
       # own run is not a gate here — that is packages/ui/src/test/a11y.test.tsx,
       # in the Test step above. Making the addon block CI would mean adding

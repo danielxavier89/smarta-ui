@@ -68,10 +68,11 @@ export function Dropzone({
 
   const hintId = React.useId();
   const errorId = React.useId();
-  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(" ");
+  const hintRendered = Boolean(hint) && !children;
+  const describedBy = [hintRendered ? hintId : null, error ? errorId : null].filter(Boolean).join(" ");
 
   return (
-    <div className="flex flex-col gap-[6px]">
+    <div className="sui:flex sui:flex-col sui:gap-[6px]">
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- the
           input is a child, which is the association. */}
       <label
@@ -93,30 +94,41 @@ export function Dropzone({
           handleFiles(e.dataTransfer.files);
         }}
         className={cn(
-          "flex flex-col items-center justify-center gap-[6px] text-center",
-          "rounded-lg border-[length:var(--border-width-strong)] border-dashed border-border",
-          "bg-surface px-[24px] py-[26px] text-sm text-fg-subtle",
-          "transition-[border-color,background-color] duration-[var(--duration-fast)]",
-          !blocked && "cursor-pointer hover:border-border-strong",
+          "sui:flex sui:flex-col sui:items-center sui:justify-center sui:gap-[6px] sui:text-center",
+          "sui:rounded-lg sui:border-[length:var(--border-width-strong)] sui:border-dashed sui:border-border",
+          "sui:bg-surface sui:px-[24px] sui:py-[26px] sui:text-sm sui:text-fg-subtle",
+          "sui:transition-[border-color,background-color] sui:duration-[var(--duration-fast)]",
+          !blocked && "sui:cursor-pointer sui:hover:border-border-strong",
           // The input takes the focus and is visually hidden, so the zone draws
           // the ring on its behalf.
-          "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus-ring",
-          over && "border-accent bg-accent-soft",
-          error && "border-bad",
-          blocked && "cursor-not-allowed opacity-60",
+          "sui:has-[:focus-visible]:outline-2 sui:has-[:focus-visible]:outline-offset-2 sui:has-[:focus-visible]:outline-focus-ring",
+          over && "sui:border-accent sui:bg-accent-soft",
+          error && "sui:border-bad",
+          blocked && "sui:cursor-not-allowed sui:opacity-60",
           className,
         )}
         {...props}
       >
         {children ?? (
           <>
-            <UploadCloud size={22} aria-hidden className="text-fg-faint" />
-            <p className="m-0 text-base text-fg">
+            <UploadCloud size={22} aria-hidden className="sui:text-fg-faint" />
+            <p className="sui:m-0 sui:text-base sui:text-fg">
               {label ?? labels.dropFiles}{" "}
               <TextLink asChild>
                 <span>{labels.chooseFiles}</span>
               </TextLink>
             </p>
+            {/* Inside the zone, where the design puts it — and aria-hidden, so
+                it stays out of the input's accessible name, which is built from
+                everything the label contains. A name that recites the size
+                limit is read out in full on every focus. The input still gets
+                the hint, as a description: aria-describedby reads a referenced
+                element even when it is hidden from the tree, by design. */}
+            {hint && (
+              <p id={hintId} aria-hidden="true" className="sui:m-0 sui:text-xs sui:text-fg-subtle">
+                {hint}
+              </p>
+            )}
           </>
         )}
         <input
@@ -127,7 +139,7 @@ export function Dropzone({
           disabled={blocked}
           aria-describedby={describedBy || undefined}
           aria-invalid={error ? true : undefined}
-          className="sr-only"
+          className="sui:sr-only"
           onChange={(e) => {
             handleFiles(e.target.files);
             // Reset so choosing the same file twice still fires a change.
@@ -136,17 +148,8 @@ export function Dropzone({
         />
       </label>
 
-      {/* Outside the label on purpose: anything inside it becomes part of the
-          input's accessible name, and a name that recites the size limit is
-          read out in full every time the control takes focus. */}
-      {hint && (
-        <p id={hintId} className="m-0 text-xs text-fg-subtle">
-          {hint}
-        </p>
-      )}
-
       {error && (
-        <p id={errorId} role="alert" className="text-xs text-bad-fg">
+        <p id={errorId} role="alert" className="sui:text-xs sui:text-bad-fg">
           {error}
         </p>
       )}

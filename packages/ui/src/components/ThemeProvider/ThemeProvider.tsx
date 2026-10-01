@@ -3,6 +3,15 @@ import type { Product, Theme } from "@smarta/tokens";
 import { cn } from "../../lib/utils";
 import { mergeLabels, type PartialLabels, type SmartaLabels } from "../../lib/labels";
 
+/**
+ * The class every painting rule in the library is scoped under.
+ *
+ * Exported so a product can target the boundary deliberately — and because
+ * it is the answer to "how do I render library markup without a provider",
+ * which is: don't, but if you must, this class and a data-product attribute.
+ */
+export const ROOT_CLASS = "smarta-ui";
+
 /** One level deep, which is all a labels object ever is. */
 function shallowEqual(a?: PartialLabels, b?: PartialLabels): boolean {
   if (a === b) return true;
@@ -72,7 +81,17 @@ export function useLabels(): SmartaLabels {
 export function ThemeScope({ children }: { children: React.ReactNode }) {
   const { product, theme } = useTheme();
   return (
-    <div data-product={product} data-theme={theme} style={{ display: "contents" }}>
+    // `.smarta-ui` too, not just the tokens: everything that paints is scoped
+    // to that root, so a portal without it would render its contents unreset
+    // and unstyled at the root level — Bootstrap's `h3` and Ant Design's `p`
+    // margins would reach straight into an open Dialog.
+    <div
+      className={ROOT_CLASS}
+      data-smarta-portal=""
+      data-product={product}
+      data-theme={theme}
+      style={{ display: "contents" }}
+    >
       {children}
     </div>
   );
@@ -124,6 +143,11 @@ export function ThemeProvider({
     el.setAttribute("data-product", product);
     if (theme) el.setAttribute("data-theme", theme);
     else el.removeAttribute("data-theme");
+    // The tokens go on <html>, so color-scheme and every custom property reach
+    // the whole document. The painting root goes on <body>: the ground rule
+    // sets font-size, and on <html> that would redefine the rem for the page.
+    document.body.classList.add(ROOT_CLASS);
+    return () => document.body.classList.remove(ROOT_CLASS);
   }, [asRoot, product, theme]);
 
   /**
@@ -156,7 +180,7 @@ export function ThemeProvider({
       <div
         data-product={product}
         data-theme={theme}
-        className={cn("font-sans text-base text-fg", className)}
+        className={cn(ROOT_CLASS, className)}
         {...props}
       >
         {children}

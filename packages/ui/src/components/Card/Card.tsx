@@ -59,20 +59,20 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
 
   const Comp = (asChild ? Slot.Root : "div") as React.ElementType;
   const tones = {
-    default: "border-border",
-    warn: "border-warn/40 bg-warn-bg",
-    bad: "border-bad/40 bg-bad-bg",
-    accent: "border-accent/40 bg-accent-soft",
+    default: "sui:border-border",
+    warn: "sui:border-warn/40 sui:bg-warn-bg",
+    bad: "sui:border-bad/40 sui:bg-bad-bg",
+    accent: "sui:border-accent/40 sui:bg-accent-soft",
   }[tone];
 
   // The one element that is actually pressed. Its ::after covers the card, so
   // a click anywhere on the surface lands here.
   const stretch =
-    "after:absolute after:inset-0 after:content-[''] after:rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring";
+    "sui:after:absolute sui:after:inset-0 sui:after:content-[''] sui:after:rounded-lg sui:focus-visible:outline-2 sui:focus-visible:outline-offset-2 sui:focus-visible:outline-focus-ring";
 
   const control = !interactive ? null : affordanceAsChild ? (
     <Slot.Root
-      className={cn(stretch, "relative")}
+      className={cn(stretch, "sui:relative")}
       aria-label={affordanceLabel}
     >
       {affordanceAsChild}
@@ -87,12 +87,12 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
         // Inset to the card's own padding, not to numbers of its own: the arrow
         // then shares the grid everything else in the card sits on, and its top
         // edge lines up with whatever the header puts on its first row.
-        "absolute right-[var(--density-card-p)] top-[var(--density-card-p)]",
-        "grid size-[26px] place-items-center rounded-full",
-        "border border-border bg-surface text-fg-subtle",
-        "transition-[background-color,border-color,color,transform] duration-[var(--duration-fast)]",
-        "group-hover:border-accent group-hover:bg-accent group-hover:text-accent-fg",
-        "motion-safe:group-hover:translate-x-[2px]",
+        "sui:absolute sui:right-[var(--density-card-p)] sui:top-[var(--density-card-p)]",
+        "sui:grid sui:size-[26px] sui:place-items-center sui:rounded-full",
+        "sui:border sui:border-border sui:bg-surface sui:text-fg-subtle",
+        "sui:transition-[background-color,border-color,color,transform] sui:duration-[var(--duration-fast)]",
+        "sui:group-hover:border-accent sui:group-hover:bg-accent sui:group-hover:text-accent-fg",
+        "sui:motion-safe:group-hover:translate-x-[2px]",
       )}
     >
       <ArrowRight size={14} aria-hidden />
@@ -108,18 +108,18 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
         // mt-auto pins it to the foot: in an equal-height grid row a short card
         // otherwise leaves its affordance floating in the middle, out of line
         // with its neighbours'. With no spare height it resolves to 0.
-        "mx-[var(--density-card-p)] mb-[var(--density-card-p)] mt-auto self-start",
-        "inline-flex items-center gap-[5px] rounded-xs border-0 bg-transparent p-0",
-        "text-sm font-medium text-link [text-decoration:var(--link-decoration)]",
-        "transition-colors duration-[var(--duration-fast)]",
-        "group-hover:text-link-hover group-hover:underline",
+        "sui:mx-[var(--density-card-p)] sui:mb-[var(--density-card-p)] sui:mt-auto sui:self-start",
+        "sui:inline-flex sui:items-center sui:gap-[5px] sui:rounded-xs sui:border-0 sui:bg-transparent sui:p-0",
+        "sui:text-sm sui:font-medium sui:text-link sui:[text-decoration:var(--link-decoration)]",
+        "sui:transition-colors sui:duration-[var(--duration-fast)]",
+        "sui:group-hover:text-link-hover sui:group-hover:underline",
       )}
     >
       {affordanceLabel ?? labels.cardSeeMore}
       <ArrowRight
         size={13}
         aria-hidden
-        className="transition-transform duration-[var(--duration-fast)] motion-safe:group-hover:translate-x-[2px]"
+        className="sui:transition-transform sui:duration-[var(--duration-fast)] sui:motion-safe:group-hover:translate-x-[2px]"
       />
     </button>
   ) : (
@@ -128,12 +128,12 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
       onClick={onClick}
       className={cn(
         stretch,
-        "mx-[var(--density-card-p)] mb-[var(--density-card-p)] mt-auto self-start",
-        "inline-flex h-[var(--control-height-sm)] items-center gap-[6px]",
-        "rounded-md border border-border bg-surface px-[var(--control-padding-x-sm)]",
-        "text-xs font-medium text-fg",
-        "transition-[background-color,border-color] duration-[var(--duration-fast)]",
-        "group-hover:border-border-strong group-hover:bg-surface-hover",
+        "sui:mx-[var(--density-card-p)] sui:mb-[var(--density-card-p)] sui:mt-auto sui:self-start",
+        "sui:inline-flex sui:h-[var(--control-height-sm)] sui:items-center sui:gap-[6px]",
+        "sui:rounded-md sui:border sui:border-border sui:bg-surface sui:px-[var(--control-padding-x-sm)]",
+        "sui:text-xs sui:font-medium sui:text-fg",
+        "sui:transition-[background-color,border-color] sui:duration-[var(--duration-fast)]",
+        "sui:group-hover:border-border-strong sui:group-hover:bg-surface-hover",
       )}
     >
       {affordanceLabel ?? labels.cardOpen}
@@ -145,27 +145,27 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
     <Comp
       ref={ref}
       className={cn(
-        "relative flex flex-col rounded-lg border bg-surface text-left",
+        "sui:relative sui:flex sui:flex-col sui:rounded-lg sui:border sui:bg-surface sui:text-left",
         tones,
         interactive && [
           "group",
-          "transition-[border-color,box-shadow,transform] duration-[var(--duration-fast)]",
-          "hover:border-border-strong hover:shadow-xs",
+          "sui:transition-[border-color,box-shadow,transform] sui:duration-[var(--duration-fast)]",
+          "sui:hover:border-border-strong sui:hover:shadow-xs",
           // Suppressed by the reduced-motion rule in reset.css.
-          "motion-safe:hover:-translate-y-[1px]",
+          "sui:motion-safe:hover:-translate-y-[1px]",
           // Keyboard users get the same lift as the mouse.
-          "has-[:focus-visible]:border-border-strong has-[:focus-visible]:shadow-xs",
+          "sui:has-[:focus-visible]:border-border-strong sui:has-[:focus-visible]:shadow-xs",
           // Reserve the arrow's width plus a real gap, measured from the card
           // padding. At 40px the reserve was exactly the arrow, so a chip in the
           // header ended up touching it.
           affordance === "arrow" &&
-            "[&>*:first-child]:pr-[calc(var(--density-card-p)+36px)]",
+            "sui:[&>*:first-child]:pr-[calc(var(--density-card-p)+36px)]",
           // The in-flow affordance is the last child, so :nth-last-child(2) is
           // whatever sits above it. Drop that element's bottom padding, or the
           // card's own padding stacks with the affordance's margin.
-          affordance !== "arrow" && "[&>*:nth-last-child(2)]:pb-[12px]",
+          affordance !== "arrow" && "sui:[&>*:nth-last-child(2)]:pb-[12px]",
         ],
-        disabled && "pointer-events-none opacity-60",
+        disabled && "sui:pointer-events-none sui:opacity-60",
         className,
       )}
       aria-disabled={disabled || undefined}
@@ -185,8 +185,8 @@ export const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
         className={cn(
           // Wraps rather than squeezes: a CardAction is a whole control, and a
           // narrow card would otherwise crush the title to fit it on the line.
-          "flex flex-wrap items-start justify-between gap-[12px]",
-          "px-[var(--density-card-p)] pt-[var(--density-card-p)] pb-[10px]",
+          "sui:flex sui:flex-wrap sui:items-start sui:justify-between sui:gap-[12px]",
+          "sui:px-[var(--density-card-p)] sui:pt-[var(--density-card-p)] sui:pb-[10px]",
           className,
         )}
         {...props}
@@ -212,7 +212,7 @@ export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
     return (
       <Tag
         ref={ref}
-        className={cn("m-0 text-lg font-semibold tracking-tight text-fg", className)}
+        className={cn("sui:m-0 sui:text-lg sui:font-semibold sui:tracking-tight sui:text-fg", className)}
         {...props}
       />
     );
@@ -221,7 +221,7 @@ export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
 
 export const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   function CardDescription({ className, ...props }, ref) {
-    return <p ref={ref} className={cn("m-0 mt-[2px] text-sm text-fg-subtle", className)} {...props} />;
+    return <p ref={ref} className={cn("sui:m-0 sui:mt-[2px] sui:text-sm sui:text-fg-subtle", className)} {...props} />;
   },
 );
 
@@ -230,7 +230,7 @@ export const CardBody = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col px-[var(--density-card-p)] pb-[var(--density-card-p)]", className)}
+        className={cn("sui:flex sui:flex-col sui:px-[var(--density-card-p)] sui:pb-[var(--density-card-p)]", className)}
         {...props}
       />
     );
@@ -250,9 +250,9 @@ export const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
       <div
         ref={ref}
         className={cn(
-          "relative z-[1] mt-auto flex items-center gap-[8px]",
-          "border-t border-border-soft bg-surface-sunken/60",
-          "px-[var(--density-card-p)] py-[12px] rounded-b-lg",
+          "sui:relative sui:z-[1] sui:mt-auto sui:flex sui:items-center sui:gap-[8px]",
+          "sui:border-t sui:border-border-soft sui:bg-surface-sunken/60",
+          "sui:px-[var(--density-card-p)] sui:py-[12px] sui:rounded-b-lg",
           className,
         )}
         {...props}
@@ -264,6 +264,6 @@ export const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<
 /** Wrap any control that must stay clickable inside an interactive card. */
 export const CardAction = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   function CardAction({ className, ...props }, ref) {
-    return <div ref={ref} className={cn("relative z-[1]", className)} {...props} />;
+    return <div ref={ref} className={cn("sui:relative sui:z-[1]", className)} {...props} />;
   },
 );

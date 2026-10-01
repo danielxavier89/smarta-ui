@@ -27,7 +27,7 @@ export function Spinner({ size = 14, label, className, ...props }: SpinnerProps)
       role={name ? "status" : undefined}
       aria-label={name || undefined}
       aria-hidden={name ? undefined : true}
-      className={cn("animate-[spin_1.1s_linear_infinite]", className)}
+      className={cn("sui:animate-[spin_1.1s_linear_infinite]", className)}
       {...props}
     >
       <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" opacity="0.25" />

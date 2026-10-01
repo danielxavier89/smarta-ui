@@ -3,6 +3,7 @@ export {
   ThemeScope,
   useTheme,
   useLabels,
+  ROOT_CLASS,
   type ThemeProviderProps,
 } from "./ThemeProvider";
 

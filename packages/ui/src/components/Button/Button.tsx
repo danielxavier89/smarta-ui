@@ -11,41 +11,41 @@ import { Spinner } from "../Spinner";
  */
 const buttonVariants = cva(
   [
-    "touch-target inline-flex items-center justify-center gap-[6px] whitespace-nowrap",
-    "rounded-md border font-medium",
-    "transition-[background-color,border-color,color,box-shadow] duration-[var(--duration-fast)]",
-    "cursor-pointer select-none",
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
+    "sui-touch-target sui:inline-flex sui:items-center sui:justify-center sui:gap-[6px] sui:whitespace-nowrap",
+    "sui:rounded-md sui:border sui:font-medium",
+    "sui:transition-[background-color,border-color,color,box-shadow] sui:duration-[var(--duration-fast)]",
+    "sui:cursor-pointer sui:select-none",
+    "sui:focus-visible:outline-2 sui:focus-visible:outline-offset-2 sui:focus-visible:outline-focus-ring",
     // Disabled is a look AND a state. aria-disabled covers the case where the
     // button must stay focusable so it can explain why it is off.
-    "disabled:pointer-events-none disabled:opacity-55",
-    "aria-disabled:opacity-55 aria-disabled:cursor-not-allowed",
-    "[&_svg]:pointer-events-none [&_svg]:shrink-0",
+    "sui:disabled:pointer-events-none sui:disabled:opacity-55",
+    "sui:aria-disabled:opacity-55 sui:aria-disabled:cursor-not-allowed",
+    "sui:[&_svg]:pointer-events-none sui:[&_svg]:shrink-0",
   ],
   {
     variants: {
       variant: {
         primary:
-          "bg-accent border-accent text-accent-fg hover:bg-accent-hover hover:border-accent-hover",
+          "sui:bg-accent sui:border-accent sui:text-accent-fg sui:hover:bg-accent-hover sui:hover:border-accent-hover",
         secondary:
-          "bg-surface border-border text-fg hover:border-border-strong hover:bg-surface-hover",
+          "sui:bg-surface sui:border-border sui:text-fg sui:hover:border-border-strong sui:hover:bg-surface-hover",
         ghost:
-          "bg-transparent border-transparent text-fg-muted hover:bg-surface-sunken hover:text-fg",
+          "sui:bg-transparent sui:border-transparent sui:text-fg-muted sui:hover:bg-surface-sunken sui:hover:text-fg",
         danger:
           // A solid STATUS fill, so the text is --on-status, not --accent-fg:
           // in dark mode --bad is a light red and white on it measures 2.87:1.
-          "bg-bad border-bad text-on-status hover:brightness-110",
+          "sui:bg-bad sui:border-bad sui:text-on-status sui:hover:brightness-110",
         /** A destructive action that is not the page's main move. */
         "danger-quiet":
-          "bg-transparent border-border text-bad hover:bg-bad-bg hover:border-bad",
+          "sui:bg-transparent sui:border-border sui:text-bad sui:hover:bg-bad-bg sui:hover:border-bad",
       },
       size: {
-        sm: "h-[var(--control-height-sm)] px-[var(--control-padding-x-sm)] text-xs",
-        md: "h-[var(--control-height-md)] px-[var(--control-padding-x-md)] text-sm",
-        lg: "h-[var(--control-height-lg)] px-[var(--control-padding-x-lg)] text-base",
+        sm: "sui:h-[var(--control-height-sm)] sui:px-[var(--control-padding-x-sm)] sui:text-xs",
+        md: "sui:h-[var(--control-height-md)] sui:px-[var(--control-padding-x-md)] sui:text-sm",
+        lg: "sui:h-[var(--control-height-lg)] sui:px-[var(--control-padding-x-lg)] sui:text-base",
       },
       fullWidth: {
-        true: "w-full",
+        true: "sui:w-full",
         false: "",
       },
     },

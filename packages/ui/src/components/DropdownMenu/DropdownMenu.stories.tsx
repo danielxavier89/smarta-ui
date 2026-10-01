@@ -68,7 +68,7 @@ export const Filters: Story = {
 export const NotASelect: Story = {
   name: "A menu is not a select",
   render: () => (
-    <p className="m-0 max-w-[62ch] text-base text-fg-muted">
+    <p className="sui:m-0 sui:max-w-[62ch] sui:text-base sui:text-fg-muted">
       A DropdownMenu runs <em>actions</em>. If the items are values the user is choosing
       between, and the choice is then stored, it is a Select — native, keyboard-proof and
       better on a phone.
@@ -79,7 +79,7 @@ export const NotASelect: Story = {
 export const DisabledItem: Story = {
   name: "An action that cannot run yet",
   render: () => (
-    <div className="flex flex-col items-start gap-[10px]">
+    <div className="sui:flex sui:flex-col sui:items-start sui:gap-[10px]">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="sm">Actions</Button>
@@ -94,7 +94,7 @@ export const DisabledItem: Story = {
           <DropdownMenuItem tone="danger">Delete the upload</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+      <p className="sui:m-0 sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
         A menu is the one place a disabled control can carry its own reason: `meta` sits
         on the right of the row and is read with it. Everywhere else the reason has to
         live beside the control, because there is nowhere inside it to put one.

@@ -54,14 +54,14 @@ export function SegmentedControl({
       }}
       aria-label={label}
       className={cn(
-        "inline-flex items-center gap-[2px] rounded-full bg-surface-sunken p-[3px]",
+        "sui:inline-flex sui:items-center sui:gap-[2px] sui:rounded-full sui:bg-surface-sunken sui:p-[3px]",
         // The labels never wrap — that is the point of a segmented control —
         // so on a narrow screen the track scrolls instead of pushing the page
         // sideways. Four short segments still fit a 360px phone; past that,
         // the component's own rule applies and it should have been a Select.
-        "max-w-full overflow-x-auto overscroll-x-contain",
-        "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-        fullWidth && "flex w-full",
+        "sui:max-w-full sui:overflow-x-auto sui:overscroll-x-contain",
+        "sui:[scrollbar-width:none] sui:[&::-webkit-scrollbar]:hidden",
+        fullWidth && "sui:flex sui:w-full",
         className,
       )}
       {...props}
@@ -72,15 +72,15 @@ export function SegmentedControl({
           value={o.value}
           disabled={o.disabled}
           className={cn(
-            "inline-flex flex-1 items-center justify-center gap-[6px] whitespace-nowrap",
-            "cursor-pointer rounded-full border-0 bg-transparent font-medium text-fg-subtle",
-            "transition-[background-color,color,box-shadow] duration-[var(--duration-fast)]",
-            size === "sm" ? "h-[24px] px-[10px] text-xs" : "h-[28px] px-[13px] text-sm",
-            "touch:min-h-[var(--touch-target)]",
-            "hover:text-fg",
-            "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring",
-            "data-[state=on]:bg-surface data-[state=on]:text-fg data-[state=on]:shadow-xs",
-            "disabled:opacity-55 disabled:cursor-not-allowed",
+            "sui:inline-flex sui:flex-1 sui:items-center sui:justify-center sui:gap-[6px] sui:whitespace-nowrap",
+            "sui:cursor-pointer sui:rounded-full sui:border-0 sui:bg-transparent sui:font-medium sui:text-fg-subtle",
+            "sui:transition-[background-color,color,box-shadow] sui:duration-[var(--duration-fast)]",
+            size === "sm" ? "sui:h-[24px] sui:px-[10px] sui:text-xs" : "sui:h-[28px] sui:px-[13px] sui:text-sm",
+            "sui:touch:min-h-[var(--touch-target)]",
+            "sui:hover:text-fg",
+            "sui:focus-visible:outline-2 sui:focus-visible:outline-offset-1 sui:focus-visible:outline-focus-ring",
+            "sui:data-[state=on]:bg-surface sui:data-[state=on]:text-fg sui:data-[state=on]:shadow-xs",
+            "sui:disabled:opacity-55 sui:disabled:cursor-not-allowed",
           )}
         >
           {o.icon}

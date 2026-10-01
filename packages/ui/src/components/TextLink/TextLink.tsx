@@ -3,12 +3,12 @@ import { Slot } from "radix-ui";
 import { cn } from "../../lib/utils";
 
 const base = [
-  "inline items-baseline p-0 bg-transparent border-0 align-baseline",
-  "font-[inherit] text-link [text-decoration:var(--link-decoration)] [text-underline-offset:2px]",
-  "cursor-pointer",
-  "hover:text-link-hover hover:underline",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring rounded-xs",
-  "disabled:opacity-55 disabled:cursor-default disabled:no-underline",
+  "sui:inline sui:items-baseline sui:p-0 sui:bg-transparent sui:border-0 sui:align-baseline",
+  "sui:font-[inherit] sui:text-link sui:[text-decoration:var(--link-decoration)] sui:[text-underline-offset:2px]",
+  "sui:cursor-pointer",
+  "sui:hover:text-link-hover sui:hover:underline",
+  "sui:focus-visible:outline-2 sui:focus-visible:outline-offset-2 sui:focus-visible:outline-focus-ring sui:rounded-xs",
+  "sui:disabled:opacity-55 sui:disabled:cursor-default sui:disabled:no-underline",
 ].join(" ");
 
 export interface TextLinkProps
@@ -37,7 +37,7 @@ export const TextLink = React.forwardRef<HTMLButtonElement, TextLinkProps>(
       <Comp
         ref={ref}
         type={asChild ? undefined : (type ?? "button")}
-        className={cn(base, muted && "text-fg-subtle no-underline", className)}
+        className={cn(base, muted && "sui:text-fg-subtle sui:no-underline", className)}
         {...props}
       />
     );

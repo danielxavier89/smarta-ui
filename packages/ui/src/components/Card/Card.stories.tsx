@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   render: () => (
-    <div className="max-w-[420px]">
+    <div className="sui:max-w-[420px]">
       <Card>
         <CardHeader>
           <div>
@@ -25,7 +25,7 @@ export const Basic: Story = {
           <Chip tone="warn" dot>In 3 days</Chip>
         </CardHeader>
         <CardBody>
-          <p className="m-0 text-base text-fg-muted">
+          <p className="sui:m-0 sui:text-base sui:text-fg-muted">
             Ana has everything except the Revolut statement. Once that is in, she can file.
           </p>
         </CardBody>
@@ -49,25 +49,25 @@ export const Affordances: Story = {
     },
   },
   render: () => (
-    <div className="grid max-w-[720px] gap-[12px] sm:grid-cols-3">
+    <div className="sui:grid sui:max-w-[720px] sui:gap-[12px] sui:sm:grid-cols-3">
       <Card interactive affordance="arrow" affordanceLabel="Open receipts" onClick={() => {}}>
         <CardHeader><CardTitle>Receipts</CardTitle></CardHeader>
         <CardBody>
-          <p className="m-0 text-sm text-fg-subtle">12 charges with nothing behind them.</p>
+          <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">12 charges with nothing behind them.</p>
         </CardBody>
       </Card>
 
       <Card interactive affordance="link" affordanceLabel="See the 12 charges" onClick={() => {}}>
         <CardHeader><CardTitle>Missing receipts</CardTitle></CardHeader>
         <CardBody>
-          <p className="m-0 text-sm text-fg-subtle">€3,094.10 unsupported this period.</p>
+          <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">€3,094.10 unsupported this period.</p>
         </CardBody>
       </Card>
 
       <Card interactive affordance="button" affordanceLabel="Open the thread" onClick={() => {}}>
         <CardHeader><CardTitle>Ana asked a question</CardTitle></CardHeader>
         <CardBody>
-          <p className="m-0 text-sm text-fg-subtle">About the Lisbon Coffee charge on 5 June.</p>
+          <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">About the Lisbon Coffee charge on 5 June.</p>
         </CardBody>
       </Card>
     </div>
@@ -85,7 +85,7 @@ export const ClickableWithItsOwnActions: Story = {
     },
   },
   render: () => (
-    <div className="max-w-[420px]">
+    <div className="sui:max-w-[420px]">
       <Card interactive affordance="arrow" affordanceLabel="Open the June period" onClick={() => {}}>
         <CardHeader>
           <div>
@@ -97,7 +97,7 @@ export const ClickableWithItsOwnActions: Story = {
           </CardAction>
         </CardHeader>
         <CardBody>
-          <p className="m-0 text-sm text-fg-subtle">
+          <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
             Revolut ···· 7731 is the only statement still to arrive.
           </p>
         </CardBody>
@@ -112,11 +112,11 @@ export const ClickableWithItsOwnActions: Story = {
 
 export const Tones: Story = {
   render: () => (
-    <div className="grid max-w-[620px] gap-[12px] sm:grid-cols-2">
-      <Card tone="warn"><CardBody><p className="m-0 text-sm">Two documents are still blocking the conversion.</p></CardBody></Card>
-      <Card tone="bad"><CardBody><p className="m-0 text-sm">The Modelo 22 deadline passed on 31 May.</p></CardBody></Card>
-      <Card tone="accent"><CardBody><p className="m-0 text-sm">This period is ready to close.</p></CardBody></Card>
-      <Card disabled><CardBody><p className="m-0 text-sm">May 2026 is closed. Nothing here can change.</p></CardBody></Card>
+    <div className="sui:grid sui:max-w-[620px] sui:gap-[12px] sui:sm:grid-cols-2">
+      <Card tone="warn"><CardBody><p className="sui:m-0 sui:text-sm">Two documents are still blocking the conversion.</p></CardBody></Card>
+      <Card tone="bad"><CardBody><p className="sui:m-0 sui:text-sm">The Modelo 22 deadline passed on 31 May.</p></CardBody></Card>
+      <Card tone="accent"><CardBody><p className="sui:m-0 sui:text-sm">This period is ready to close.</p></CardBody></Card>
+      <Card disabled><CardBody><p className="sui:m-0 sui:text-sm">May 2026 is closed. Nothing here can change.</p></CardBody></Card>
     </div>
   ),
 };

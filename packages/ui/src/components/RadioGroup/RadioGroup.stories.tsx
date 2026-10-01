@@ -21,11 +21,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a: RadioGroupProps) => <div className="max-w-[420px]"><RadioGroup {...a} /></div> };
+export const Playground: Story = { render: (a: RadioGroupProps) => <div className="sui:max-w-[420px]"><RadioGroup {...a} /></div> };
 
 export const Cards: Story = {
   render: () => (
-    <div className="max-w-[420px]">
+    <div className="sui:max-w-[420px]">
       <RadioGroup
         label="Which offer template?"
         appearance="card"
@@ -41,7 +41,7 @@ export const Cards: Story = {
 
 export const WithError: Story = {
   render: () => (
-    <div className="max-w-[420px]">
+    <div className="sui:max-w-[420px]">
       <RadioGroup
         label="Who owes the missing document?"
         options={[

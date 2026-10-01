@@ -19,11 +19,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a: SelectProps) => <div className="max-w-[300px]"><Select {...a} /></div> };
+export const Playground: Story = { render: (a: SelectProps) => <div className="sui:max-w-[300px]"><Select {...a} /></div> };
 
 export const Grouped: Story = {
   render: () => (
-    <div className="max-w-[300px]">
+    <div className="sui:max-w-[300px]">
       <Select
         label="Move to"
         placeholder="Choose a queue"
@@ -41,7 +41,7 @@ export const Grouped: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="grid max-w-[300px] gap-[16px]">
+    <div className="sui:grid sui:max-w-[300px] sui:gap-[16px]">
       <Select label="Period" options={[{ value: "jun", label: "June 2026" }]} hint="Closed periods are read-only." />
       <Select label="Bundesland" options={[{ value: "nw", label: "Nordrhein-Westfalen" }]} error="Pick the state the business is registered in." />
       <Select label="Currency" options={[{ value: "eur", label: "Euro" }]} disabled />
@@ -52,9 +52,9 @@ export const States: Story = {
 export const WhyNative: Story = {
   name: "Why this is a native select",
   render: () => (
-    <div className="flex max-w-[54ch] flex-col gap-[12px]">
+    <div className="sui:flex sui:max-w-[54ch] sui:flex-col sui:gap-[12px]">
       <Select label="Assignee" options={assignees} />
-      <p className="m-0 text-sm text-fg-subtle">
+      <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
         Both prototypes settled on native selects and native date inputs. On a phone the
         platform picker beats anything we would build, it needs no portal, no focus trap
         and no scroll lock, and it cannot be the reason a form is unusable with a keyboard.

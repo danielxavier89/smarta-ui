@@ -22,7 +22,7 @@ export const Playground: Story = {};
 
 export const Variants: Story = {
   render: () => (
-    <div className="flex items-center gap-[10px]">
+    <div className="sui:flex sui:items-center sui:gap-[10px]">
       <IconButton label="Notifications" icon={<Bell size={16} />} />
       <IconButton variant="ghost" label="More" icon={<MoreHorizontal size={16} />} />
       <IconButton variant="primary" label="Edit" icon={<Pencil size={16} />} />
@@ -33,7 +33,7 @@ export const Variants: Story = {
 
 export const WithIndicator: Story = {
   render: () => (
-    <div className="flex items-center gap-[16px]">
+    <div className="sui:flex sui:items-center sui:gap-[16px]">
       <IconButton label="Notifications, 3 unread" icon={<Bell size={16} />} indicator />
       <IconButton label="Downloads ready" icon={<Download size={16} />} indicator indicatorTone="ok" variant="ghost" />
     </div>
@@ -43,12 +43,12 @@ export const WithIndicator: Story = {
 export const LabelIsNotOptional: Story = {
   name: "The label is not optional",
   render: () => (
-    <div className="flex max-w-[52ch] flex-col gap-[10px]">
+    <div className="sui:flex sui:max-w-[52ch] sui:flex-col sui:gap-[10px]">
       <IconButton label="Open the notifications panel" icon={<Bell size={16} />} />
-      <p className="m-0 text-sm text-fg-subtle">
+      <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
         An icon-only control is unreadable to a screen reader and unguessable to anyone
-        new, so <code className="text-fg">label</code> is required by the type and is used
-        for both <code className="text-fg">aria-label</code> and the native tooltip.
+        new, so <code className="sui:text-fg">label</code> is required by the type and is used
+        for both <code className="sui:text-fg">aria-label</code> and the native tooltip.
       </p>
     </div>
   ),
@@ -57,19 +57,19 @@ export const LabelIsNotOptional: Story = {
 export const LoadingAndDisabled: Story = {
   name: "Working, and unavailable",
   render: () => (
-    <div className="flex flex-col gap-[16px]">
-      <div className="flex items-center gap-[10px]">
+    <div className="sui:flex sui:flex-col sui:gap-[16px]">
+      <div className="sui:flex sui:items-center sui:gap-[10px]">
         <IconButton label="Download the statement" icon={<Download size={15} />} />
         <IconButton label="Downloading the statement" icon={<Download size={15} />} loading />
         <IconButton label="Delete the upload" icon={<Trash2 size={15} />} variant="danger" disabled />
       </div>
-      <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+      <p className="sui:m-0 sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
         Loading swaps the icon for a spinner and blocks the click; the button keeps its
         size, so a toolbar does not reflow while one control is busy. The label stays
         required in every state — mid-request is exactly when someone asks what is
         happening, and an icon alone cannot answer.
       </p>
-      <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+      <p className="sui:m-0 sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
         The disabled one is only half a control until something says why. An icon button
         has no room for a reason, so it needs a Tooltip or a line beside it — see
         Foundations → States.

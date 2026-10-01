@@ -17,19 +17,19 @@ export const Table = React.forwardRef<
   return (
     <div
       className={cn(
-        "rounded-lg border border-border bg-surface",
+        "sui:rounded-lg sui:border sui:border-border sui:bg-surface",
         // Horizontal scroll only, so sticky headings still resolve vertically.
-        "overflow-x-auto",
+        "sui:overflow-x-auto",
         // A table is the one thing on a phone the user swipes sideways. Without
         // containment that swipe reaches the browser at the end of the scroll
         // and iOS reads it as "go back".
-        "overscroll-x-contain",
+        "sui:overscroll-x-contain",
         containerClassName,
       )}
     >
       <table
         ref={ref}
-        className={cn("w-full border-collapse text-base", className)}
+        className={cn("sui:w-full sui:border-collapse sui:text-base", className)}
         {...props}
       />
     </div>
@@ -44,7 +44,7 @@ export const THead = React.forwardRef<
     <thead
       ref={ref}
       className={cn(
-        sticky && "sticky top-0 z-[var(--z-sticky)]",
+        sticky && "sui:sticky sui:top-0 sui:z-[var(--z-sticky)]",
         className,
       )}
       {...props}
@@ -167,11 +167,11 @@ export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
         onActivate(e);
       }}
       className={cn(
-        "border-b border-border-soft last:border-b-0",
-        (clickable || activatable) && "cursor-pointer hover:bg-surface-hover",
+        "sui:border-b sui:border-border-soft sui:last:border-b-0",
+        (clickable || activatable) && "sui:cursor-pointer sui:hover:bg-surface-hover",
         (clickable || activatable) &&
-          "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring",
-        selected && "bg-accent-soft",
+          "sui:focus-visible:outline-2 sui:focus-visible:-outline-offset-2 sui:focus-visible:outline-focus-ring",
+        selected && "sui:bg-accent-soft",
         className,
       )}
       {...props}
@@ -194,10 +194,10 @@ export const TH = React.forwardRef<HTMLTableCellElement, THProps>(function TH(
     <button
       type="button"
       onClick={onSort}
-      className="inline-flex items-center gap-[4px] bg-transparent border-0 p-0 font-[inherit] text-[inherit] cursor-pointer hover:text-fg"
+      className="sui:inline-flex sui:items-center sui:gap-[4px] sui:bg-transparent sui:border-0 sui:p-0 sui:font-[inherit] sui:text-[inherit] sui:cursor-pointer sui:hover:text-fg"
     >
       {children}
-      <span aria-hidden className="text-fg-faint">
+      <span aria-hidden className="sui:text-fg-faint">
         {sort === "asc" ? "↑" : sort === "desc" ? "↓" : "↕"}
       </span>
     </button>
@@ -213,11 +213,11 @@ export const TH = React.forwardRef<HTMLTableCellElement, THProps>(function TH(
         sort === "asc" ? "ascending" : sort === "desc" ? "descending" : sort ? "none" : undefined
       }
       className={cn(
-        "border-b border-border bg-surface-sunken/70",
-        "px-[var(--density-row-x)] py-[10px]",
-        "text-xs font-medium text-fg-subtle",
-        "first:rounded-tl-lg last:rounded-tr-lg",
-        { left: "text-left", right: "text-right", center: "text-center" }[align],
+        "sui:border-b sui:border-border sui:bg-surface-sunken/70",
+        "sui:px-[var(--density-row-x)] sui:py-[10px]",
+        "sui:text-xs sui:font-medium sui:text-fg-subtle",
+        "sui:first:rounded-tl-lg sui:last:rounded-tr-lg",
+        { left: "sui:text-left", right: "sui:text-right", center: "sui:text-center" }[align],
         className,
       )}
       {...props}
@@ -244,11 +244,11 @@ export const TD = React.forwardRef<HTMLTableCellElement, TDProps>(function TD(
     <td
       ref={ref}
       className={cn(
-        "px-[var(--density-row-x)] py-[var(--density-row-y)] align-middle",
-        "first:rounded-bl-lg last:rounded-br-lg",
-        { left: "text-left", right: "text-right", center: "text-center" }[a],
-        muted ? "text-fg-subtle" : "text-fg",
-        numeric && "tabular-nums font-medium",
+        "sui:px-[var(--density-row-x)] sui:py-[var(--density-row-y)] sui:align-middle",
+        "sui:first:rounded-bl-lg sui:last:rounded-br-lg",
+        { left: "sui:text-left", right: "sui:text-right", center: "sui:text-center" }[a],
+        muted ? "sui:text-fg-subtle" : "sui:text-fg",
+        numeric && "sui:tabular-nums sui:font-medium",
         className,
       )}
       {...props}
@@ -260,7 +260,7 @@ export const TD = React.forwardRef<HTMLTableCellElement, TDProps>(function TD(
 export function TableEmpty({ colSpan, children }: { colSpan: number; children: React.ReactNode }) {
   return (
     <tr>
-      <td colSpan={colSpan} className="px-[var(--density-row-x)] py-[40px] text-center text-fg-subtle">
+      <td colSpan={colSpan} className="sui:px-[var(--density-row-x)] sui:py-[40px] sui:text-center sui:text-fg-subtle">
         {children}
       </td>
     </tr>

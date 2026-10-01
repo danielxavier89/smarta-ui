@@ -44,7 +44,7 @@ export const Blocking: Story = {
   render: function Blocking() {
     const [open, setOpen] = React.useState(false);
     return (
-      <div className="flex flex-col gap-[10px]">
+      <div className="sui:flex sui:flex-col sui:gap-[10px]">
         <Button onClick={() => setOpen(true)}>Convert Petra</Button>
         <Dialog
           open={open}
@@ -55,7 +55,7 @@ export const Blocking: Story = {
           confirm={{ label: "Convert Petra", onConfirm: () => setOpen(false) }}
           cancelLabel="Not yet"
         />
-        <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
           Blocking removes Escape, the click-outside and the close button, so the only way
           out is an answer. Reserve it for something that genuinely cannot be shrugged off.
         </p>
@@ -67,7 +67,7 @@ export const Blocking: Story = {
 export const OrAPanel: Story = {
   name: "Dialog or panel?",
   render: () => (
-    <p className="m-0 max-w-[62ch] text-base text-fg-muted">
+    <p className="sui:m-0 sui:max-w-[62ch] sui:text-base sui:text-fg-muted">
       A Dialog interrupts to ask one question the user cannot postpone — deleting,
       rejecting, sending something to a customer. Anything they can back out of, read
       alongside the page, or leave open while they look at something else belongs in a

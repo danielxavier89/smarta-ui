@@ -55,18 +55,18 @@ export function Pagination({
   return (
     <nav
       aria-label={labels.pagination}
-      className={cn("flex flex-wrap items-center justify-between gap-[10px]", className)}
+      className={cn("sui:flex sui:flex-wrap sui:items-center sui:justify-between sui:gap-[10px]", className)}
       {...props}
     >
       {totalItems !== undefined && (
-        <p className="m-0 text-xs text-fg-subtle tabular-nums">
+        <p className="sui:m-0 sui:text-xs sui:text-fg-subtle sui:tabular-nums">
           {first !== undefined && last !== undefined
             ? labels.pageRange(first, last, totalItems)
             : labels.totalItems(totalItems)}
         </p>
       )}
 
-      <div className="flex items-center gap-[4px]">
+      <div className="sui:flex sui:items-center sui:gap-[4px]">
         <IconButton
           variant="ghost"
           size="sm"
@@ -78,12 +78,12 @@ export function Pagination({
           // area an IconButton carries by default. In a row this tight the two
           // approaches disagree: a 30px arrow with 44px of invisible tap around
           // it overlaps the 44px page number beside it, and the number wins.
-          className="touch:size-[var(--touch-target)]"
+          className="sui:touch:size-[var(--touch-target)]"
         />
         {showNumbers &&
           pageWindow(page, pageCount).map((p, i) =>
             p === "gap" ? (
-              <span key={`gap-${i}`} aria-hidden className="px-[4px] text-fg-faint">
+              <span key={`gap-${i}`} aria-hidden className="sui:px-[4px] sui:text-fg-faint">
                 &hellip;
               </span>
             ) : (
@@ -94,15 +94,15 @@ export function Pagination({
                 aria-current={p === page ? "page" : undefined}
                 onClick={() => onPageChange(p)}
                 className={cn(
-                  "min-w-[28px] cursor-pointer rounded-md border-0 bg-transparent px-[7px] py-[5px]",
+                  "sui:min-w-[28px] sui:cursor-pointer sui:rounded-md sui:border-0 sui:bg-transparent sui:px-[7px] sui:py-[5px]",
                   // 28px is a comfortable click and a bad tap. On a finger the
                   // slot squares up to 44, and the row wraps rather than
                   // pushing the total off the edge.
-                  "touch:min-h-[var(--touch-target)] touch:min-w-[var(--touch-target)]",
-                  "text-sm tabular-nums text-fg-muted",
-                  "hover:bg-surface-sunken",
-                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
-                  p === page && "bg-selected-bg font-medium text-selected-fg hover:bg-selected-bg",
+                  "sui:touch:min-h-[var(--touch-target)] sui:touch:min-w-[var(--touch-target)]",
+                  "sui:text-sm sui:tabular-nums sui:text-fg-muted",
+                  "sui:hover:bg-surface-sunken",
+                  "sui:focus-visible:outline-2 sui:focus-visible:outline-offset-2 sui:focus-visible:outline-focus-ring",
+                  p === page && "sui:bg-selected-bg sui:font-medium sui:text-selected-fg sui:hover:bg-selected-bg",
                 )}
               >
                 {p}
@@ -116,7 +116,7 @@ export function Pagination({
           icon={<ChevronRight size={16} />}
           disabled={page >= pageCount}
           onClick={() => onPageChange(page + 1)}
-          className="touch:size-[var(--touch-target)]"
+          className="sui:touch:size-[var(--touch-target)]"
         />
       </div>
     </nav>

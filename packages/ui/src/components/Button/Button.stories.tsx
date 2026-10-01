@@ -22,7 +22,7 @@ export const Playground: Story = { args: { variant: "primary" } };
 
 export const Variants: Story = {
   render: () => (
-    <div className="flex flex-wrap items-center gap-[10px]">
+    <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[10px]">
       <Button variant="primary">Send to Ana</Button>
       <Button variant="secondary">Save a draft</Button>
       <Button variant="ghost">Cancel</Button>
@@ -34,7 +34,7 @@ export const Variants: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div className="flex flex-wrap items-center gap-[10px]">
+    <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[10px]">
       <Button size="sm" variant="primary">Small</Button>
       <Button size="md" variant="primary">Medium</Button>
       <Button size="lg" variant="primary">Large</Button>
@@ -44,7 +44,7 @@ export const Sizes: Story = {
 
 export const WithIcons: Story = {
   render: () => (
-    <div className="flex flex-wrap items-center gap-[10px]">
+    <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[10px]">
       <Button variant="primary" iconLeft={<Plus size={14} />}>Add an asset</Button>
       <Button iconLeft={<Check size={14} />}>Match them</Button>
       <Button variant="ghost" iconRight={<ArrowRight size={14} />}>See the list</Button>
@@ -55,13 +55,13 @@ export const WithIcons: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="flex flex-col gap-[14px]">
-      <div className="flex flex-wrap items-center gap-[10px]">
+    <div className="sui:flex sui:flex-col sui:gap-[14px]">
+      <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[10px]">
         <Button variant="primary">Default</Button>
         <Button variant="primary" loading>Sending</Button>
         <Button variant="primary" disabled>Disabled</Button>
       </div>
-      <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+      <p className="sui:m-0 sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
         Loading keeps the label in place and swaps the leading icon for a spinner, so the
         button does not resize under the cursor. Disabled is only for a control that
         cannot work yet — if there is a reason, say it beside the button rather than
@@ -73,7 +73,7 @@ export const States: Story = {
 
 export const FullWidth: Story = {
   render: () => (
-    <div className="max-w-[320px] rounded-lg border border-border bg-surface p-[16px]">
+    <div className="sui:max-w-[320px] sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[16px]">
       <Button variant="primary" fullWidth>Upload it</Button>
     </div>
   ),

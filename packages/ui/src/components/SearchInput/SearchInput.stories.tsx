@@ -17,7 +17,7 @@ export const Playground: Story = {
   render: function Playground() {
     const [q, setQ] = React.useState("");
     return (
-      <div className="max-w-[340px]">
+      <div className="sui:max-w-[340px]">
         <SearchInput
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -34,11 +34,11 @@ export const InATopBar: Story = {
   render: function InATopBar() {
     const [q, setQ] = React.useState("staples");
     return (
-      <div className="flex items-center gap-[12px] rounded-lg border border-border bg-surface px-[16px] py-[12px]">
-        <span className="font-semibold text-fg">Receipts</span>
+      <div className="sui:flex sui:items-center sui:gap-[12px] sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:px-[16px] sui:py-[12px]">
+        <span className="sui:font-semibold sui:text-fg">Receipts</span>
         <SearchInput
-          className="flex-1"
-          containerClassName="flex-1 max-w-[340px]"
+          className="sui:flex-1"
+          containerClassName="sui:flex-1 sui:max-w-[340px]"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           onClear={() => setQ("")}
@@ -50,7 +50,7 @@ export const InATopBar: Story = {
 
 export const Small: Story = {
   render: () => (
-    <div className="max-w-[240px]">
+    <div className="sui:max-w-[240px]">
       <SearchInput size="sm" placeholder="Filter rows" label="Filter rows" />
     </div>
   ),

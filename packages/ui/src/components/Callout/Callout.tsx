@@ -14,11 +14,11 @@ export interface CalloutProps
 }
 
 const toneMap = {
-  info: { box: "bg-info-bg text-info-fg border-info/30", icon: Info },
-  ok: { box: "bg-ok-bg text-ok-fg border-ok/30", icon: CheckCircle2 },
-  warn: { box: "bg-warn-bg text-warn-fg border-warn/30", icon: AlertTriangle },
-  bad: { box: "bg-bad-bg text-bad-fg border-bad/30", icon: XCircle },
-  neutral: { box: "bg-surface-sunken text-fg-muted border-border", icon: Lock },
+  info: { box: "sui:bg-info-bg sui:text-info-fg sui:border-info/30", icon: Info },
+  ok: { box: "sui:bg-ok-bg sui:text-ok-fg sui:border-ok/30", icon: CheckCircle2 },
+  warn: { box: "sui:bg-warn-bg sui:text-warn-fg sui:border-warn/30", icon: AlertTriangle },
+  bad: { box: "sui:bg-bad-bg sui:text-bad-fg sui:border-bad/30", icon: XCircle },
+  neutral: { box: "sui:bg-surface-sunken sui:text-fg-muted sui:border-border", icon: Lock },
 } as const;
 
 /**
@@ -46,28 +46,28 @@ export function Callout({
     <div
       role={tone === "bad" ? "alert" : "status"}
       className={cn(
-        "flex gap-[10px] rounded-md border px-[14px] py-[12px] text-sm",
+        "sui:flex sui:gap-[10px] sui:rounded-md sui:border sui:px-[14px] sui:py-[12px] sui:text-sm",
         box,
         className,
       )}
       {...props}
     >
-      <span aria-hidden className="mt-[1px] shrink-0">
+      <span aria-hidden className="sui:mt-[1px] sui:shrink-0">
         {icon ?? <DefaultIcon size={16} />}
       </span>
-      <div className="flex min-w-0 flex-1 flex-col gap-[4px]">
-        {title && <p className="m-0 font-semibold">{title}</p>}
-        {children && <div className="[&>p]:m-0 [&>p+p]:mt-[4px]">{children}</div>}
+      <div className="sui:flex sui:min-w-0 sui:flex-1 sui:flex-col sui:gap-[4px]">
+        {title && <p className="sui:m-0 sui:font-semibold">{title}</p>}
+        {children && <div className="sui:[&>p]:m-0 sui:[&>p+p]:mt-[4px]">{children}</div>}
         {/* Two buttons and an icon leave a callout about 240px of width on a
             phone. They wrap rather than stretch the box past the screen. */}
-        {action && <div className="mt-[4px] flex flex-wrap gap-[8px]">{action}</div>}
+        {action && <div className="sui:mt-[4px] sui:flex sui:flex-wrap sui:gap-[8px]">{action}</div>}
       </div>
       {onDismiss && (
         <button
           type="button"
           onClick={onDismiss}
           aria-label={labels.dismiss}
-          className="ml-[4px] shrink-0 self-start rounded-xs opacity-60 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-focus-ring"
+          className="sui:ml-[4px] sui:shrink-0 sui:self-start sui:rounded-xs sui:opacity-60 sui:hover:opacity-100 sui:focus-visible:outline-2 sui:focus-visible:outline-focus-ring"
         >
           <XCircle size={15} aria-hidden />
         </button>

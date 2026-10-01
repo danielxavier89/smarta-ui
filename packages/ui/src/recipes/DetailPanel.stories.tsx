@@ -42,9 +42,9 @@ export const TheScreen: Story = {
     const [confirming, setConfirming] = React.useState(false);
 
     return (
-      <div className="flex flex-col items-start gap-[10px]">
+      <div className="sui:flex sui:flex-col sui:items-start sui:gap-[10px]">
         <Button onClick={() => setOpen(true)}>Open the receipt</Button>
-        <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
           Header, then one PanelSection per group of facts, then the footer: ghost Close
           on the left, one primary on the right. Delete opens a Dialog on top, because
           deleting the file is not something Undo can walk back.
@@ -81,7 +81,7 @@ export const TheScreen: Story = {
           footer={
             <>
               <Button variant="ghost" onClick={() => setOpen(false)}>Close</Button>
-              <Button variant="primary" className="ml-auto">Send to Ana</Button>
+              <Button variant="primary" className="sui:ml-auto">Send to Ana</Button>
             </>
           }
         >
@@ -131,7 +131,7 @@ export const TheScreen: Story = {
           </PanelSection>
 
           <PanelSection title="Why these were matched">
-            <p className="m-0 text-base text-fg-muted">
+            <p className="sui:m-0 sui:text-base sui:text-fg-muted">
               Same amount, same day, and &ldquo;STAPLES LIS&rdquo; on the statement line
               matches the supplier on the receipt.
             </p>
@@ -168,7 +168,7 @@ export const OnePanelEveryDetailView: Story = {
     const [which, setWhich] = React.useState<null | "message" | "asset">(null);
 
     return (
-      <div className="flex flex-wrap items-start gap-[10px]">
+      <div className="sui:flex sui:flex-wrap sui:items-start sui:gap-[10px]">
         <Button variant="secondary" onClick={() => setWhich("message")}>A message</Button>
         <Button variant="secondary" onClick={() => setWhich("asset")}>An asset</Button>
 
@@ -180,12 +180,12 @@ export const OnePanelEveryDetailView: Story = {
           footer={
             <>
               <Button variant="ghost" onClick={() => setWhich(null)}>Close</Button>
-              <Button variant="primary" className="ml-auto">Reply to Ana</Button>
+              <Button variant="primary" className="sui:ml-auto">Reply to Ana</Button>
             </>
           }
         >
           <PanelSection>
-            <p className="m-0 text-base text-fg-muted">
+            <p className="sui:m-0 sui:text-base sui:text-fg-muted">
               Could you tell me whether the €12.10 on 5 June was a client meeting? If it
               was, I need the client name for the deduction.
             </p>
@@ -201,7 +201,7 @@ export const OnePanelEveryDetailView: Story = {
           footer={
             <>
               <Button variant="ghost" onClick={() => setWhich(null)}>Close</Button>
-              <Button variant="primary" className="ml-auto">Edit the asset</Button>
+              <Button variant="primary" className="sui:ml-auto">Edit the asset</Button>
             </>
           }
         >

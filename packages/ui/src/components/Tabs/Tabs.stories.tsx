@@ -21,7 +21,7 @@ export const WithCounts: Story = {
     const [tab, setTab] = React.useState("all");
     const rows = data[tab as keyof typeof data];
     return (
-      <div className="max-w-[520px]">
+      <div className="sui:max-w-[520px]">
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList>
             <Tab value="all" count={data.all.length}>All charges</Tab>
@@ -29,17 +29,17 @@ export const WithCounts: Story = {
             <Tab value="matched" count={data.matched.length}>Matched</Tab>
           </TabsList>
           <TabPanel value={tab}>
-            <ul className="m-0 flex list-none flex-col gap-[6px] p-0">
+            <ul className="sui:m-0 sui:flex sui:list-none sui:flex-col sui:gap-[6px] sui:p-0">
               {rows.map((r) => (
-                <li key={r} className="rounded-md border border-border bg-surface px-[12px] py-[9px] text-base text-fg">
+                <li key={r} className="sui:rounded-md sui:border sui:border-border sui:bg-surface sui:px-[12px] sui:py-[9px] sui:text-base sui:text-fg">
                   {r}
                 </li>
               ))}
             </ul>
           </TabPanel>
         </Tabs>
-        <p className="m-0 mt-[14px] max-w-[60ch] text-sm text-fg-subtle">
-          Each count is <code className="text-fg">rows.length</code> for the list that tab
+        <p className="sui:m-0 sui:mt-[14px] sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
+          Each count is <code className="sui:text-fg">rows.length</code> for the list that tab
           renders. Derive it, never pass it separately — a count passed in on its own is a
           count that will eventually disagree with the list underneath it.
         </p>
@@ -50,7 +50,7 @@ export const WithCounts: Story = {
 
 export const Plain: Story = {
   render: () => (
-    <div className="max-w-[520px]">
+    <div className="sui:max-w-[520px]">
       <Tabs defaultValue="master">
         <TabsList>
           <Tab value="master">Master data</Tab>
@@ -58,9 +58,9 @@ export const Plain: Story = {
           <Tab value="taxops">Tax Ops</Tab>
           <Tab value="locked" disabled>Archive</Tab>
         </TabsList>
-        <TabPanel value="master"><p className="m-0 text-base text-fg-muted">Name, addresses, tax numbers.</p></TabPanel>
-        <TabPanel value="docs"><p className="m-0 text-base text-fg-muted">Everything the customer has sent.</p></TabPanel>
-        <TabPanel value="taxops"><p className="m-0 text-base text-fg-muted">Open work that does not block a conversion.</p></TabPanel>
+        <TabPanel value="master"><p className="sui:m-0 sui:text-base sui:text-fg-muted">Name, addresses, tax numbers.</p></TabPanel>
+        <TabPanel value="docs"><p className="sui:m-0 sui:text-base sui:text-fg-muted">Everything the customer has sent.</p></TabPanel>
+        <TabPanel value="taxops"><p className="sui:m-0 sui:text-base sui:text-fg-muted">Open work that does not block a conversion.</p></TabPanel>
       </Tabs>
     </div>
   ),

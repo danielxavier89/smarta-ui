@@ -5,3 +5,6 @@ storybook-static/
 .DS_Store
 .icloud
 .consumer-smoke/
+.probes/
+.visual-diff/
+.coexistence/

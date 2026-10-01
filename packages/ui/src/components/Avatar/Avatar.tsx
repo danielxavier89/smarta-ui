@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
 const avatarVariants = cva(
-  "relative grid shrink-0 place-items-center overflow-hidden font-semibold select-none",
+  "sui:relative sui:grid sui:shrink-0 sui:place-items-center sui:overflow-hidden sui:font-semibold sui:select-none",
   {
     variants: {
       /**
@@ -14,15 +14,15 @@ const avatarVariants = cva(
        * backoffice has no hue to spend on it.
        */
       kind: {
-        person: "rounded-full bg-accent-soft text-accent-soft-fg",
-        institution: "rounded-md bg-surface-sunken text-fg-muted",
+        person: "sui:rounded-full sui:bg-accent-soft sui:text-accent-soft-fg",
+        institution: "sui:rounded-md sui:bg-surface-sunken sui:text-fg-muted",
       },
       size: {
-        xs: "size-[22px] text-[9.5px]",
-        sm: "size-[26px] text-[10.5px]",
-        md: "size-[30px] text-[11.5px]",
-        lg: "size-[40px] text-sm",
-        xl: "size-[56px] text-lg",
+        xs: "sui:size-[22px] sui:text-[9.5px]",
+        sm: "sui:size-[26px] sui:text-[10.5px]",
+        md: "sui:size-[30px] sui:text-[11.5px]",
+        lg: "sui:size-[40px] sui:text-sm",
+        xl: "sui:size-[56px] sui:text-lg",
       },
     },
     defaultVariants: { size: "md", kind: "person" },
@@ -68,7 +68,7 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(function Av
 ) {
   return (
     <span ref={ref} className={cn(avatarVariants({ size, kind }), className)} {...props}>
-      <RAvatar.Root className="contents">
+      <RAvatar.Root className="sui:contents">
         {src && (
           <RAvatar.Image
             src={src}
@@ -76,8 +76,8 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(function Av
             // A face is cropped to fill; a logo is fitted, because cropping a
             // wordmark cuts letters off it.
             className={cn(
-              "size-full",
-              kind === "institution" ? "object-contain p-[3px]" : "object-cover",
+              "sui:size-full",
+              kind === "institution" ? "sui:object-contain sui:p-[3px]" : "sui:object-cover",
             )}
           />
         )}
@@ -85,18 +85,18 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(function Av
           // No delay: the initials are the design, not a placeholder waiting
           // for a photograph that in most cases does not exist.
           delayMs={src ? 200 : 0}
-          className="grid size-full place-items-center"
+          className="sui:grid sui:size-full sui:place-items-center"
         >
           <span aria-hidden>{initialsOf(name)}</span>
-          <span className="sr-only">{name}</span>
+          <span className="sui:sr-only">{name}</span>
         </RAvatar.Fallback>
       </RAvatar.Root>
       {status && (
         <span
           aria-hidden
           className={cn(
-            "absolute bottom-0 right-0 size-[8px] rounded-full ring-2 ring-surface",
-            { ok: "bg-ok", warn: "bg-warn", bad: "bg-bad" }[status],
+            "sui:absolute sui:bottom-0 sui:right-0 sui:size-[8px] sui:rounded-full sui:ring-2 sui:ring-surface",
+            { ok: "sui:bg-ok", warn: "sui:bg-warn", bad: "sui:bg-bad" }[status],
           )}
         />
       )}
@@ -116,21 +116,21 @@ export function AvatarStack({ people, max = 4, size = "sm", className, ...props 
   const shown = people.slice(0, max);
   const rest = people.length - shown.length;
   return (
-    <div className={cn("flex items-center", className)} {...props}>
+    <div className={cn("sui:flex sui:items-center", className)} {...props}>
       {shown.map((p, i) => (
         <Avatar
           key={`${p.name}-${i}`}
           name={p.name}
           src={p.src}
           size={size}
-          className={cn("ring-2 ring-surface", i > 0 && "-ml-[8px]")}
+          className={cn("sui:ring-2 sui:ring-surface", i > 0 && "sui:-ml-[8px]")}
         />
       ))}
       {rest > 0 && (
         <span
           className={cn(
             avatarVariants({ size, kind: "person" }),
-            "-ml-[8px] bg-surface-sunken text-fg-muted ring-2 ring-surface",
+            "sui:-ml-[8px] sui:bg-surface-sunken sui:text-fg-muted sui:ring-2 sui:ring-surface",
           )}
         >
           +{rest}

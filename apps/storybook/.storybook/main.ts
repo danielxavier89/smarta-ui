@@ -33,7 +33,31 @@ const config: StorybookConfig = {
     cfg.plugins = [...(cfg.plugins ?? []), tailwindcss()];
     cfg.resolve = {
       ...cfg.resolve,
-      alias: { ...(cfg.resolve?.alias ?? {}), "@": uiSrc },
+      /**
+       * Storybook runs the library from source, not from dist — and it has to
+       * be ONE copy.
+       *
+       * Once @smarta/ui's package.json pointed at the built dist, preview.tsx
+       * (which imports ThemeProvider and ToastProvider from "@smarta/ui") got
+       * the built providers while every story imported its component from
+       * "./Thing" in src. Two module graphs, so two ThemeContexts and two Toast
+       * contexts: every Toast story threw "useToast must be used inside
+       * <ToastProvider>", and every portalled Panel, Dialog and menu rendered
+       * in the webapp's plum palette inside the backoffice, because ThemeScope
+       * read the default context instead of the one the provider set. The build
+       * was green and all 103 tests passed; it took a screenshot to see it.
+       *
+       * A real consumer imports everything from dist and so has one copy. This
+       * is Storybook's problem alone, and this is its fix. Order matters: the
+       * stylesheet entries first, or "@smarta/ui" swallows them as a prefix.
+       */
+      alias: [
+        { find: /^@smarta\/ui\/styles\.css$/, replacement: resolve(uiSrc, "styles.css") },
+        { find: /^@smarta\/ui$/, replacement: resolve(uiSrc, "index.ts") },
+        ...(Array.isArray(cfg.resolve?.alias)
+          ? cfg.resolve.alias
+          : Object.entries(cfg.resolve?.alias ?? {}).map(([find, replacement]) => ({ find, replacement }))),
+      ],
     };
     return cfg;
   },

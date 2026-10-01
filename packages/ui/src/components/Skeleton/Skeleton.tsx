@@ -22,9 +22,9 @@ export function Skeleton({ className, width, height, shape = "line", ...props }:
     <div
       aria-hidden
       className={cn(
-        "animate-[skeleton_1.4s_ease-in-out_infinite] bg-skeleton",
-        shape === "circle" ? "rounded-full" : shape === "block" ? "rounded-md" : "rounded-xs",
-        shape === "line" && !height && "h-[0.9em]",
+        "sui:animate-[skeleton_1.4s_ease-in-out_infinite] sui:bg-skeleton",
+        shape === "circle" ? "sui:rounded-full" : shape === "block" ? "sui:rounded-md" : "sui:rounded-xs",
+        shape === "line" && !height && "sui:h-[0.9em]",
         className,
       )}
       style={{ width, height, ...props.style }}
@@ -37,14 +37,14 @@ export function Skeleton({ className, width, height, shape = "line", ...props }:
 export function SkeletonList({ rows = 4, className }: { rows?: number; className?: string }) {
   const labels = useLabels();
   return (
-    <div className={cn("flex flex-col", className)} role="status" aria-label={labels.loading}>
+    <div className={cn("sui:flex sui:flex-col", className)} role="status" aria-label={labels.loading}>
       {Array.from({ length: rows }).map((_, i) => (
         <div
           key={i}
-          className="flex items-center gap-[14px] border-b border-border-soft px-[var(--density-row-x)] py-[var(--density-row-y)] last:border-b-0"
+          className="sui:flex sui:items-center sui:gap-[14px] sui:border-b sui:border-border-soft sui:px-[var(--density-row-x)] sui:py-[var(--density-row-y)] sui:last:border-b-0"
         >
           <Skeleton shape="circle" width="30px" height="30px" />
-          <div className="flex flex-1 flex-col gap-[6px]">
+          <div className="sui:flex sui:flex-1 sui:flex-col sui:gap-[6px]">
             <Skeleton width={`${55 + ((i * 13) % 30)}%`} />
             <Skeleton width={`${30 + ((i * 7) % 25)}%`} height="0.75em" />
           </div>

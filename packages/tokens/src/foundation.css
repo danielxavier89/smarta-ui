@@ -128,7 +128,7 @@
   --control-padding-x-md: 14px;
   --control-padding-x-lg: 16px;
 
-  /* The minimum a finger can hit. Spent by the .touch-target utility in
+  /* The minimum a finger can hit. Spent by the .sui-touch-target utility in
      base.css, which grows the hit area without growing the drawn control. */
   --touch-target: 44px;
 
@@ -144,8 +144,8 @@
 
      So the type grows on a coarse pointer and nowhere else. Desktop density
      is untouched: --text-base is still 14px, and a mouse never triggers it. */
-  --field-font-size:    var(--text-base);
-  --field-font-size-sm: var(--text-xs);
+  --field-font-size:    var(--sui-text-base);
+  --field-font-size-sm: var(--sui-text-xs);
 
   /* --- Density ---------------------------------------------------------
      One set of numbers that table rows, list items and card padding read. */
@@ -190,7 +190,7 @@
 @media (pointer: coarse) {
   :root,
   [data-product="backoffice"] {
-    --field-font-size:    var(--text-lg);
-    --field-font-size-sm: var(--text-lg);
+    --field-font-size:    var(--sui-text-lg);
+    --field-font-size-sm: var(--sui-text-lg);
   }
 }

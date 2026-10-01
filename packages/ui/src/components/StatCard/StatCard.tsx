@@ -42,10 +42,10 @@ export function StatCard({
   ...props
 }: StatCardProps) {
   const tones = {
-    default: "text-fg",
-    ok: "text-ok",
-    warn: "text-warn",
-    bad: "text-bad",
+    default: "sui:text-fg",
+    ok: "sui:text-ok",
+    warn: "sui:text-warn",
+    bad: "sui:text-bad",
   }[tone];
 
   return (
@@ -56,21 +56,21 @@ export function StatCard({
       // The tile's own words are the card's accessible name, so a screen
       // reader hears "Missing charges" rather than "button".
       affordanceLabel={typeof label === "string" ? label : undefined}
-      className={cn("p-[var(--density-card-p)]", className)}
+      className={cn("sui:p-[var(--density-card-p)]", className)}
       {...props}
     >
-      <div className="flex items-start justify-between gap-[10px]">
-        <p className="m-0 text-sm text-fg-subtle">{label}</p>
-        {icon && <span className="shrink-0 text-fg-faint">{icon}</span>}
+      <div className="sui:flex sui:items-start sui:justify-between sui:gap-[10px]">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">{label}</p>
+        {icon && <span className="sui:shrink-0 sui:text-fg-faint">{icon}</span>}
       </div>
       {loading ? (
-        <div className="mt-[6px] h-[30px] w-[90px] animate-[skeleton_1.4s_ease-in-out_infinite] rounded-sm bg-skeleton" />
+        <div className="sui:mt-[6px] sui:h-[30px] sui:w-[90px] sui:animate-[skeleton_1.4s_ease-in-out_infinite] sui:rounded-sm sui:bg-skeleton" />
       ) : (
-        <p className={cn("m-0 mt-[2px] text-2xl font-semibold tracking-tight tabular-nums", tones)}>
+        <p className={cn("sui:m-0 sui:mt-[2px] sui:text-2xl sui:font-semibold sui:tracking-tight sui:tabular-nums", tones)}>
           {value}
         </p>
       )}
-      {caption && <p className="m-0 mt-[2px] text-xs text-fg-subtle">{caption}</p>}
+      {caption && <p className="sui:m-0 sui:mt-[2px] sui:text-xs sui:text-fg-subtle">{caption}</p>}
     </Card>
   );
 }

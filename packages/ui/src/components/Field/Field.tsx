@@ -48,7 +48,7 @@ export function Field({
   const describedBy = errorId ?? hintId;
 
   return (
-    <div className={cn("flex flex-col gap-[6px]", className)} {...props}>
+    <div className={cn("sui:flex sui:flex-col sui:gap-[6px]", className)} {...props}>
       {label && (
         <Label htmlFor={id} optional={optional}>
           {label}
@@ -60,11 +60,11 @@ export function Field({
         "aria-invalid": error ? true : undefined,
       })}
       {error ? (
-        <p id={errorId} className="text-xs text-bad-fg" role="alert">
+        <p id={errorId} className="sui:text-xs sui:text-bad-fg" role="alert">
           {error}
         </p>
       ) : hint ? (
-        <p id={hintId} className="text-xs text-fg-subtle">
+        <p id={hintId} className="sui:text-xs sui:text-fg-subtle">
           {hint}
         </p>
       ) : null}

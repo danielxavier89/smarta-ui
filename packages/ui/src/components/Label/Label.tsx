@@ -26,15 +26,15 @@ export const Label = React.forwardRef<
     <RLabel.Root
       ref={ref}
       className={cn(
-        "inline-flex items-center gap-[6px] text-sm font-medium text-fg-muted",
-        "peer-disabled:opacity-55",
+        "sui:inline-flex sui:items-center sui:gap-[6px] sui:text-sm sui:font-medium sui:text-fg-muted",
+        "sui:peer-disabled:opacity-55",
         className,
       )}
       {...props}
     >
       {children}
       {optional && (
-        <span className="text-xs font-normal text-fg-subtle">{labels.optional}</span>
+        <span className="sui:text-xs sui:font-normal sui:text-fg-subtle">{labels.optional}</span>
       )}
     </RLabel.Root>
   );

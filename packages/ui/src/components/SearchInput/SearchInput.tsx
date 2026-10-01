@@ -44,18 +44,18 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     return (
       <div
         className={cn(
-          "flex items-center gap-[8px] rounded-full border border-border bg-canvas",
-          "text-fg-subtle transition-[border-color,box-shadow] duration-[var(--duration-fast)]",
+          "sui:flex sui:items-center sui:gap-[8px] sui:rounded-full sui:border sui:border-border sui:bg-canvas",
+          "sui:text-fg-subtle sui:transition-[border-color,box-shadow] sui:duration-[var(--duration-fast)]",
           // The input drops its own outline, so the pill it sits in shows the
           // focus instead of a rectangle inside a circle.
-          "focus-within:border-accent focus-within:shadow-[var(--shadow-focus)]",
+          "sui:focus-within:border-accent sui:focus-within:shadow-focus",
           size === "sm"
-            ? "h-[var(--control-height-sm)] px-[12px] text-[length:var(--field-font-size-sm)]"
-            : "h-[var(--control-height-md)] px-[14px] text-[length:var(--field-font-size)]",
+            ? "sui:h-[var(--control-height-sm)] sui:px-[12px] sui:text-[length:var(--field-font-size-sm)]"
+            : "sui:h-[var(--control-height-md)] sui:px-[14px] sui:text-[length:var(--field-font-size)]",
           containerClassName,
         )}
       >
-        <Search size={size === "sm" ? 13 : 15} aria-hidden className="shrink-0" />
+        <Search size={size === "sm" ? 13 : 15} aria-hidden className="sui:shrink-0" />
         <input
           ref={innerRef}
           type="search"
@@ -63,10 +63,10 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
           placeholder={placeholder ?? labels.search}
           value={value}
           className={cn(
-            "w-full min-w-0 border-0 bg-transparent p-0 outline-none",
-            "text-[inherit] text-fg placeholder:text-fg-subtle",
+            "sui:w-full sui:min-w-0 sui:border-0 sui:bg-transparent sui:p-0 sui:focus-visible:outline-none",
+            "sui:text-[inherit] sui:text-fg sui:placeholder:text-fg-subtle",
             // Safari draws its own X on type=search and it cannot be styled.
-            "[&::-webkit-search-cancel-button]:appearance-none",
+            "sui:[&::-webkit-search-cancel-button]:appearance-none",
             className,
           )}
           {...props}
@@ -81,7 +81,7 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
             }}
             // The X is 13px of icon inside a 44px tap on a phone. Growing the
             // button instead would burst the pill it sits in.
-            className="touch-target shrink-0 rounded-full p-[2px] text-fg-subtle hover:text-fg focus-visible:outline-2 focus-visible:outline-focus-ring"
+            className="sui-touch-target sui:shrink-0 sui:rounded-full sui:p-[2px] sui:text-fg-subtle sui:hover:text-fg sui:focus-visible:outline-2 sui:focus-visible:outline-focus-ring"
           >
             <X size={13} aria-hidden />
           </button>

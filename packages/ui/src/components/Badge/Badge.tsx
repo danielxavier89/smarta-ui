@@ -31,9 +31,9 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badg
   if (count <= 0 && !showZero) return null;
 
   const tones = {
-    bad: "bg-bad text-on-status",
-    accent: "bg-accent text-accent-fg",
-    neutral: "bg-surface-sunken text-fg-muted",
+    bad: "sui:bg-bad sui:text-on-status",
+    accent: "sui:bg-accent sui:text-accent-fg",
+    neutral: "sui:bg-surface-sunken sui:text-fg-muted",
   }[tone];
 
   if (dotOnly) {
@@ -42,7 +42,7 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badg
         ref={ref}
         role="status"
         aria-label={unit ? `${count} ${unit}` : `${count}`}
-        className={cn("inline-block size-[7px] rounded-full", tones, className)}
+        className={cn("sui:inline-block sui:size-[7px] sui:rounded-full", tones, className)}
         {...props}
       />
     );
@@ -54,9 +54,9 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(function Badg
       role="status"
       aria-label={unit ? `${count} ${unit}` : undefined}
       className={cn(
-        "inline-grid place-items-center rounded-full",
-        "min-w-[20px] h-[20px] px-[6px]",
-        "text-2xs font-semibold leading-none not-italic",
+        "sui:inline-grid sui:place-items-center sui:rounded-full",
+        "sui:min-w-[20px] sui:h-[20px] sui:px-[6px]",
+        "sui:text-2xs sui:font-semibold sui:leading-none sui:not-italic",
         tones,
         className,
       )}

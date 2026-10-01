@@ -84,7 +84,7 @@ export const TheScreen: Story = {
     };
 
     return (
-      <form onSubmit={onSubmit} className="flex max-w-[420px] flex-col gap-[16px]">
+      <form onSubmit={onSubmit} className="sui:flex sui:max-w-[420px] sui:flex-col sui:gap-[16px]">
         {/* A rule that applies before they start, not after they fail. */}
         <Callout tone="neutral" title="May 2026 is closed">
           <p>
@@ -139,14 +139,14 @@ export const TheScreen: Story = {
           </Callout>
         )}
 
-        <div className="flex gap-[8px]">
+        <div className="sui:flex sui:gap-[8px]">
           <Button variant="ghost" type="button">Cancel</Button>
-          <Button variant="primary" type="submit" loading={saving} className="ml-auto">
+          <Button variant="primary" type="submit" loading={saving} className="sui:ml-auto">
             Convert Petra
           </Button>
         </div>
 
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           One primary, and it names the outcome. &ldquo;Submit&rdquo; tells the user what
           they are doing to the form; &ldquo;Convert Petra&rdquo; tells them what happens
           to Petra.
@@ -174,13 +174,13 @@ export const ValidationTiming: Story = {
     );
 
     return (
-      <div className="flex max-w-[420px] flex-col gap-[14px]">
+      <div className="sui:flex sui:max-w-[420px] sui:flex-col sui:gap-[14px]">
         <Input label="NIF" hint="Nine digits, no spaces." {...nif.props} error={nif.error} />
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           The error replaces the hint rather than stacking under it. Two lines of small
           print beneath one field is where people stop reading either of them.
         </p>
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           Note what the message says: what a NIF is, and what is wrong with this one. Not
           &ldquo;Invalid input&rdquo;, which tells the user only that the computer is
           unhappy.

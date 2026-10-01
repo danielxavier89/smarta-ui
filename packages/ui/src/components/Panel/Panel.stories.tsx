@@ -20,7 +20,7 @@ export const ReceiptDetail: Story = {
   render: function ReceiptDetail() {
     const [open, setOpen] = React.useState(false);
     return (
-      <div className="flex flex-col gap-[12px]">
+      <div className="sui:flex sui:flex-col sui:gap-[12px]">
         <Button variant="primary" onClick={() => setOpen(true)}>Open the receipt</Button>
         <Panel
           open={open}
@@ -31,7 +31,7 @@ export const ReceiptDetail: Story = {
           footer={
             <>
               <Button variant="ghost" onClick={() => setOpen(false)}>Close</Button>
-              <Button variant="primary" className="ml-auto">Send to Ana</Button>
+              <Button variant="primary" className="sui:ml-auto">Send to Ana</Button>
             </>
           }
         >
@@ -56,7 +56,7 @@ export const ReceiptDetail: Story = {
             />
           </PanelSection>
           <PanelSection title="Why these were matched">
-            <p className="m-0 text-base text-fg-muted">
+            <p className="sui:m-0 sui:text-base sui:text-fg-muted">
               Same amount, same day, and the supplier appears on the statement line.
             </p>
           </PanelSection>
@@ -81,12 +81,12 @@ export const Wide: Story = {
           footer={
             <>
               <Button variant="danger-quiet">Reject &amp; tell the customer</Button>
-              <Button variant="primary" className="ml-auto">Verify it</Button>
+              <Button variant="primary" className="sui:ml-auto">Verify it</Button>
             </>
           }
         >
-          <div className="grid h-full gap-[16px] p-[20px] sm:grid-cols-2">
-            <div className="grid min-h-[260px] place-items-center rounded-md border border-border bg-surface-sunken text-sm text-fg-subtle">
+          <div className="sui:grid sui:h-full sui:gap-[16px] sui:p-[20px] sui:sm:grid-cols-2">
+            <div className="sui:grid sui:min-h-[260px] sui:place-items-center sui:rounded-md sui:border sui:border-border sui:bg-surface-sunken sui:text-sm sui:text-fg-subtle">
               The page
             </div>
             <KeyValue
@@ -113,13 +113,13 @@ export const OneComponentManyViews: Story = {
       success: "Sent to Ana",
     } as const;
     return (
-      <div className="flex flex-col gap-[12px]">
-        <div className="flex flex-wrap gap-[8px]">
+      <div className="sui:flex sui:flex-col sui:gap-[12px]">
+        <div className="sui:flex sui:flex-wrap sui:gap-[8px]">
           <Button onClick={() => setView("notifications")}>Notifications</Button>
           <Button onClick={() => setView("message")}>A message</Button>
           <Button onClick={() => setView("success")}>A success state</Button>
         </div>
-        <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
           Both prototypes carry the same house rule: don&rsquo;t build a second panel
           component. Every detail view is another Panel caller — notifications, a receipt,
           a transaction, a picker, a wizard step, a success state.
@@ -130,7 +130,7 @@ export const OneComponentManyViews: Story = {
           title={view ? titles[view] : ""}
         >
           <PanelSection>
-            <p className="m-0 text-base text-fg-muted">
+            <p className="sui:m-0 sui:text-base sui:text-fg-muted">
               The same component, a different body.
             </p>
           </PanelSection>
