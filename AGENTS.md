@@ -7,7 +7,7 @@ to this file.
 
 ```
 packages/tokens   primitives → semantics → Tailwind bridge → base
-packages/ui       34 components, one folder each
+packages/ui       45 components, one folder each
 apps/storybook    stories, with product and mode toggles
 ```
 

@@ -10,7 +10,7 @@ contains a colour.
 
 ```
 packages/tokens     design tokens: primitives → semantics → Tailwind bridge
-packages/ui         34 React components, shadcn/Radix underneath
+packages/ui         45 React components, shadcn/Radix underneath
 apps/storybook      every component, with product and mode toggles
 ```
 
@@ -245,6 +245,29 @@ formatCurrency(1234.56, "en-GB");   // "€1,234.56"
 formatDate("2026-06-03", "de-DE");  // "3. Juni 2026"
 ```
 
+The fields that read a value — InputNumber, CurrencyInput, DatePicker — read it
+in the same locale, from `<ThemeProvider locale="de-DE">`: `9,50` and
+`03.06.2026` in German, `9.50` and `03/06/2026` in English. `parseNumber` and
+`parseDate` are exported for a product that needs the same reading elsewhere.
+
+### Formik
+
+`@smarta/ui/formik` is a second entry with one hook per kind of field. Each
+returns the field's props, with the error shown the house way — silent while
+typing, on blur, then live:
+
+```tsx
+import { useFormikField, useFormikValue, useFormikSubmit } from "@smarta/ui/formik";
+
+<Input label="Email" {...useFormikField("email")} />
+<CurrencyInput label="Amount" currency="EUR" {...useFormikValue<number | null>("amount")} />
+<DatePicker label="Booked on" {...useFormikValue<Date | null>("bookedOn")} />
+<Button type="submit" variant="primary" {...useFormikSubmit()}>Book the charge</Button>
+```
+
+Formik is an optional peer dependency: a product that never imports
+`@smarta/ui/formik` never needs it installed.
+
 ## The one rule
 
 **Components use tokens, never hardcoded values.**
@@ -283,10 +306,11 @@ picking a Chip when it wanted a Badge.
 ## What is in here
 
 **Actions** Button · IconButton · TextLink
-**Form** Field · Label · Input · Textarea · Select · SearchInput · Checkbox · RadioGroup · Dropzone
+**Form** Field · Label · Input · InputNumber · CurrencyInput · DatePicker · DateRangePicker · Textarea · Select · Combobox · MultiSelect · SearchInput · Checkbox · RadioGroup · Dropzone · Upload
 **Status** Chip · Badge · Avatar · Spinner · Progress · Skeleton
-**Containers** Card · StatCard · Table · ListItem · KeyValue · EmptyState
-**Navigation** Tabs · SegmentedControl · Pagination · DropdownMenu
+**Containers** Card · StatCard · Table · DataTable · ListItem · KeyValue · EmptyState · FilePreview
+**Navigation** AppShell · PageHeader · Tabs · SegmentedControl · Pagination · DropdownMenu
+**Formik** `@smarta/ui/formik` — useFormikField · useFormikValue · useFormikCheckbox · useFormikSubmit
 **Overlays** Panel · Dialog · Tooltip · Toast · Callout
 **Foundations** ThemeProvider
 

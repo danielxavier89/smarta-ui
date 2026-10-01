@@ -108,9 +108,18 @@ mkdirSync(join(work, "src"), { recursive: true });
 
 writeFileSync(
   join(work, "src/App.tsx"),
-  `import { ThemeProvider, Button, Table, THead, TBody, TR, TH, TD, Chip } from "@smarta/ui";
+  `import { ThemeProvider, Button, Table, THead, TBody, TR, TH, TD, Chip, DatePicker, Combobox, CurrencyInput } from "@smarta/ui";
 import type { Product, SmartaLabels } from "@smarta/ui";
+import { useFormikValue } from "@smarta/ui/formik";
+import { Formik } from "formik";
 import "@smarta/ui/styles.css";
+
+// The calendar (react-day-picker on date-fns 4) and the combobox (downshift)
+// are the dependencies most likely to resolve to the wrong copy in a product
+// that already has an older date-fns; the formik entry is the second export.
+function Booked() {
+  return <DatePicker label="Gebucht am" {...useFormikValue<Date | null>("booked")} />;
+}
 
 const product: Product = "backoffice";
 const labels: Partial<SmartaLabels> = { close: "Schließen" };
@@ -130,6 +139,11 @@ export default function App() {
         </TBody>
       </Table>
       <Chip tone="ok">Matched</Chip>
+      <Formik initialValues={{ booked: null as Date | null }} onSubmit={() => {}}>
+        <Booked />
+      </Formik>
+      <Combobox label="Kategorie" options={[{ value: "4930", label: "Bürobedarf" }]} />
+      <CurrencyInput label="Betrag" currency="EUR" />
       <Button variant="primary">Upload it</Button>
     </ThemeProvider>
   );
@@ -215,6 +229,9 @@ step("a. packing the tarball and unpacking it into the fixture");
     "dist/index.cjs",
     "dist/index.d.ts",
     "dist/index.d.cts",
+    "dist/formik.js",
+    "dist/formik.cjs",
+    "dist/formik.d.ts",
     "dist/styles.css",
     "dist/reset.css",
   ];

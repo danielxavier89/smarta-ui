@@ -21,6 +21,16 @@
         "default": "./dist/index.cjs"
       }
     },
+    "./formik": {
+      "import": {
+        "types": "./dist/formik.d.ts",
+        "default": "./dist/formik.js"
+      },
+      "require": {
+        "types": "./dist/formik.d.cts",
+        "default": "./dist/formik.cjs"
+      }
+    },
     "./styles.css": "./dist/styles.css",
     "./reset.css": "./dist/reset.css",
     "./package.json": "./package.json"
@@ -43,7 +53,6 @@
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "date-fns": "^4.4.0",
     "downshift": "^9.4.0",
     "lucide-react": "^0.544.0",
     "radix-ui": "^1.4.3",
@@ -51,6 +60,7 @@
     "tailwind-merge": "^3.3.1"
   },
   "peerDependencies": {
+    "formik": "^2.4.0",
     "react": "^18.3.0 || ^19.0.0",
     "react-dom": "^18.3.0 || ^19.0.0"
   },
@@ -73,5 +83,10 @@
     "typescript": "^5.9.2",
     "vitest": "^3.2.7",
     "vitest-axe": "^0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "formik": {
+      "optional": true
+    }
   }
 }

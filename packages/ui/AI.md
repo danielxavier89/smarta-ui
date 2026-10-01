@@ -20,7 +20,7 @@ one library instead of two.
 Read this file first, then `docs/inventory.md` — every component and every token
 on one page, generated from source. Open `docs/conventions.md` before writing any
 UI copy or any state handling, and a component's own `.md` only when you are
-about to use it. Never load all 34; that is ~25k tokens.
+about to use it. Never load all 45; that is ~40k tokens.
 
 ## Setup
 
@@ -56,12 +56,18 @@ Everything else imports by name from `@smarta/ui`.
 | …an icon-only control | `IconButton` (label is required) | a `Button` with no text |
 | …a control inside a sentence | `TextLink` | an `<a href="#">` |
 | A short text answer | `Input` | |
+| …a number, stepped or bounded | `InputNumber` | `<input type="number">` |
+| …an amount of money | `CurrencyInput` | an `Input` with a € prefix |
+| …a date | `DatePicker` | `<input type="date">` |
+| …a period to filter by | `DateRangePicker` | two `DatePicker`s |
 | …more than one line | `Textarea` | |
 | …one of a known set, stored | `Select` (native) | a custom listbox |
+| …one of a long list — accounts, customers | `Combobox` | a `Select` with 180 options |
+| …several of a long list | `MultiSelect` | a column of 30 checkboxes |
 | …one of ≤5 important choices | `RadioGroup` | `Select` |
 | …an independent on/off | `Checkbox` | |
 | …narrowing a list on screen | `SearchInput` | `Input` |
-| …files | `Dropzone` | a bare `<input type="file">` |
+| …files | `Dropzone`, or `Upload` to show each file's progress | a bare `<input type="file">` |
 | …a control we do not have | `Field` wrapping your own | re-deriving the aria |
 | A status in one or two words | `Chip` | |
 | A count on top of something | `Badge` | `Chip` |
@@ -71,10 +77,13 @@ Everything else imports by name from `@smarta/ui`.
 | A placeholder while loading | `Skeleton` | a full-page spinner |
 | A titled block of content | `Card` | |
 | One number that is the point | `StatCard` | |
-| Rows with the same columns, compared | `Table` | |
+| Rows with the same columns, compared | `DataTable` (sort, select, states) or `Table` | |
 | Rows read across, varying shape | `ListItem` in `List` | `Table` |
 | The facts about one record | `KeyValue` | a two-column `Table` |
 | Nothing to show | `EmptyState` | the word "No data" |
+| A receipt or invoice, shown in place | `FilePreview` | a bare `<img>` |
+| The top of a page, with its h1 | `PageHeader` | a hand-built title row |
+| The frame: navigation, skip link, main | `AppShell` | a second shell inside the product's |
 | Switching **what** is shown | `Tabs` (with counts) | |
 | Switching **how** it is shown | `SegmentedControl` | `Tabs` |
 | Moving through a long list | `Pagination` | |
@@ -97,6 +106,10 @@ Everything else imports by name from `@smarta/ui`.
 - **Toast vs Callout** — a toast is a moment, a callout is a place. Errors are
   always a callout or a field error, never only a toast.
 - **Table vs ListItem** — compared down a column, or read across a row.
+- **DataTable vs Table** — DataTable when the list sorts, selects, loads or
+  can be empty; Table when the layout needs what DataTable does not do.
+- **Select vs Combobox** — under a dozen options everyone recognises, Select;
+  more than people can scan, Combobox.
 - **StatCard vs ListItem** — is the answer *how many*, or *which one*? Prefer
   naming the missing thing over counting it.
 

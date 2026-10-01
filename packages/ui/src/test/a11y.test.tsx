@@ -28,6 +28,17 @@ import { Callout } from "../components/Callout";
 import { Dialog } from "../components/Dialog";
 import { Panel } from "../components/Panel";
 import { Tooltip } from "../components/Tooltip";
+import { AppShell, NavItem, NavGroup } from "../components/AppShell";
+import { PageHeader } from "../components/PageHeader";
+import { DataTable } from "../components/DataTable";
+import { InputNumber } from "../components/InputNumber";
+import { CurrencyInput } from "../components/CurrencyInput";
+import { DatePicker } from "../components/DatePicker";
+import { DateRangePicker } from "../components/DateRangePicker";
+import { Combobox } from "../components/Combobox";
+import { MultiSelect } from "../components/MultiSelect";
+import { Upload } from "../components/Upload";
+import { FilePreview } from "../components/FilePreview";
 
 /**
  * axe as a gate, not a suggestion. These fail the build.
@@ -208,5 +219,71 @@ describe.each(COMBINATIONS)("axe: $product / $theme", ({ product, theme }) => {
       </ThemeProvider>,
     );
     expect(await axe(baseElement)).toHaveNoViolations();
+  }, 30_000);
+});
+
+/**
+ * The components added for the products' remaining screens, in their shell.
+ * One render, not four: see the note above on what the loop does not prove.
+ * The open states — a calendar, an option list — are covered in a real
+ * browser by the Open stories and `npm run test:browser`.
+ */
+describe("axe: the shell, the data table and the newer fields", () => {
+  it("finds no violations", async () => {
+    const { container } = render(
+      <ThemeProvider locale="de-DE">
+        <AppShell
+          brand={<span>smarta</span>}
+          nav={
+            <NavGroup label="Accounting">
+              <NavItem href="/charges" active count={12}>
+                Charges
+              </NavItem>
+              <NavItem href="/receipts">Receipts</NavItem>
+            </NavGroup>
+          }
+        >
+          <PageHeader
+            title="June charges"
+            description="53 charges, 41 with a receipt."
+            breadcrumbs={[{ label: "Accounting", href: "/accounting" }]}
+            actions={<Button variant="primary">Upload a receipt</Button>}
+          />
+          <DataTable
+            caption="Charges in June"
+            columns={[
+              { id: "s", header: "Supplier", cell: (r: { id: string; s: string; a: string }) => r.s, sort: (r) => r.s },
+              { id: "a", header: "Amount", cell: (r) => r.a, numeric: true },
+            ]}
+            rows={[
+              { id: "1", s: "Druckerei Weidmann", a: "208,01 €" },
+              { id: "2", s: "Café Miradouro", a: "9,50 €" },
+            ]}
+            getRowId={(r) => r.id}
+            selectable
+            rowLabel={(r) => r.s}
+            defaultSelected={["1"]}
+            bulkActions={() => <Button size="sm">Export</Button>}
+            onRowActivate={() => {}}
+            empty={<EmptyState title="No charges in June yet" />}
+          />
+          <form>
+            <InputNumber label="Quantity" defaultValue={2} min={1} max={99} />
+            <CurrencyInput label="Amount" currency="EUR" defaultValue={9.5} />
+            <DatePicker label="Booked on" defaultValue={new Date(2026, 5, 12)} />
+            <DateRangePicker label="Period" />
+            <Combobox label="Category" options={[{ value: "4930", label: "Bürobedarf" }]} defaultValue="4930" />
+            <MultiSelect label="Tags" options={[{ value: "a", label: "Travel" }]} defaultValue={["a"]} />
+            <Upload
+              files={[{ id: "u", name: "beleg.pdf", size: 96_000, status: "uploading", progress: 40 }]}
+              onFiles={() => {}}
+              onRemove={() => {}}
+            />
+          </form>
+          <FilePreview src="/beleg.jpg" name="beleg.jpg" type="image/jpeg" />
+        </AppShell>
+      </ThemeProvider>,
+    );
+    expect(await axe(container)).toHaveNoViolations();
   }, 30_000);
 });

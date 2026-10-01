@@ -41,10 +41,13 @@ const external = [
   "react-dom",
   "react/jsx-runtime",
   ...Object.keys(pkg.dependencies ?? {}),
+  // An optional peer: only @smarta/ui/formik imports it, and the product supplies it.
+  ...Object.keys(pkg.peerDependencies ?? {}),
 ];
 
 await build({
-  entry: { index: "src/index.ts" },
+  // formik is its own entry so a product without Formik never resolves it.
+  entry: { index: "src/index.ts", formik: "src/formik/index.ts" },
 
   // Both formats on purpose. The webapp builds with Webpack and the backoffice
   // with Vite; a package that ships only ESM is the kind of thing that works in

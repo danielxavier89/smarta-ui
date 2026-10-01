@@ -105,3 +105,30 @@ const bad = touched && value.length !== 9;
   </div>
 </form>
 ```
+
+## With Formik
+
+Both products use Formik. `@smarta/ui/formik` does the wiring, and gets the
+timing right without anyone thinking about it: an error shows once the field
+has been left (Formik's `touched`), then updates live, and a submit shows them
+all. See the "With Formik" story.
+
+```tsx
+import { Formik, Form } from "formik";
+import { useFormikField, useFormikValue, useFormikSubmit } from "@smarta/ui/formik";
+
+function Fields() {
+  return (
+    <Form noValidate>
+      <Combobox label="Supplier" options={suppliers} {...useFormikValue<string | null>("supplier")} />
+      <CurrencyInput label="Amount" currency="EUR" {...useFormikValue<number | null>("amount")} />
+      <DatePicker label="Booked on" {...useFormikValue<Date | null>("bookedOn")} />
+      <Textarea label="Note for your accountant" optional {...useFormikField("note")} />
+      <Button type="submit" variant="primary" {...useFormikSubmit()}>Book the charge</Button>
+    </Form>
+  );
+}
+```
+
+`noValidate` on the form, always: otherwise the browser's own bubbles fire on
+`required` fields before Formik's messages, in the browser's language.

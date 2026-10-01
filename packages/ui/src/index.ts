@@ -87,12 +87,15 @@ export * from "./components/Skeleton";
 export * from "./components/Card";
 export * from "./components/StatCard";
 export * from "./components/Table";
+export * from "./components/DataTable";
 export * from "./components/ListItem";
 export * from "./components/KeyValue";
 export * from "./components/EmptyState";
 export * from "./components/FilePreview";
 
 // Navigation
+export * from "./components/AppShell";
+export * from "./components/PageHeader";
 export * from "./components/Tabs";
 export * from "./components/SegmentedControl";
 export * from "./components/Pagination";

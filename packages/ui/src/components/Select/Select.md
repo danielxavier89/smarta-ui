@@ -24,7 +24,8 @@ A native `<select>`, styled. One value from a known list.
 | The items **do** something rather than being stored | `DropdownMenu` |
 | There are ≤5 options and the choice matters enough to read | `RadioGroup` |
 | It switches how the same content is displayed | `SegmentedControl` |
-| The user needs to search hundreds of options | a combobox — not in this library yet |
+| The user needs to search a long list — accounts, countries, customers | `Combobox` |
+| More than one can be chosen | `MultiSelect` |
 
 ## Props
 
@@ -43,7 +44,7 @@ There is no loading state — if the options are still arriving, disable the fie
 
 ## Rules
 
-1. **It stays native.** Both prototypes settled on native selects and native date inputs: on a phone the platform picker beats anything we would build, it needs no portal, no focus trap and no scroll lock, and it cannot be the reason a form is unusable with a keyboard. Do not replace this with a Radix listbox to win a rounded corner.
+1. **It stays native.** Both prototypes settled on native selects: on a phone the platform picker beats anything we would build, it needs no portal, no focus trap and no scroll lock, and it cannot be the reason a form is unusable with a keyboard. Do not replace this with a Radix listbox to win a rounded corner.
 2. **A menu is not a select.** If choosing the item runs something, it is a `DropdownMenu`.
 3. **Order the options the way the user thinks**, not alphabetically by accident: most likely first, or a real sequence (periods in date order).
 4. **`placeholder` is not a value.** Treat the empty string as "not answered" and validate it.

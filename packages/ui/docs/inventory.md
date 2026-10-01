@@ -11,7 +11,7 @@ load: before choosing a component or a token
 
 Everything that exists, on one page, so nothing gets rebuilt that is already here. If what you need is not in these tables, say so rather than inventing a component — adding one is a decision for the design system, not for the screen you happen to be on.
 
-## Components (38)
+## Components (45)
 
 
 ### Actions
@@ -27,6 +27,7 @@ Everything that exists, on one page, so nothing gets rebuilt that is already her
 | Component | What it is | Exports |
 |---|---|---|
 | `Checkbox` | An independent on/off choice, or a row selector in a table. | `Checkbox` |
+| `Combobox` | One option out of a long list: type to narrow, arrow to choose. | `Combobox` |
 | `CurrencyInput` | An amount of money, typed and shown the way the user's locale writes it. | `CurrencyInput` |
 | `DatePicker` | One date: typed in the locale's order, or picked from a calendar. | `DatePicker` |
 | `DateRangePicker` | A from–to period, picked on a two-month calendar or from presets. | `DateRangePicker` |
@@ -35,10 +36,12 @@ Everything that exists, on one page, so nothing gets rebuilt that is already her
 | `Input` | A single-line text field with its label, hint and error wired to it. | `Input` |
 | `InputNumber` | A number, typed in the user's own locale, with the spinbutton role. | `InputNumber` |
 | `Label` | The words naming a control. | `Label` |
+| `MultiSelect` | Several options out of a long list, shown as removable tags in the field. | `MultiSelect` |
 | `RadioGroup` | One choice from a small set, with every option visible. | `RadioGroup` |
 | `SearchInput` | The pill-shaped search field from both products' top bars. | `SearchInput` |
 | `Select` | A native `<select>`, styled. One value from a known list. | `Select` |
 | `Textarea` | A multi-line text field. | `Textarea` |
+| `Upload` | A Dropzone with the list of what was dropped: each file, its size, where it is, and what can be done about it. | `Upload` |
 
 ### Status
 
@@ -56,7 +59,9 @@ Everything that exists, on one page, so nothing gets rebuilt that is already her
 | Component | What it is | Exports |
 |---|---|---|
 | `Card` | A bordered surface holding one thing. | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardBody`, `CardFooter`, `CardAction` |
+| `DataTable` | A Table with the behaviour every list screen needs: sorting, selection with bulk actions, activatable rows, loading, error, empty and pagination. | `DataTable` |
 | `EmptyState` | The state a list is in when it has nothing to list. | `EmptyState` |
+| `FilePreview` | A receipt, an invoice or a contract, shown in place with a way out to a full tab and a download. | `FilePreview` |
 | `KeyValue` | The facts about one thing, as a real `<dl>`. | `KeyValue` |
 | `ListItem` | One row in a list of things that are read rather than compared. | `ListItem`, `List` |
 | `StatCard` | One number, named. | `StatCard` |
@@ -66,7 +71,9 @@ Everything that exists, on one page, so nothing gets rebuilt that is already her
 
 | Component | What it is | Exports |
 |---|---|---|
+| `AppShell` | The frame every screen sits in: a skip link, the navigation, a top bar, and the page in `<main>`. | `AppShell`, `NavItem`, `NavGroup` |
 | `DropdownMenu` | A list of **actions**, opened from a control. | `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuCheckboxItem`, `DropdownMenuLabel`, `DropdownMenuSeparator` |
+| `PageHeader` | The top of a page: where it sits, its h1, how it stands, and the one thing to do here. | `PageHeader` |
 | `Pagination` | Moves through a list too long to show at once. | `Pagination` |
 | `SegmentedControl` | Switches **how** the same content is shown. | `SegmentedControl` |
 | `Tabs` | Switches **what** is shown, within one page. | `Tabs`, `TabsList`, `Tab`, `TabPanel` |
@@ -224,9 +231,9 @@ The only colours a component may read. Anything not listed here does not exist.
 | Token | Utility | Use |
 |---|---|---|
 | `--z-sticky` | `—` | 10 — sticky table headings. |
-| `--z-dropdown` | `—` | 20 — menus and popovers. |
 | `--z-overlay` | `—` | 30 — the scrim. |
 | `--z-panel` | `—` | 40 — the side panel. |
 | `--z-dialog` | `—` | 50 — modal dialogs. |
+| `--z-dropdown` | `—` | 55 — menus, calendars and option lists, above the Dialog or Panel they open from. |
 | `--z-toast` | `—` | 60 — toasts, above a dialog. |
 | `--z-tooltip` | `—` | 70 — tooltips, above everything. |

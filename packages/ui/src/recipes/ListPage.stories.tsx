@@ -12,6 +12,7 @@ import {
 } from "../components/DropdownMenu";
 import { EmptyState } from "../components/EmptyState";
 import { KeyValue } from "../components/KeyValue";
+import { PageHeader } from "../components/PageHeader";
 import { Pagination } from "../components/Pagination";
 import { Panel, PanelSection } from "../components/Panel";
 import { SearchInput } from "../components/SearchInput";
@@ -108,19 +109,11 @@ export const TheScreen: Story = {
 
     return (
       <div className="sui:flex sui:flex-col sui:gap-[16px]">
-        {/* The page header is assembled by hand because there is no PageHeader
-            component. The recipe's shape diagram names one; the inventory does
-            not have one. Until that is resolved, every page invents this row —
-            which is the argument for adding it. */}
-        <div className="sui:flex sui:flex-wrap sui:items-end sui:justify-between sui:gap-[12px]">
-          <div>
-            <h1 className="sui:m-0 sui:text-xl sui:font-semibold sui:tracking-tight sui:text-fg">June charges</h1>
-            <p className="sui:m-0 sui:mt-[2px] sui:text-sm sui:text-fg-subtle">
-              53 charges on the statement. 41 have a receipt behind them.
-            </p>
-          </div>
-          <Button variant="primary">Upload a receipt</Button>
-        </div>
+        <PageHeader
+          title="June charges"
+          description="53 charges on the statement. 41 have a receipt behind them."
+          actions={<Button variant="primary">Upload a receipt</Button>}
+        />
 
         {/* Toolbar: search, then filters. One row, wraps on a phone. */}
         <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[10px]">

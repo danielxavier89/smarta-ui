@@ -24,7 +24,7 @@ referred to below as `$SMARTA_UI`.
 colour, every time:
 
 - `$SMARTA_UI/packages/ui/docs/inventory.md` — every component and every semantic
-  token on one page, generated from source so it cannot drift. 34 components, 44
+  token on one page, generated from source so it cannot drift. 45 components, 44
   colour tokens, 34 scale tokens. If what you need is not in those tables, say so
   rather than inventing one.
 - `$SMARTA_UI/packages/ui/AI.md` — the hard rules, and a decision table
@@ -48,7 +48,7 @@ from scratch:
 `$SMARTA_UI/packages/ui/src/components/<Name>/<Name>.md`. The **Don't use it
 when** table in each is the part that prevents the usual mistake.
 
-Do not load all 34 component files — that is ~25k tokens. Load the inventory and
+Do not load all 45 component files — that is ~40k tokens. Load the inventory and
 the entry point, then only the component files you are about to use.
 
 ## The rules that hold even if you read nothing else

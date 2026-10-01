@@ -1,7 +1,7 @@
 ---
 kind: recipe
 screen: a list or table with filters, detail, and the states around it
-components: [SearchInput, DropdownMenu, SegmentedControl, Tabs, Table, ListItem, Chip, EmptyState, Pagination, Panel, Skeleton]
+components: [PageHeader, SearchInput, DropdownMenu, MultiSelect, DateRangePicker, SegmentedControl, Tabs, DataTable, Table, ListItem, Chip, EmptyState, Pagination, Panel, Skeleton]
 ---
 
 # A list page
@@ -12,10 +12,10 @@ assets. Start here rather than assembling from scratch.
 ## Shape
 
 ```
-PageHeader        title, and the one primary action if the page has one
-Toolbar           SearchInput · filters (DropdownMenu) · view (SegmentedControl)
+PageHeader        the h1, a line on where things stand, the one primary action
+Toolbar           SearchInput · filters (MultiSelect, DateRangePicker, DropdownMenu) · view (SegmentedControl)
 Tabs              only when the tabs change WHICH rows, with counts
-Table | List      the rows
+DataTable | List  the rows — DataTable brings sort, selection, loading, error and empty
 Pagination        only when the total is knowable
 Panel             opens on a row click, over the list
 ```
@@ -24,7 +24,7 @@ Panel             opens on a row click, over the list
 
 | The rows are | Use |
 |---|---|
-| The same columns, compared down a column | `Table` |
+| The same columns, compared down a column | `DataTable` — or `Table` when the layout needs what DataTable does not do |
 | Read across — a title, prose, an avatar | `ListItem` inside `List` |
 
 ## The states, in the order you will hit them

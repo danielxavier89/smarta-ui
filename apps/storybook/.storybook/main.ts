@@ -53,6 +53,7 @@ const config: StorybookConfig = {
        */
       alias: [
         { find: /^@smarta\/ui\/styles\.css$/, replacement: resolve(uiSrc, "styles.css") },
+        { find: /^@smarta\/ui\/formik$/, replacement: resolve(uiSrc, "formik/index.ts") },
         { find: /^@smarta\/ui$/, replacement: resolve(uiSrc, "index.ts") },
         ...(Array.isArray(cfg.resolve?.alias)
           ? cfg.resolve.alias
