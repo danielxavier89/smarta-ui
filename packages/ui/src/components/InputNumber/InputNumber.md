@@ -33,7 +33,7 @@ A number, typed in the user's own locale, with the spinbutton role.
 |---|---|---|---|---|
 | `value` / `defaultValue` | `number \| null` | no | `null` | `null` is empty. |
 | `onValueChange` | `(n: number \| null) => void` | no | — | Fires as the user types (only for what can be read), and again on blur after clamping. |
-| `min` / `max` | `number` | no | — | Clamped on blur, and the bounds of Home/End. |
+| `min` / `max` | `number` | no | — | Clamped on blur. `min={0}` also brings up the phone's number pad, which has no minus key; without it the field keeps the full keyboard. |
 | `step` | `number` | no | `1` | Arrow keys and steppers. PageUp/PageDown and Shift+arrow move ten. |
 | `decimals` | `number` | no | — | The most decimals kept; rounded on blur. |
 | `fixedDecimals` | `boolean` | no | `false` | Always show `decimals` digits when not editing. |
@@ -48,7 +48,7 @@ A number, typed in the user's own locale, with the spinbutton role.
 - **Empty** — blank; `aria-valuenow` absent.
 - **Editing** — shows exactly what was typed, never reformatted under the cursor.
 - **Settled** — on blur: clamped, rounded, grouped the locale's way (1.234.567 in German).
-- **Unreadable** — on blur, text that is not a number falls back to the last good value. Pair it with an `error` if the product needs to say why.
+- **Unreadable** — on blur, text that is not a number stays in the field with "Write the number like 1.234,5." under it, and the value becomes `null`. It clears the moment the text reads. Grouping must really group: `12.50` in German is refused, not read as 1250.
 - **Error / disabled / read-only** — as `Input`.
 
 ## Rules

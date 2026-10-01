@@ -248,18 +248,35 @@ export function numberSeparators(locale: SmartaLocale): { decimal: string; group
  * Returns null for an empty string and NaN for something that is not a number,
  * so a caller can tell "nothing yet" from "not valid".
  *
- * Any kind of space is accepted as a grouping character in every locale,
- * because people type a plain space where Portuguese prints a narrow one.
+ * Grouping is accepted only where it really groups: in threes, with one kind
+ * of mark. Anything looser turns a slip into a silent factor of a hundred —
+ * "12.50" in German is not 1250, it is a mistake, and so is "1,5" in English.
+ * Any kind of space groups in every locale, because people type a plain space
+ * where Portuguese prints a narrow one; and where the decimal mark is a comma,
+ * a dot groups too, because that is how Portuguese is written by hand.
  */
 export function parseNumber(text: string, locale: SmartaLocale): number | null {
   const trimmed = text.trim();
   if (trimmed === "") return null;
   const { decimal, group } = numberSeparators(locale);
-  let t = trimmed.replace(/[\s   ]/g, "");
-  if (group.trim()) t = t.split(group).join("");
-  t = t.replace(decimal, ".").replace(/^−/, "-");
-  if (!/^-?(\d+\.?\d*|\.\d+)$/.test(t)) return Number.NaN;
-  return Number(t);
+  const t = trimmed.replace(/[\s   ]+/g, " ").replace(/^[−-]\s*/, "-");
+  const negative = t.startsWith("-");
+  const body = negative ? t.slice(1) : t;
+
+  const at = body.indexOf(decimal);
+  if (at !== body.lastIndexOf(decimal)) return Number.NaN;
+  const whole = at < 0 ? body : body.slice(0, at);
+  const fraction = at < 0 ? "" : body.slice(at + 1);
+  if (at >= 0 && !/^\d+$/.test(fraction)) return Number.NaN;
+
+  const marks = [" ", ...(group.trim() ? [group] : []), ...(decimal === "," ? ["."] : [])];
+  const escape = (m: string) => m.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const grouped = marks.some((m) => new RegExp(`^\\d{1,3}(${escape(m)}\\d{3})+$`).test(whole));
+  const plain = /^\d+$/.test(whole) || (whole === "" && fraction !== "");
+  if (!plain && !grouped) return Number.NaN;
+
+  const n = Number(`${whole.replace(/\D/g, "") || "0"}.${fraction || "0"}`);
+  return negative ? -n : n;
 }
 
 /**
@@ -283,7 +300,8 @@ export function dateOrder(locale: SmartaLocale): {
 /**
  * A typed date, in the locale's order: "25.11.2026" in German, "25/11/2026" in
  * English. Any non-digit separates the parts, so "25-11-2026" and "25 11 2026"
- * work too; a two-digit year is read as 20xx.
+ * work too, and so do the digits alone — "25112026", "251126". A year is two
+ * digits (read as 20xx) or four; anything else is a slip, not the year 202.
  *
  * Returns null for an empty string and an Invalid Date for anything that is not
  * a real date — 31.02.2026 is rejected rather than rolled into March.
@@ -291,14 +309,24 @@ export function dateOrder(locale: SmartaLocale): {
 export function parseDate(text: string, locale: SmartaLocale): Date | null {
   const trimmed = text.trim();
   if (trimmed === "") return null;
-  const pieces = trimmed.split(/\D+/).filter(Boolean).map(Number);
-  if (pieces.length !== 3) return new Date(Number.NaN);
   const { order } = dateOrder(locale);
-  const at = (k: "day" | "month" | "year") => pieces[order.indexOf(k)];
-  let year = at("year");
-  if (year < 100) year += 2000;
-  const month = at("month");
-  const day = at("day");
+  let pieces = trimmed.split(/\D+/).filter(Boolean);
+  // Digits only — 25112026 or 251126 — because a phone's number pad has no
+  // dot or slash to type between them.
+  if (pieces.length === 1 && (pieces[0].length === 8 || pieces[0].length === 6)) {
+    const digits = pieces[0];
+    const widths = { day: 2, month: 2, year: digits.length - 4 };
+    let from = 0;
+    pieces = order.map((k) => digits.slice(from, (from += widths[k])));
+  }
+  if (pieces.length !== 3) return new Date(Number.NaN);
+  const raw = (k: "day" | "month" | "year") => pieces[order.indexOf(k)];
+  // Two digits or four: "25.11.202" is a digit short, not the year 202.
+  if (raw("year").length !== 2 && raw("year").length !== 4) return new Date(Number.NaN);
+  let year = Number(raw("year"));
+  if (raw("year").length === 2) year += 2000;
+  const month = Number(raw("month"));
+  const day = Number(raw("day"));
   const d = new Date(year, month - 1, day);
   if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== day) {
     return new Date(Number.NaN);

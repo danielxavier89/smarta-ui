@@ -84,7 +84,13 @@ export const DateRangePicker = React.forwardRef<HTMLButtonElement, DateRangePick
   const controlled = valueProp !== undefined;
   const [inner, setInner] = React.useState<DateRange>(defaultValue);
   const value = controlled ? valueProp : inner;
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpenState] = React.useState(false);
+  // The first day clicked since the calendar opened, while the second is awaited.
+  const [anchor, setAnchor] = React.useState<Date | null>(null);
+  const setOpen = (o: boolean) => {
+    setOpenState(o);
+    setAnchor(null);
+  };
   const valueId = React.useId();
 
   const commit = (r: DateRange) => {
@@ -178,11 +184,20 @@ export const DateRangePicker = React.forwardRef<HTMLButtonElement, DateRangePick
                     ...(max ? [{ after: max }] : []),
                     ...(isDisabled ? [isDisabled] : []),
                   ]}
-                  onSelect={(r: DayPickerRange | undefined) => {
-                    const next = { from: r?.from ?? null, to: r?.to ?? null };
-                    commit(next);
-                    // Close once there is a range, not on the first click.
-                    if (next.from && next.to && next.from.getTime() !== next.to.getTime()) setOpen(false);
+                  // The day-picker's own range logic extends the existing range
+                  // on the first click and toggles a day off on the second. Here
+                  // every opening starts a new range: first click is the start,
+                  // second the end — the same day twice is a one-day range.
+                  onSelect={(_r: DayPickerRange | undefined, day: Date) => {
+                    if (!anchor) {
+                      setAnchor(day);
+                      commit({ from: day, to: null });
+                      return;
+                    }
+                    const [from, to] = day < anchor ? [day, anchor] : [anchor, day];
+                    commit({ from, to });
+                    setAnchor(null);
+                    setOpen(false);
                   }}
                 />
               </Popover.Content>

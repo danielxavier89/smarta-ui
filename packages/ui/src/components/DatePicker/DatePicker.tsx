@@ -95,9 +95,25 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(fu
   const commit = (d: Date | null) => {
     setProblem(null);
     setText(null);
+    const changed = d === null || value === null ? d !== value : !sameDay(d, value);
+    if (!changed) return;
+    sent.current = d;
     if (!controlled) setInner(d);
-    if (!sameDay(d, value) || (d === null) !== (value === null)) onValueChange?.(d);
+    onValueChange?.(d);
   };
+
+  // A value the parent set — a form reset — replaces whatever text and message
+  // were left in the field; a value this field reported itself does not.
+  const sent = React.useRef<Date | null>(value);
+  React.useEffect(() => {
+    if (!controlled) return;
+    const next = valueProp ?? null;
+    const same = next === null || sent.current === null ? next === sent.current : sameDay(next, sent.current);
+    if (same) return;
+    sent.current = next;
+    setText(null);
+    setProblem(null);
+  }, [controlled, valueProp]);
 
   const outOfRange = (d: Date) =>
     (min && d < new Date(min.getFullYear(), min.getMonth(), min.getDate())
@@ -114,6 +130,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(fu
     if (!isValidDate(d)) return setProblem(labels.dateNotRecognised(example));
     const range = outOfRange(d);
     if (range) return setProblem(range);
+    if (isDisabled?.(d)) return setProblem(labels.dateUnavailable);
     commit(d);
   };
 
@@ -203,7 +220,9 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(fu
                     ...(isDisabled ? [isDisabled] : []),
                   ]}
                   onSelect={(d: Date | undefined) => {
-                    commit(d ?? null);
+                    // Clicking the chosen day again toggles it off in the
+                    // calendar; here it only closes. Clearing is the text field's job.
+                    if (d) commit(d);
                     setOpen(false);
                   }}
                 />

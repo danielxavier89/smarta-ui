@@ -61,18 +61,27 @@ export function Upload({ files, onFiles, onRetry, onRemove, className, ...dropzo
 
   // Announce only the ends — uploaded or failed. Announcing every percent
   // would talk over everything else.
-  const previous = React.useRef(new Map<string, UploadStatus>());
+  // null until the first render: what is already on screen then is not news.
+  const previous = React.useRef<Map<string, UploadStatus> | null>(null);
   const [announcement, setAnnouncement] = React.useState("");
   React.useEffect(() => {
     const said: string[] = [];
     for (const f of files) {
+      if (!previous.current) break;
       const was = previous.current.get(f.id);
-      if (was !== undefined && was !== f.status && (f.status === "uploaded" || f.status === "failed")) {
+      const ended = f.status === "uploaded" || f.status === "failed";
+      // A file rejected before it ever uploaded — too big, wrong type — arrives
+      // already failed, and is announced too.
+      const arrivedFailed = was === undefined && f.status === "failed";
+      if ((was !== undefined && was !== f.status && ended) || arrivedFailed) {
         said.push(labels.uploadStatusChanged(f.name, word[f.status]));
       }
     }
     previous.current = new Map(files.map((f) => [f.id, f.status]));
-    if (said.length) setAnnouncement(said.join(". "));
+    // The same words twice — a retry that fails again — would not change the
+    // live region and would not be read. A trailing zero-width space toggles
+    // so the text always differs.
+    if (said.length) setAnnouncement((prev) => said.join(". ") + (prev.endsWith("​") ? "" : "​"));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- word is derived from labels
   }, [files, labels]);
 

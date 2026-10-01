@@ -70,16 +70,55 @@ describe("InputNumber", () => {
     expect(onValueChange).toHaveBeenLastCalledWith(19.5);
   });
 
-  it("falls back to the last good value when what was typed is not a number", async () => {
+  /**
+   * It used to fall back to the last number that parsed — which, typing
+   * 1.234,56 in Portuguese before "." grouped there, was 1,23, kept silently.
+   */
+  it("keeps unreadable text, says so on blur, empties the value, and clears live", async () => {
+    const onValueChange = vi.fn();
     const user = userEvent.setup();
-    de(<InputNumber label="Amount" defaultValue={12} />);
+    de(<InputNumber label="Amount" defaultValue={12} onValueChange={onValueChange} />);
     const field = screen.getByRole("spinbutton");
-    // Select and overtype, so the field never passes through empty — which
-    // is a real value (null) and would rightly become the last good one.
     await user.tripleClick(field);
-    await user.keyboard("abc");
+    await user.keyboard("12.50");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     await user.tab();
-    expect(field).toHaveValue("12");
+    expect(field).toHaveValue("12.50");
+    expect(screen.getByRole("alert")).toHaveTextContent("Write the number like 1.234,5.");
+    expect(onValueChange).toHaveBeenLastCalledWith(null);
+    await user.clear(field);
+    await user.type(field, "12,50");
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(onValueChange).toHaveBeenLastCalledWith(12.5);
+  });
+
+  it("does not report a change when nothing changed", async () => {
+    const onValueChange = vi.fn();
+    const user = userEvent.setup();
+    de(<InputNumber label="Amount" onValueChange={onValueChange} />);
+    await user.click(screen.getByRole("spinbutton"));
+    await user.tab();
+    expect(onValueChange).not.toHaveBeenCalled();
+  });
+
+  it("steps by a fraction without float noise", async () => {
+    const user = userEvent.setup();
+    de(<InputNumber label="Rate" defaultValue={0.2} step={0.1} />);
+    const field = screen.getByRole("spinbutton");
+    await user.click(field);
+    await user.keyboard("{ArrowUp}");
+    expect(field).toHaveAttribute("aria-valuenow", "0.3");
+  });
+
+  it("offers the full keyboard unless the number cannot go negative", () => {
+    de(
+      <>
+        <InputNumber label="Correction" />
+        <InputNumber label="Quantity" min={0} decimals={0} />
+      </>,
+    );
+    expect(screen.getByRole("spinbutton", { name: "Correction" })).toHaveAttribute("inputmode", "text");
+    expect(screen.getByRole("spinbutton", { name: "Quantity" })).toHaveAttribute("inputmode", "numeric");
   });
 
   it("reports empty as null", async () => {

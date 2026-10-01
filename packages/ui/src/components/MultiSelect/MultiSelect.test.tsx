@@ -64,6 +64,31 @@ describe("MultiSelect", () => {
     expect(onValueChange).toHaveBeenLastCalledWith(["meals"], [categories[1]]);
   });
 
+  it("removes with Backspace while the list is still open", async () => {
+    const onValueChange = vi.fn();
+    const user = userEvent.setup();
+    wrap(<MultiSelect label="Categories" options={categories} onValueChange={onValueChange} />);
+    await user.click(screen.getByRole("combobox"));
+    await user.keyboard("{ArrowDown}{Enter}{ArrowDown}{Enter}");
+    expect(onValueChange).toHaveBeenLastCalledWith(["travel", "meals"], [categories[0], categories[1]]);
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    await user.keyboard("{Backspace}");
+    expect(onValueChange).toHaveBeenLastCalledWith(["travel"], [categories[0]]);
+  });
+
+  it("cannot lose a tag while disabled", async () => {
+    const onValueChange = vi.fn();
+    const user = userEvent.setup();
+    const { container } = wrap(
+      <MultiSelect label="Categories" options={categories} defaultValue={["meals", "travel"]} disabled onValueChange={onValueChange} />,
+    );
+    const tag = [...container.querySelectorAll("span")].find((s) => s.textContent === "Meals")!.parentElement!;
+    await user.click(tag);
+    await user.keyboard("{Backspace}{Delete}");
+    expect(onValueChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: "Remove Meals" })).not.toBeInTheDocument();
+  });
+
   it("announces how many are chosen", async () => {
     const user = userEvent.setup();
     const { container } = wrap(<MultiSelect label="Categories" options={categories} />);

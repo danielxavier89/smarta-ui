@@ -7,8 +7,12 @@ export interface Crumb {
   label: React.ReactNode;
   /** A real URL, so it opens in a new tab and shows on hover. */
   href?: string;
-  /** For a client-side router: call `e.preventDefault()` and navigate. */
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  /**
+   * For a client-side router: call `e.preventDefault()` and navigate. With no
+   * `href` the crumb renders as a button, so it is still reachable and fires on
+   * Enter — an <a> without href is neither.
+   */
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 export interface PageHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
@@ -27,15 +31,23 @@ export interface PageHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElemen
 }
 
 function CrumbLink({ crumb, className, children }: { crumb: Crumb; className?: string; children: React.ReactNode }) {
+  const look = cn(
+    "sui:inline-flex sui:items-center sui:gap-[2px] sui:rounded-xs sui:text-fg-subtle sui:no-underline sui:hover:text-fg sui:hover:underline",
+    className,
+  );
+  if (!crumb.href) {
+    return (
+      <button
+        type="button"
+        onClick={crumb.onClick}
+        className={cn(look, "sui:cursor-pointer sui:border-0 sui:bg-transparent sui:p-0 sui:text-[length:inherit]")}
+      >
+        {children}
+      </button>
+    );
+  }
   return (
-    <a
-      href={crumb.href}
-      onClick={crumb.onClick}
-      className={cn(
-        "sui:inline-flex sui:items-center sui:gap-[2px] sui:rounded-xs sui:text-fg-subtle sui:no-underline sui:hover:text-fg sui:hover:underline",
-        className,
-      )}
-    >
+    <a href={crumb.href} onClick={crumb.onClick} className={look}>
       {children}
     </a>
   );

@@ -155,6 +155,16 @@ export const MultiSelect = React.forwardRef<HTMLInputElement, MultiSelectProps>(
     });
 
   const menuProps = getMenuProps({}, { suppressRefError: true });
+  const { onKeyDown: dropdownKeyDown, ...dropdownProps } = getDropdownProps({
+    ref,
+    disabled,
+    placeholder: chosen.length ? undefined : placeholder,
+    onBlur,
+    // Downshift turns off its tag keys while the list is open, so the arrows
+    // belong to the list...
+    preventKeyAction: isOpen,
+    ...(label ? {} : { "aria-labelledby": undefined, "aria-label": ariaLabel }),
+  }) as Record<string, unknown> & { onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void };
   const tall = {
     sm: "sui:min-h-[var(--control-height-sm)]",
     md: "sui:min-h-[var(--control-height-md)]",
@@ -176,7 +186,7 @@ export const MultiSelect = React.forwardRef<HTMLInputElement, MultiSelectProps>(
               {chosen.map((option, index) => (
                 <span
                   key={option.value}
-                  {...getSelectedItemProps({ selectedItem: option, index })}
+                  {...(disabled ? {} : getSelectedItemProps({ selectedItem: option, index }))}
                   // Dimmed with the field; disabled controls are exempt from contrast, and this says so.
                   aria-disabled={disabled || undefined}
                   className={cn(
@@ -202,18 +212,21 @@ export const MultiSelect = React.forwardRef<HTMLInputElement, MultiSelectProps>(
                 </span>
               ))}
               <input
-                {...getInputProps(
-                  getDropdownProps({
-                    ref,
-                    disabled,
-                    placeholder: chosen.length ? undefined : placeholder,
-                    onBlur,
-                    preventKeyAction: isOpen,
-                    "aria-describedby": ids["aria-describedby"],
-                    "aria-invalid": ids["aria-invalid"],
-                    ...(label ? {} : { "aria-labelledby": undefined, "aria-label": ariaLabel }),
-                  }),
-                )}
+                {...getInputProps({
+                  ...dropdownProps,
+                  "aria-describedby": ids["aria-describedby"],
+                  "aria-invalid": ids["aria-invalid"],
+                  // ...but the list stays open between choices, so without this
+                  // Backspace-to-remove would almost never work. Passed to the
+                  // combobox, because getDropdownProps drops a handler while
+                  // preventKeyAction is on.
+                  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (isOpen && e.key === "Backspace" && query === "" && chosen.length > 0) {
+                      removeSelectedItem(chosen[chosen.length - 1]);
+                    }
+                    dropdownKeyDown?.(e);
+                  },
+                })}
                 autoComplete="off"
                 className={cn(
                   "sui:min-w-[80px] sui:flex-1 sui:border-0 sui:bg-transparent sui:p-0 sui:focus-visible:outline-none",

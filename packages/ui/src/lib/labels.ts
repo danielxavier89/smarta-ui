@@ -74,6 +74,8 @@ export interface SmartaLabels {
   /** The stepper buttons. */
   increase: string;
   decrease: string;
+  /** Under a number field whose text is not a number. Gets an example in the locale's format. */
+  numberNotRecognised: (example: string) => string;
 
   /* ---- DatePicker, DateRangePicker ---------------------------------------- */
   /** The button that opens the calendar. */
@@ -92,6 +94,8 @@ export interface SmartaLabels {
    * example written the locale's way. Says what to do, not "Invalid date".
    */
   dateNotRecognised: (example: string) => string;
+  /** A typed date the field excludes — a weekend, a closed period. */
+  dateUnavailable: string;
   /** Shown when a typed date is outside min/max. Receives the bound, formatted. */
   dateTooEarly: (min: string) => string;
   dateTooLate: (max: string) => string;
@@ -176,6 +180,7 @@ export const defaultLabels: SmartaLabels = {
   scrollableTable: "Table, scrolls sideways",
 
   increase: "Increase",
+  numberNotRecognised: (example) => `Write the number like ${example}.`,
   decrease: "Decrease",
 
   chooseDate: "Choose a date",
@@ -186,6 +191,7 @@ export const defaultLabels: SmartaLabels = {
   selected: "selected",
   clearValue: "Clear",
   dateNotRecognised: (example) => `Write the date like ${example}.`,
+  dateUnavailable: "That date can't be chosen here.",
   dateTooEarly: (min) => `Choose ${min} or later.`,
   dateTooLate: (max) => `Choose ${max} or earlier.`,
 

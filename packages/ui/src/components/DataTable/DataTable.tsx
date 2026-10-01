@@ -150,6 +150,8 @@ export function DataTable<T>({
           : null;
     if (!sortControlled) setInnerSort(next);
     onSortChange?.(next);
+    // A new order starts at its beginning, not on page 3 of it.
+    setInnerPage(1);
   };
 
   const sorted = React.useMemo(() => {
@@ -172,12 +174,22 @@ export function DataTable<T>({
   const [innerPage, setInnerPage] = React.useState(1);
   const clientPages = !pagination && pageSize ? Math.max(1, Math.ceil(sorted.length / pageSize)) : 1;
   const page = Math.min(innerPage, clientPages);
+  // Stored, not only clamped for display: otherwise a filter that shrinks the
+  // list to one page and is then cleared lands back on page 3.
+  React.useEffect(() => {
+    if (innerPage > clientPages) setInnerPage(clientPages);
+  }, [innerPage, clientPages]);
   const visible = !pagination && pageSize ? sorted.slice((page - 1) * pageSize, page * pageSize) : sorted;
 
   // --- Selection --------------------------------------------------------
   const selControlled = selectedProp !== undefined;
   const [innerSelected, setInnerSelected] = React.useState<string[]>(defaultSelected);
-  const selected = selControlled ? selectedProp : innerSelected;
+  // Only ids still in `rows` count — after a bulk delete or a filter, a
+  // selection of rows nobody can see is a bulk action on records nobody can
+  // see. With server pagination `rows` is one page and the product owns the
+  // rest, so it is left alone.
+  const rowIds = new Set(rows.map(getRowId));
+  const selected = (selControlled ? selectedProp : innerSelected).filter((id) => pagination || rowIds.has(id));
   const setSelected = (ids: string[]) => {
     if (!selControlled) setInnerSelected(ids);
     onSelectedChange?.(ids);
@@ -192,7 +204,7 @@ export function DataTable<T>({
 
   return (
     <div className={cn("sui:flex sui:flex-col sui:gap-[12px]", className)}>
-      {selectable && bulkActions && selected.length > 0 && (
+      {selectable && bulkActions && selected.length > 0 && !loading && !error && (
         <div
           role="toolbar"
           aria-label={labels.selectedCount(selected.length)}
@@ -278,12 +290,16 @@ export function DataTable<T>({
               return (
                 <TR
                   key={id}
-                  selected={isSelected || activeRowId === id}
+                  // Only the checkbox selects. The open row is tinted and
+                  // aria-current, not announced as selected.
+                  selected={isSelected}
+                  className={activeRowId === id && !isSelected ? "sui:bg-accent-soft" : undefined}
                   aria-current={activeRowId === id ? "true" : undefined}
                   onActivate={onRowActivate ? () => onRowActivate(row) : undefined}
                 >
                   {selectable && (
-                    <TD className="sui:w-[1%]">
+                    // A near miss beside the checkbox must not open the row.
+                    <TD className="sui:w-[1%]" onClick={(e) => e.preventDefault()}>
                       <Checkbox
                         aria-label={labels.selectRow(rowLabel ? rowLabel(row) : id)}
                         checked={isSelected}
@@ -304,7 +320,7 @@ export function DataTable<T>({
         </TBody>
       </Table>
 
-      {pagination ? (
+      {loading || error ? null : pagination ? (
         pagination.pageCount > 1 && <Pagination {...pagination} aria-label={caption} />
       ) : pageSize && clientPages > 1 ? (
         <Pagination

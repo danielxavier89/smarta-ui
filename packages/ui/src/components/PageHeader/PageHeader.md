@@ -70,7 +70,17 @@ For a client-side router, pass `href` and an `onClick` that calls `e.preventDefa
   actions={<Button variant="primary">Upload a receipt</Button>}
 />
 
-<PageHeader title="Café Miradouro" back={{ label: "Charges", href: "/charges", onClick: navigate }} />
+<PageHeader
+  title="Café Miradouro"
+  back={{
+    label: "Charges",
+    href: "/charges",
+    onClick: (e) => {
+      e.preventDefault();
+      navigate("/charges");
+    },
+  }}
+/>
 ```
 
 ## Related

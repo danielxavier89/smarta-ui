@@ -92,6 +92,16 @@ describe("PageHeader", () => {
     expect(screen.getByRole("link", { name: "Accounting" })).toHaveAttribute("href", "/accounting");
   });
 
+  it("renders a crumb with only onClick as a reachable button", async () => {
+    const onClick = vi.fn();
+    const user = userEvent.setup();
+    wrap(<PageHeader title="Café Miradouro" breadcrumbs={[{ label: "Charges", onClick }]} />);
+    await user.tab();
+    expect(screen.getByRole("button", { name: "Charges" })).toHaveFocus();
+    await user.keyboard("{Enter}");
+    expect(onClick).toHaveBeenCalled();
+  });
+
   it("offers a single way back instead of breadcrumbs", () => {
     wrap(<PageHeader title="Café Miradouro" back={{ label: "Charges", href: "/charges" }} />);
     expect(screen.getByRole("link", { name: "Charges" })).toHaveAttribute("href", "/charges");

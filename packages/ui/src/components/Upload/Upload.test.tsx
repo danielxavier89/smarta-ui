@@ -53,6 +53,25 @@ describe("Upload", () => {
     expect(live).toHaveTextContent("rechnung-118.pdf: Uploaded");
   });
 
+  it("announces a file rejected on arrival, and a retry that fails again", () => {
+    const { container, rerender } = wrap(<Upload files={[]} onFiles={() => {}} />);
+    const live = container.querySelector('[aria-live="polite"]')!;
+    const show = (list: UploadItem[]) =>
+      rerender(
+        <ThemeProvider>
+          <Upload files={list} onFiles={() => {}} />
+        </ThemeProvider>,
+      );
+    const big: UploadItem = { id: "b", name: "scan.tif", size: 40_000_000, status: "failed", error: "Larger than 10 MB." };
+    show([big]);
+    expect(live).toHaveTextContent("scan.tif: Failed");
+    const first = live.textContent;
+    show([{ ...big, status: "uploading" }]);
+    show([big]);
+    expect(live).toHaveTextContent("scan.tif: Failed");
+    expect(live.textContent).not.toBe(first);
+  });
+
   it("hands chosen files to the product", async () => {
     const onFiles = vi.fn();
     const user = userEvent.setup();

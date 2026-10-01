@@ -55,6 +55,7 @@
 
 ### Fixed
 
-- **`Button asChild` and `IconButton asChild` threw** ("Slot failed to slot onto
-  its children") whenever there was an icon. The child now becomes the button
-  with the icon inside it.
+- **`Button asChild` and `IconButton asChild` always threw** ("Slot failed to
+  slot onto its children"): the child was handed to Radix Slot beside the icon
+  slots, and an empty slot still counts as a child. The child now becomes the
+  button with the icon inside it.

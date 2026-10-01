@@ -57,6 +57,22 @@ describe("DateRangePicker", () => {
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
   });
 
+  /** Found in review: the first click extended the old range and closed the calendar. */
+  it("starts a new range on every opening, and takes the same day twice as one day", async () => {
+    const onValueChange = vi.fn();
+    const user = userEvent.setup();
+    de(<DateRangePicker label="Period" defaultValue={june} onValueChange={onValueChange} />);
+    await user.click(screen.getByRole("button", { name: /^Period/ }));
+    const dialog = await screen.findByRole("dialog");
+    const day10 = within(within(dialog).getAllByRole("grid")[0]).getByRole("button", { name: /10\. Juni/ });
+    await user.click(day10);
+    expect(onValueChange).toHaveBeenLastCalledWith({ from: new Date(2026, 5, 10), to: null });
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    await user.click(within(within(screen.getByRole("dialog")).getAllByRole("grid")[0]).getByRole("button", { name: /10\. Juni/ }));
+    expect(onValueChange).toHaveBeenLastCalledWith({ from: new Date(2026, 5, 10), to: new Date(2026, 5, 10) });
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+  });
+
   it("marks the preset that matches the current range", async () => {
     const user = userEvent.setup();
     de(<DateRangePicker label="Period" defaultValue={june} presets={[{ label: "June", range: june }]} />);

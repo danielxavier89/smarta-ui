@@ -38,6 +38,16 @@ export function AppShell({ brand, nav, navFooter, topBar, children, mainId = "ma
   const [open, setOpen] = React.useState(false);
   const close = React.useCallback(() => setOpen(false), []);
 
+  // A drawer left open while the window widens past the sidebar breakpoint
+  // would stay a modal over a page whose button for it is gone.
+  React.useEffect(() => {
+    if (!open || typeof window.matchMedia !== "function") return;
+    const wide = window.matchMedia("(min-width: 48rem)"); // Tailwind's md
+    const onChange = () => wide.matches && setOpen(false);
+    wide.addEventListener("change", onChange);
+    return () => wide.removeEventListener("change", onChange);
+  }, [open]);
+
   const sidebar = (
     <>
       <div className="sui:flex sui:min-h-0 sui:flex-1 sui:flex-col sui:gap-[2px] sui:overflow-y-auto sui:px-[12px] sui:py-[8px]">
@@ -52,6 +62,14 @@ export function AppShell({ brand, nav, navFooter, topBar, children, mainId = "ma
       <div className={cn("sui:flex sui:min-h-dvh sui:bg-canvas", className)}>
         <a
           href={`#${mainId}`}
+          // Focus, not navigation: in a hash-routed app "#main" is a route, and
+          // the link would send the page to it. The href stays for no-JS.
+          onClick={(e) => {
+            const main = document.getElementById(mainId);
+            if (!main) return;
+            e.preventDefault();
+            main.focus();
+          }}
           className={cn(
             "sui:sr-only sui:focus:not-sr-only sui:focus:fixed sui:focus:left-[12px] sui:focus:top-[12px] sui:focus:z-[var(--z-toast)]",
             "sui:focus:rounded-md sui:focus:bg-surface-raised sui:focus:px-[14px] sui:focus:py-[8px] sui:focus:text-sm sui:focus:text-fg sui:focus:shadow-lg",

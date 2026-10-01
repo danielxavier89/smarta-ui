@@ -153,3 +153,58 @@ describe("DatePicker, picked", () => {
     expect(early).toBeDisabled();
   });
 });
+
+/** Found in review. */
+describe("DatePicker, the edges", () => {
+  it("keeps the date when the chosen day is clicked again", async () => {
+    const onValueChange = vi.fn();
+    const user = userEvent.setup();
+    de(<DatePicker label="Booked on" defaultValue={new Date(2026, 5, 3)} onValueChange={onValueChange} />);
+    await user.click(screen.getByRole("button", { name: "Choose a date" }));
+    const dialog = await screen.findByRole("dialog");
+    await user.click(within(dialog).getByRole("button", { name: /^3\. Juni 2026/ }));
+    expect(onValueChange).not.toHaveBeenCalled();
+    expect(screen.getByRole("textbox", { name: "Booked on" })).toHaveValue("03.06.2026");
+  });
+
+  it("refuses a typed day the field excludes", async () => {
+    const onValueChange = vi.fn();
+    const user = userEvent.setup();
+    const weekend = (d: Date) => d.getDay() === 0 || d.getDay() === 6;
+    de(<DatePicker label="Booked on" isDisabled={weekend} onValueChange={onValueChange} />);
+    await user.type(screen.getByRole("textbox"), "06.06.2026");
+    await user.tab();
+    expect(screen.getByRole("alert")).toHaveTextContent("That date can't be chosen here.");
+    expect(onValueChange).not.toHaveBeenCalled();
+  });
+
+  it("drops leftover text and message when the parent sets a value", async () => {
+    const user = userEvent.setup();
+    function Reset() {
+      const [v, setV] = React.useState<Date | null>(null);
+      return (
+        <>
+          <DatePicker label="Booked on" value={v} onValueChange={setV} />
+          <button type="button" onClick={() => setV(new Date(2026, 5, 1))}>Reset</button>
+        </>
+      );
+    }
+    de(<Reset />);
+    await user.type(screen.getByRole("textbox"), "31.02.2026");
+    await user.tab();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Reset" }));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox")).toHaveValue("01.06.2026");
+  });
+
+  it("does not report null when it was already empty", async () => {
+    const onValueChange = vi.fn();
+    const user = userEvent.setup();
+    de(<DatePicker label="Booked on" onValueChange={onValueChange} />);
+    await user.type(screen.getByRole("textbox"), "1");
+    await user.clear(screen.getByRole("textbox"));
+    await user.tab();
+    expect(onValueChange).not.toHaveBeenCalled();
+  });
+});
