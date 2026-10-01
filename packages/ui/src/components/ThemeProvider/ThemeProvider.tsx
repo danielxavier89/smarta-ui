@@ -2,6 +2,7 @@ import * as React from "react";
 import type { Product, Theme } from "@smarta/tokens";
 import { cn } from "../../lib/utils";
 import { mergeLabels, type PartialLabels, type SmartaLabels } from "../../lib/labels";
+import type { SmartaLocale } from "../../lib/format";
 
 /**
  * The class every painting rule in the library is scoped under.
@@ -32,12 +33,15 @@ interface ThemeContextValue {
   theme: Theme | undefined;
   /** Always complete: the product's partial overrides merged over English. */
   labels: SmartaLabels;
+  /** BCP 47. What dates, numbers and money are written in. */
+  locale: SmartaLocale;
 }
 
 const ThemeContext = React.createContext<ThemeContextValue>({
   product: "webapp",
   theme: undefined,
   labels: mergeLabels(),
+  locale: "en-GB",
 });
 
 /**
@@ -60,6 +64,15 @@ export function useTheme() {
  * whether the product supplied it. Outside a ThemeProvider it is English,
  * which keeps an unwrapped component legible rather than blank.
  */
+/**
+ * The locale dates, numbers and money are written in — "de-DE", "pt-PT",
+ * "en-GB". DatePicker, InputNumber and CurrencyInput read it, so a German
+ * backoffice gets 25.11.2026 and 1.234,56 € without each field being told.
+ */
+export function useLocale(): SmartaLocale {
+  return React.useContext(ThemeContext).locale;
+}
+
 export function useLabels(): SmartaLabels {
   return React.useContext(ThemeContext).labels;
 }
@@ -115,6 +128,11 @@ export interface ThemeProviderProps extends React.HTMLAttributes<HTMLDivElement>
    * Compared by contents, so an inline object literal is fine.
    */
   labels?: PartialLabels;
+  /**
+   * BCP 47 locale for dates, numbers and money: "de-DE", "pt-PT", "en-GB".
+   * Defaults to "en-GB". Words the components say are `labels`, not this.
+   */
+  locale?: SmartaLocale;
   children?: React.ReactNode;
 }
 
@@ -126,14 +144,28 @@ export interface ThemeProviderProps extends React.HTMLAttributes<HTMLDivElement>
  * an outer one, because the tokens are plain inherited custom properties.
  */
 export function ThemeProvider({
-  product = "webapp",
-  theme,
+  product: productProp,
+  theme: themeProp,
   asRoot = false,
   labels,
+  locale: localeProp,
   className,
   children,
   ...props
 }: ThemeProviderProps) {
+  /**
+   * A nested provider overrides what it is given and inherits the rest.
+   *
+   * It used to reset everything it was not told: a provider added only to set
+   * `locale="de-DE"` around one form silently turned that form back into the
+   * webapp, light, and English, inside a dark backoffice screen. The context's
+   * own defaults are the library's defaults, so a top-level provider behaves
+   * exactly as before.
+   */
+  const parent = React.useContext(ThemeContext);
+  const product = productProp ?? parent.product;
+  const theme = themeProp ?? parent.theme;
+  const locale = localeProp ?? parent.locale;
   // Before paint, not after: a useEffect here lets the document render one frame
   // in the operating system's theme before the chosen one lands, which reads as
   // a flash of the wrong palette on every load.
@@ -165,10 +197,15 @@ export function ThemeProvider({
   if (!shallowEqual(labelsRef.current, labels)) labelsRef.current = labels;
   const stableLabels = labelsRef.current;
 
-  const merged = React.useMemo(() => mergeLabels(stableLabels), [stableLabels]);
+  // Over the parent's labels, not over English: an inner provider that renames
+  // one button keeps every word the outer one translated.
+  const merged = React.useMemo(
+    () => (stableLabels ? { ...parent.labels, ...stableLabels } : parent.labels),
+    [parent.labels, stableLabels],
+  );
   const value = React.useMemo(
-    () => ({ product, theme, labels: merged }),
-    [product, theme, merged],
+    () => ({ product, theme, labels: merged, locale }),
+    [product, theme, merged, locale],
   );
 
   if (asRoot) {

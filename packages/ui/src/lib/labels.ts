@@ -70,6 +70,74 @@ export interface SmartaLabels {
    */
   scrollableTable: string;
 
+  /* ---- InputNumber, CurrencyInput ---------------------------------------- */
+  /** The stepper buttons. */
+  increase: string;
+  decrease: string;
+
+  /* ---- DatePicker, DateRangePicker ---------------------------------------- */
+  /** The button that opens the calendar. */
+  chooseDate: string;
+  /** The trigger of a range picker with nothing chosen yet. */
+  chooseDateRange: string;
+  previousMonth: string;
+  nextMonth: string;
+  /** Appended to a calendar day's name when it is today / chosen. */
+  today: string;
+  selected: string;
+  /** Clears a field's value. */
+  clearValue: string;
+  /**
+   * Shown under a DatePicker when what was typed is not a date, with an
+   * example written the locale's way. Says what to do, not "Invalid date".
+   */
+  dateNotRecognised: (example: string) => string;
+  /** Shown when a typed date is outside min/max. Receives the bound, formatted. */
+  dateTooEarly: (min: string) => string;
+  dateTooLate: (max: string) => string;
+
+  /* ---- Combobox, MultiSelect ---------------------------------------------- */
+  /** The toggle button beside the search field. */
+  showOptions: string;
+  /** Shown in the list when the search matches nothing. */
+  noMatches: string;
+  /** Shown in the list while results are loading. */
+  loadingOptions: string;
+  /** A selected item's remove button in a MultiSelect. */
+  removeItem: (label: string) => string;
+  /** Announced count of selected items. */
+  selectedCount: (n: number) => string;
+
+  /* ---- Upload ------------------------------------------------------------- */
+  uploadQueued: string;
+  uploading: string;
+  uploaded: string;
+  uploadFailed: string;
+  retryUpload: (fileName: string) => string;
+  removeFile: (fileName: string) => string;
+  /** Announced when a file's status changes. */
+  uploadStatusChanged: (fileName: string, status: string) => string;
+
+  /* ---- FilePreview -------------------------------------------------------- */
+  openInNewTab: string;
+  download: string;
+  zoomIn: string;
+  fitToFrame: string;
+  previewUnavailable: string;
+
+  /* ---- DataTable ---------------------------------------------------------- */
+  selectAllRows: string;
+  selectRow: (rowLabel: string) => string;
+  couldNotLoad: string;
+  tryAgain: string;
+
+  /* ---- PageHeader, AppShell ----------------------------------------------- */
+  breadcrumb: string;
+  skipToContent: string;
+  mainNavigation: string;
+  openNavigation: string;
+  closeNavigation: string;
+
   /**
    * Accessible name for the info control beside a KeyValue row.
    * `label` is the row's key when it is a string.
@@ -106,6 +174,51 @@ export const defaultLabels: SmartaLabels = {
   totalItems: (total) => `${total} in total`,
 
   scrollableTable: "Table, scrolls sideways",
+
+  increase: "Increase",
+  decrease: "Decrease",
+
+  chooseDate: "Choose a date",
+  chooseDateRange: "Choose dates",
+  previousMonth: "Previous month",
+  nextMonth: "Next month",
+  today: "today",
+  selected: "selected",
+  clearValue: "Clear",
+  dateNotRecognised: (example) => `Write the date like ${example}.`,
+  dateTooEarly: (min) => `Choose ${min} or later.`,
+  dateTooLate: (max) => `Choose ${max} or earlier.`,
+
+  showOptions: "Show options",
+  noMatches: "Nothing matches",
+  loadingOptions: "Loading",
+  removeItem: (label) => `Remove ${label}`,
+  selectedCount: (n) => `${n} selected`,
+
+  uploadQueued: "Waiting",
+  uploading: "Uploading",
+  uploaded: "Uploaded",
+  uploadFailed: "Failed",
+  retryUpload: (name) => `Try ${name} again`,
+  removeFile: (name) => `Remove ${name}`,
+  uploadStatusChanged: (name, status) => `${name}: ${status}`,
+
+  openInNewTab: "Open in a new tab",
+  download: "Download",
+  zoomIn: "Actual size",
+  fitToFrame: "Fit to frame",
+  previewUnavailable: "This file can't be previewed here.",
+
+  selectAllRows: "Select all rows on this page",
+  selectRow: (label) => `Select ${label}`,
+  couldNotLoad: "This could not be loaded.",
+  tryAgain: "Try again",
+
+  breadcrumb: "Breadcrumb",
+  skipToContent: "Skip to content",
+  mainNavigation: "Main",
+  openNavigation: "Open navigation",
+  closeNavigation: "Close navigation",
 
   // Lowercased because that is English sentence style; German overrides this
   // with a function that does not, since German nouns keep their capital.

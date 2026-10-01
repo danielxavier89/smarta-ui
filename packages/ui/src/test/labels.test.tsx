@@ -137,6 +137,51 @@ describe("explicit props still win over labels", () => {
   });
 });
 
+describe("a nested provider", () => {
+  /**
+   * It used to reset everything it was not given: a provider added only to set
+   * one label turned the screen inside it back into the webapp, in English.
+   */
+  const outer = { close: "Schließen", loading: "Wird geladen" };
+
+  it("inherits the product and the theme it does not override", () => {
+    const { container } = render(
+      <ThemeProvider product="backoffice" theme="dark" labels={outer}>
+        <ThemeProvider labels={{ loading: "Lädt" }}>
+          <Spinner />
+        </ThemeProvider>
+      </ThemeProvider>,
+    );
+    const inner = container.querySelectorAll("[data-product]")[1];
+    expect(inner).toHaveAttribute("data-product", "backoffice");
+    expect(inner).toHaveAttribute("data-theme", "dark");
+  });
+
+  it("overrides the labels it is given and keeps the rest", () => {
+    render(
+      <ThemeProvider product="backoffice" labels={outer}>
+        <ThemeProvider labels={{ loading: "Lädt" }}>
+          <Spinner />
+        </ThemeProvider>
+      </ThemeProvider>,
+    );
+    expect(screen.getByRole("status", { name: "Lädt" })).toBeInTheDocument();
+  });
+
+  it("keeps the outer labels it does not override", () => {
+    render(
+      <ThemeProvider product="backoffice" labels={outer}>
+        <ThemeProvider labels={{ loading: "Lädt" }}>
+          <Panel open onOpenChange={() => {}} title="Beleg">
+            <p>Inhalt</p>
+          </Panel>
+        </ThemeProvider>
+      </ThemeProvider>,
+    );
+    expect(screen.getByRole("button", { name: "Schließen" })).toBeInTheDocument();
+  });
+});
+
 describe("Label", () => {
   it("marks optional with the product's word", () => {
     render(

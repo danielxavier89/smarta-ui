@@ -11,7 +11,7 @@ load: before choosing a component or a token
 
 Everything that exists, on one page, so nothing gets rebuilt that is already here. If what you need is not in these tables, say so rather than inventing a component — adding one is a decision for the design system, not for the screen you happen to be on.
 
-## Components (34)
+## Components (38)
 
 
 ### Actions
@@ -27,9 +27,13 @@ Everything that exists, on one page, so nothing gets rebuilt that is already her
 | Component | What it is | Exports |
 |---|---|---|
 | `Checkbox` | An independent on/off choice, or a row selector in a table. | `Checkbox` |
+| `CurrencyInput` | An amount of money, typed and shown the way the user's locale writes it. | `CurrencyInput` |
+| `DatePicker` | One date: typed in the locale's order, or picked from a calendar. | `DatePicker` |
+| `DateRangePicker` | A from–to period, picked on a two-month calendar or from presets. | `DateRangePicker` |
 | `Dropzone` | A drop target that is also a button that is also a file input. | `Dropzone` |
 | `Field` | Label, control, and the one line underneath — wired together so the hint and the error actually reach a screen reader. | `Field` |
 | `Input` | A single-line text field with its label, hint and error wired to it. | `Input` |
+| `InputNumber` | A number, typed in the user's own locale, with the spinbutton role. | `InputNumber` |
 | `Label` | The words naming a control. | `Label` |
 | `RadioGroup` | One choice from a small set, with every option visible. | `RadioGroup` |
 | `SearchInput` | The pill-shaped search field from both products' top bars. | `SearchInput` |

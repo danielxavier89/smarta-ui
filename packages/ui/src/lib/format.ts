@@ -225,3 +225,88 @@ export function formatRelativeDay(
   );
   return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(days, "day");
 }
+
+/* ---------------------------------------------------------------- parsing */
+
+/**
+ * The decimal and grouping characters of a locale, read from Intl rather than
+ * hardcoded: de-DE writes 1.234,5, pt-PT 1 234,5 with a narrow no-break space,
+ * en-GB 1,234.5.
+ */
+export function numberSeparators(locale: SmartaLocale): { decimal: string; group: string } {
+  const parts = numberFormat(locale, { useGrouping: true }).formatToParts(12345.6);
+  return {
+    decimal: parts.find((p) => p.type === "decimal")?.value ?? ".",
+    group: parts.find((p) => p.type === "group")?.value ?? ",",
+  };
+}
+
+/**
+ * What someone typed, as a number — in their locale. "1.234,56" is
+ * one-thousand-and-something in German and an error in English.
+ *
+ * Returns null for an empty string and NaN for something that is not a number,
+ * so a caller can tell "nothing yet" from "not valid".
+ *
+ * Any kind of space is accepted as a grouping character in every locale,
+ * because people type a plain space where Portuguese prints a narrow one.
+ */
+export function parseNumber(text: string, locale: SmartaLocale): number | null {
+  const trimmed = text.trim();
+  if (trimmed === "") return null;
+  const { decimal, group } = numberSeparators(locale);
+  let t = trimmed.replace(/[\s   ]/g, "");
+  if (group.trim()) t = t.split(group).join("");
+  t = t.replace(decimal, ".").replace(/^−/, "-");
+  if (!/^-?(\d+\.?\d*|\.\d+)$/.test(t)) return Number.NaN;
+  return Number(t);
+}
+
+/**
+ * The order a locale writes a numeric date in, and the separator between the
+ * parts: day-month-year with "." in German, "/" in English and Portuguese.
+ */
+export function dateOrder(locale: SmartaLocale): {
+  order: Array<"day" | "month" | "year">;
+  separator: string;
+} {
+  const parts = dateFormat(locale, { day: "2-digit", month: "2-digit", year: "numeric" }).formatToParts(
+    new Date(2026, 10, 25),
+  );
+  const order = parts
+    .filter((p) => p.type === "day" || p.type === "month" || p.type === "year")
+    .map((p) => p.type as "day" | "month" | "year");
+  const separator = parts.find((p) => p.type === "literal")?.value ?? "/";
+  return { order, separator };
+}
+
+/**
+ * A typed date, in the locale's order: "25.11.2026" in German, "25/11/2026" in
+ * English. Any non-digit separates the parts, so "25-11-2026" and "25 11 2026"
+ * work too; a two-digit year is read as 20xx.
+ *
+ * Returns null for an empty string and an Invalid Date for anything that is not
+ * a real date — 31.02.2026 is rejected rather than rolled into March.
+ */
+export function parseDate(text: string, locale: SmartaLocale): Date | null {
+  const trimmed = text.trim();
+  if (trimmed === "") return null;
+  const pieces = trimmed.split(/\D+/).filter(Boolean).map(Number);
+  if (pieces.length !== 3) return new Date(Number.NaN);
+  const { order } = dateOrder(locale);
+  const at = (k: "day" | "month" | "year") => pieces[order.indexOf(k)];
+  let year = at("year");
+  if (year < 100) year += 2000;
+  const month = at("month");
+  const day = at("day");
+  const d = new Date(year, month - 1, day);
+  if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== day) {
+    return new Date(Number.NaN);
+  }
+  return d;
+}
+
+/** True for a real Date; false for null, undefined and an Invalid Date. */
+export function isValidDate(d: Date | null | undefined): d is Date {
+  return d instanceof Date && !Number.isNaN(d.getTime());
+}

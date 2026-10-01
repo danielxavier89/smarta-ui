@@ -42,6 +42,11 @@ export {
   formatDateTime,
   formatMonth,
   formatRelativeDay,
+  parseNumber,
+  parseDate,
+  numberSeparators,
+  dateOrder,
+  isValidDate,
   type SmartaLocale,
   type CurrencyOptions,
   type DateInput,
@@ -56,6 +61,10 @@ export * from "./components/TextLink";
 export * from "./components/Field";
 export * from "./components/Label";
 export * from "./components/Input";
+export * from "./components/InputNumber";
+export * from "./components/CurrencyInput";
+export * from "./components/DatePicker";
+export * from "./components/DateRangePicker";
 export * from "./components/Textarea";
 export * from "./components/Select";
 export * from "./components/SearchInput";

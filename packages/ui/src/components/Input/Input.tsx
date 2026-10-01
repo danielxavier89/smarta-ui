@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 import { Field } from "../Field";
 
-const inputShell = cva(
+export const inputShell = cva(
   [
     "sui:flex sui:w-full sui:items-center sui:gap-[8px]",
     "sui:rounded-md sui:border sui:border-border sui:bg-surface",

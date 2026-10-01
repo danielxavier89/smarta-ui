@@ -50,7 +50,10 @@ export function Field({
   return (
     <div className={cn("sui:flex sui:flex-col sui:gap-[6px]", className)} {...props}>
       {label && (
-        <Label htmlFor={id} optional={optional}>
+        // `${id}-label`, always: a control whose accessible name has to say
+        // more than the label — a button showing a chosen date range — can
+        // name itself with aria-labelledby="<id>-label <its own value>".
+        <Label id={`${id}-label`} htmlFor={id} optional={optional}>
           {label}
         </Label>
       )}

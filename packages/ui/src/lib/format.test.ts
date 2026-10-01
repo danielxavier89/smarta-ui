@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
 import {
+  parseNumber,
+  parseDate,
+  dateOrder,
+  numberSeparators,
+  isValidDate,
   formatCurrency,
   formatSignedCurrency,
   formatNumber,
@@ -153,5 +158,66 @@ describe("formatRelativeDay", () => {
 
   it("says it in German too", () => {
     expect(formatRelativeDay(at(17, 9), "de-DE", now)).toBe("gestern");
+  });
+});
+
+describe("parseNumber", () => {
+  it("reads German grouping and decimals", () => {
+    expect(parseNumber("1.234,56", "de-DE")).toBe(1234.56);
+    expect(parseNumber("12,5", "de-DE")).toBe(12.5);
+  });
+
+  it("reads English grouping and decimals", () => {
+    expect(parseNumber("1,234.56", "en-GB")).toBe(1234.56);
+  });
+
+  it("accepts a plain space where Portuguese prints a narrow one", () => {
+    expect(parseNumber("12 345,67", "pt-PT")).toBe(12345.67);
+  });
+
+  it("tells empty from invalid", () => {
+    expect(parseNumber("", "de-DE")).toBeNull();
+    expect(parseNumber("  ", "de-DE")).toBeNull();
+    expect(parseNumber("abc", "de-DE")).toBeNaN();
+    expect(parseNumber("1,2,3", "de-DE")).toBeNaN();
+  });
+
+  it("reads a hyphen or a real minus sign", () => {
+    expect(parseNumber("-12,10", "de-DE")).toBe(-12.1);
+    expect(parseNumber("−12,10", "de-DE")).toBe(-12.1);
+  });
+
+  it("knows each locale's separators", () => {
+    expect(numberSeparators("de-DE")).toEqual({ decimal: ",", group: "." });
+    expect(numberSeparators("en-GB")).toEqual({ decimal: ".", group: "," });
+  });
+});
+
+describe("parseDate", () => {
+  const ymd = (d: Date | null) => (isValidDate(d) ? [d.getFullYear(), d.getMonth(), d.getDate()] : null);
+
+  it("reads day-month-year in German and English", () => {
+    expect(ymd(parseDate("25.11.2026", "de-DE"))).toEqual([2026, 10, 25]);
+    expect(ymd(parseDate("25/11/2026", "en-GB"))).toEqual([2026, 10, 25]);
+  });
+
+  it("takes any separator and a two-digit year", () => {
+    expect(ymd(parseDate("3-6-26", "de-DE"))).toEqual([2026, 5, 3]);
+  });
+
+  /** A date that rolls over is a typo, not a date in the next month. */
+  it("rejects dates that do not exist instead of rolling them over", () => {
+    expect(isValidDate(parseDate("31.02.2026", "de-DE"))).toBe(false);
+    expect(isValidDate(parseDate("25.13.2026", "de-DE"))).toBe(false);
+  });
+
+  it("tells empty from invalid", () => {
+    expect(parseDate("", "de-DE")).toBeNull();
+    expect(isValidDate(parseDate("next week", "de-DE"))).toBe(false);
+  });
+
+  it("knows each locale's order", () => {
+    expect(dateOrder("de-DE")).toEqual({ order: ["day", "month", "year"], separator: "." });
+    expect(dateOrder("en-GB").order).toEqual(["day", "month", "year"]);
   });
 });

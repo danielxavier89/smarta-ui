@@ -104,6 +104,11 @@ async function run(job) {
   try {
     await page.goto(`http://localhost:${port}/iframe.html?id=${s.id}&viewMode=story&globals=product:${product};theme:${theme}`, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    // Stories with a play function (the Open ones) are checked after it has run,
+    // so the popover being audited is actually on the page.
+    await page
+      .waitForFunction(() => ["finished", "completed", "errored", "aborted"].includes(window.__STORYBOOK_PREVIEW__?.currentRender?.phase), null, { timeout: 5000 })
+      .catch(() => {});
 
     const crashed = await page.evaluate(() => document.body.classList.contains("sb-show-errordisplay"));
     if (crashed) {
