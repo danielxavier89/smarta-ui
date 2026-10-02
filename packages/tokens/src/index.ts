@@ -161,7 +161,7 @@ export const SCALE_TOKENS: TokenGroup[] = [
   },
   {
     title: "Elevation",
-    note: "Tinted by --shadow-color, so a shadow is plum in the webapp and neutral in the backoffice.",
+    note: "Tinted by --shadow-color, so a shadow is Deep Purple in the webapp and neutral in the backoffice.",
     tokens: [
       { name: "shadow-xs", utility: "shadow-xs", use: "A hairline lift on a hovered card." },
       { name: "shadow-sm", utility: "shadow-sm", use: "Sticky headers, toolbars." },

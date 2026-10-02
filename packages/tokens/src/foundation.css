@@ -75,7 +75,7 @@
   --radius-full: 999px;  /* pills, avatars, icon buttons */
 
   /* --- Elevation -------------------------------------------------------
-     Built from --shadow-color, which is plum-tinted in the webapp and neutral
+     Built from --shadow-color, which is Deep Purple–tinted in the webapp and neutral
      in the backoffice, so a shadow belongs to its product without any
      component knowing there are two. */
   --shadow-xs:    0 1px 2px   rgb(var(--shadow-color) / 0.05);

@@ -30,7 +30,7 @@ export const WrappingYourOwnControl: Story = {
         {(ids) => (
           <input
             type="color"
-            defaultValue="#9B3F92"
+            defaultValue="#280028"
             className="sui:h-[var(--control-height-md)] sui:w-[64px] sui:rounded-md sui:border sui:border-border sui:bg-surface sui:p-[3px]"
             {...ids}
           />

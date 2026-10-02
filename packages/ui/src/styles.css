@@ -67,6 +67,8 @@
    piecewise import does not. A visual diff found the Form recipe's primary
    button sitting beside Cancel instead of at the far end of the row. */
 @source "./recipes";
+/* The mockups, for the same reason: whole pages with layout classes of their own. */
+@source "./mockups";
 
 /* `touch:` — a coarse pointer, which in practice means a finger.
 

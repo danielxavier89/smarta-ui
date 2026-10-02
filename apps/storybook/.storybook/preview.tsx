@@ -17,7 +17,7 @@ const globalTypes = {
       title: "Product",
       icon: "component",
       items: [
-        { value: "webapp", title: "Webapp", right: "plum" },
+        { value: "webapp", title: "Webapp", right: "deep purple" },
         { value: "backoffice", title: "Backoffice", right: "grey" },
       ],
       dynamicTitle: true,
@@ -227,6 +227,8 @@ const preview: Preview = {
           "Containers",
           "Navigation",
           "Overlays",
+          // Last: whole pages built from everything above, with sample data.
+          "Mockups",
         ],
       },
     },

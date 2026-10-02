@@ -3,7 +3,7 @@
 Three layers, in this order. The order is the whole design.
 
 ```
-primitives.css   raw ramps            --p-plum-600, --p-grey-800, --p-green-tint
+primitives.css   raw ramps            --p-purple-900, --p-grey-800, --p-green-tint
 semantic.css     jobs, per product    --canvas, --fg-muted, --accent, --ok-bg
 foundation.css   non-colour scales    type, radius, elevation, density, layering
 theme.css        Tailwind bridge      --color-canvas: var(--canvas)
@@ -12,7 +12,7 @@ reset.css        page-level defaults  body, focus, reduced motion, touch targets
 
 ## Why three layers
 
-A component that reads `--p-plum-600` is hardcoded to the webapp in light mode.
+A component that reads `--p-purple-900` is hardcoded to the webapp in light mode.
 A component that reads `--fg-muted` is not. The primitive layer exists so that
 the semantic layer has something to point at — and so that "is this component
 themeable?" is answerable by grep.
@@ -38,16 +38,17 @@ renders something coherent rather than unstyled.
 
 | | webapp | backoffice |
 |---|---|---|
-| Brand | plum + magenta | grayscale |
-| Accent in dark | light magenta, dark text on it | near-white, dark text on it |
-| Links | no underline | **underlined** — no hue left to signal with |
+| Brand | Deep Purple on light grey | grayscale |
+| Accent in dark | Lavender, Deep Purple text on it | near-white, dark text on it |
+| Links | underlined — Deep Purple links in Deep Purple text | **underlined** — no hue left to signal with |
 | Control heights | 30 / 36 / 42 | 28 / 34 / 40 |
 | Row density | 12 × 20 | 10 × 16 |
-| Shadow tint | plum | neutral |
+| Shadow tint | Deep Purple | neutral |
 | Status colours | identical — meaning, not brand |
 
-Only one of these is a *behaviour* rather than a value: `--link-decoration`. That is
-deliberate. When the two products genuinely need to behave differently, add a token
+`--link-decoration` is the one token that is a *behaviour* rather than a value. It
+happens to be `underline` in both products now — the webapp's links are Deep Purple
+in Deep Purple text — but it stays a token. That is deliberate. When the two products genuinely need to behave differently, add a token
 rather than a branch, so components never ask which product they are in.
 
 ## Accessibility notes baked into the values

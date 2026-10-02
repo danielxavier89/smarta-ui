@@ -19,8 +19,8 @@ addons.setConfig({
  *
  * The manager and the preview are two separate bundles: the toolbars set
  * `globals` in the preview, and the manager's own chrome knows nothing about
- * them. So the sidebar sat in webapp plum while a backoffice story rendered
- * beside it, which reads as though plum were the library's colour and grey
+ * them. So the sidebar sat in webapp purple while a backoffice story rendered
+ * beside it, which reads as though purple were the library's colour and grey
  * were a variant of it. It is the other way round — neither is the library's
  * colour, which is the whole point of the token layer.
  *
@@ -39,7 +39,7 @@ addons.setConfig({
  * same value costs nothing.
  *
  * The first paint is handled earlier still, in manager-head.html, so there is
- * no plum flash before any of this runs.
+ * no purple flash before any of this runs.
  */
 addons.register("smarta/product-chrome", (api) => {
   const apply = (payload?: { globals?: Record<string, unknown> }) => {

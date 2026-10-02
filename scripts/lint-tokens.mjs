@@ -3,7 +3,7 @@
  * Fails if a component contains a colour.
  *
  * This is the mechanism behind "components use tokens, never hardcoded values".
- * The moment a component contains #9B3F92 it belongs to the webapp in light
+ * The moment a component contains #280028 it belongs to the webapp in light
  * mode, and the library quietly becomes two libraries. Grep is the enforcement.
  *
  * Token files are exempt — defining the colours is their job.

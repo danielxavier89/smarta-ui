@@ -4,7 +4,7 @@ The shared design system for the two smarta products: the client-facing **webapp
 and the internal **backoffice**.
 
 One set of components, one set of tokens, two brands and two modes. A `<Button>`
-renders plum in the webapp and graphite in the backoffice, in light or dark, with
+renders Deep Purple in the webapp and graphite in the backoffice, in light or dark, with
 no conditional anywhere in the component — because no component in this repository
 contains a colour.
 
@@ -67,8 +67,8 @@ to Single on every load, so a link someone pastes you cannot leave you staring a
 four panels with no idea why. Storybook defaults to webapp, light, single.
 
 ```
-data-product="webapp"     data-theme="light"      plum
-data-product="webapp"     data-theme="dark"       plum, inverted
+data-product="webapp"     data-theme="light"      Deep Purple
+data-product="webapp"     data-theme="dark"       Deep Purple, inverted to Lavender
 data-product="backoffice" data-theme="light"      grayscale
 data-product="backoffice" data-theme="dark"       grayscale, inverted
 ```
@@ -273,7 +273,7 @@ Formik is an optional peer dependency: a product that never imports
 **Components use tokens, never hardcoded values.**
 
 Not a style preference — it is the mechanism. The moment a component contains
-`#9B3F92` it belongs to the webapp in light mode, and the library becomes two
+`#280028` it belongs to the webapp in light mode, and the library becomes two
 libraries. Every colour a component may use is listed in
 `packages/tokens/src/theme.css`; anything not in that block cannot be reached
 through a Tailwind utility, which is the enforcement.

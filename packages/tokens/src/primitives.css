@@ -4,40 +4,43 @@
 
    Components must NEVER reference a primitive. They reference semantic tokens
    (layer 2), which are what change between webapp and backoffice, light and
-   dark. If a component reads --plum-600 it is hardcoded to the webapp in light
-   mode, which is the exact bug this file exists to make visible in review.
+   dark. If a component reads --p-purple-900 it is hardcoded to the webapp in
+   light mode, which is the exact bug this file exists to make visible in review.
 
-   Anchors are taken from the shipped prototypes:
-   plum-600 / magenta-600 / the status trio are the real product's colours.
+   The webapp's colours come from the smarta brand guidelines (v1.0, Oct 2024):
+   Deep Purple is the primary; Coral, Lavender, Lime and Lime Extra are the
+   secondaries. The status quartet is the product's own — the brand has none.
    ========================================================================== */
 
 :root {
-  /* --- Plum: the smarta brand neutral. Warm, low-chroma purple. ---------- */
-  --p-plum-50:   #FBF9FB;
-  --p-plum-100:  #F5F0F6;
-  --p-plum-200:  #EEE7EF;
-  --p-plum-300:  #C3B2C8;
-  --p-plum-400:  #9C86A2;
-  --p-plum-500:  #7A5D80;
-  --p-plum-600:  #6B5271;
-  --p-plum-700:  #57405D;
-  --p-plum-800:  #432F4A;
-  --p-plum-900:  #2E2034;
-  --p-plum-950:  #241B2A;
-  --p-plum-1000: #17121A;
+  /* --- Deep Purple: the brand primary. The webapp's fills, links and text.
+     #280028 is the guidelines' primary. Every lighter step is that colour
+     mixed with white, the way the guidelines build their own 90 %…10 % tint
+     strip (p.10). The webapp's grounds are the light greys below, not these:
+     the team wanted no pink tint behind the content. The comment is the
+     share of Deep Purple. */
+  --p-purple-50:   #F9F7F9;   /*  3 % */
+  --p-purple-100:  #F2F0F2;   /*  6 % */
+  --p-purple-150:  #ECE8EC;   /*  9 % */
+  --p-purple-200:  #E5E0E5;   /* 12 % */
+  --p-purple-300:  #C9BFC9;   /* 25 % */
+  --p-purple-400:  #9E8C9E;   /* 45 % */
+  --p-purple-500:  #7E667E;   /* 60 % */
+  --p-purple-600:  #694D69;   /* 70 % */
+  --p-purple-700:  #533353;   /* 80 % */
+  --p-purple-800:  #3E1A3E;   /* 90 % */
+  --p-purple-900:  #280028;   /* Deep Purple */
 
-  /* --- Magenta: the webapp accent. Actions, links, selection. ------------ */
-  --p-magenta-50:  #FDF4FC;
-  --p-magenta-100: #F6EAF5;
-  --p-magenta-200: #FAE4F7;
-  --p-magenta-300: #E9A9E2;
-  --p-magenta-400: #D97BCF;
-  --p-magenta-500: #B455AB;
-  --p-magenta-600: #9B3F92;
-  --p-magenta-700: #8A3D86;
-  --p-magenta-800: #87357F;
-  --p-magenta-900: #5E2559;
-  --p-magenta-950: #2A0E27;
+  /* --- The secondaries, exactly as the guidelines give them (p.11).
+     Lavender is the light fill in dark mode, where the guidelines pair it
+     with Deep Purple; light mode keeps it out, since on a screen it reads
+     pink. Coral and Lime have no job in the UI yet; they are here so a chart
+     or an illustration takes the brand's values instead of inventing its own. */
+  --p-lavender:     #FFE3FF;
+  --p-lavender-50:  #FFF1FF;   /* half Lavender, half white */
+  --p-coral:        #FF9377;
+  --p-lime:         #F0FFAA;
+  --p-lime-extra:   #E6FF64;
 
   /* --- Grey: the backoffice neutral. Deliberately hue-free. --------------
      grey-500 is the quiet text grey and carries the same constraint as the
