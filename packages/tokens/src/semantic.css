@@ -41,12 +41,13 @@
 [data-product="webapp"] {
   color-scheme: light;
 
-  /* Surfaces, back to front */
-  --canvas:          var(--p-plum-50);    /* the page itself */
+  /* Surfaces, back to front. Light grey, not the plum-tinted pinks they
+     were: the team found the muted pink too much. Magenta stays the accent. */
+  --canvas:          var(--p-grey-50);    /* the page itself */
   --surface:         var(--p-white);      /* cards, tables, rows */
   --surface-raised:  var(--p-white);      /* menus, popovers, panels */
-  --surface-sunken:  var(--p-plum-100);   /* wells, segmented tracks */
-  --surface-hover:   #FDFBFD;             /* row and card hover */
+  --surface-sunken:  var(--p-grey-100);   /* wells, segmented tracks */
+  --surface-hover:   #FCFCFC;             /* row and card hover */
 
   /* Text, most to least prominent.
      -faint is DECORATION ONLY: dots, empty icons, hover borders. It does not
@@ -57,15 +58,15 @@
   --fg-faint:        var(--p-plum-300);
 
   /* Lines */
-  --border:          var(--p-plum-200);
-  --border-soft:     var(--p-plum-100);
-  --border-strong:   var(--p-plum-300);
+  --border:          var(--p-grey-200);
+  --border-soft:     var(--p-grey-100);
+  --border-strong:   var(--p-grey-300);
 
   /* Accent — the brand colour used as a FILL (primary buttons, checked states) */
   --accent:          var(--p-magenta-600);
   --accent-hover:    var(--p-magenta-800);
   --accent-fg:       var(--p-white);
-  --accent-soft:     var(--p-magenta-100);
+  --accent-soft:     #F0F0F0;
   --accent-soft-fg:  var(--p-magenta-700);
 
   /* Link — the brand colour used as TEXT on canvas or surface.
@@ -75,13 +76,13 @@
   --link-hover:      var(--p-magenta-800);
   --link-decoration:       none;                /* backoffice underlines instead */
 
-  /* Selection — the nav pill, the chosen row */
-  --selected-bg:     var(--p-magenta-200);
+  /* Selection — the nav pill, the chosen row. A grey pill with magenta text. */
+  --selected-bg:     var(--p-grey-150);
   --selected-fg:     var(--p-magenta-700);
 
   /* Focus */
   --focus-ring:      var(--p-magenta-600);
-  --focus-halo:      var(--p-magenta-100);
+  --focus-halo:      var(--p-grey-200);
 
   /* Inversion — tooltips, and only tooltips so far */
   --inverse-surface: var(--p-plum-950);
@@ -91,8 +92,8 @@
   --overlay:         rgb(67 47 74 / 0.32);
 
   /* Loading placeholder */
-  --skeleton:        var(--p-plum-100);
-  --skeleton-sheen:  var(--p-plum-50);
+  --skeleton:        var(--p-grey-100);
+  --skeleton-sheen:  var(--p-grey-50);
 
   /* Shadows are plum-tinted so they sit in the palette rather than on it */
   --shadow-color:          67 47 74;

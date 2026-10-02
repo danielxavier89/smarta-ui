@@ -27,10 +27,10 @@ export const smartaTheme = create({
   colorPrimary: "#9B3F92",   // --accent
   colorSecondary: "#9B3F92", // selection, active sidebar item
 
-  appBg: "#FBF9FB",          // --canvas
+  appBg: "#FAFAFA",          // --canvas
   appContentBg: "#FFFFFF",   // --surface
   appPreviewBg: "#FFFFFF",
-  appBorderColor: "#EEE7EF", // --border
+  appBorderColor: "#E6E6E6", // --border
   appBorderRadius: 10,       // --radius-md
 
   fontBase: '"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif',
@@ -46,12 +46,12 @@ export const smartaTheme = create({
   barBg: "#FFFFFF",
 
   buttonBg: "#FFFFFF",
-  buttonBorder: "#EEE7EF",
-  booleanBg: "#F5F0F6",      // --surface-sunken
+  buttonBorder: "#E6E6E6",
+  booleanBg: "#F1F1F1",      // --surface-sunken
   booleanSelectedBg: "#FFFFFF",
 
   inputBg: "#FFFFFF",
-  inputBorder: "#EEE7EF",
+  inputBorder: "#E6E6E6",
   inputTextColor: "#432F4A",
   inputBorderRadius: 10,
 });

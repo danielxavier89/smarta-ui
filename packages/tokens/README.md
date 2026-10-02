@@ -38,7 +38,7 @@ renders something coherent rather than unstyled.
 
 | | webapp | backoffice |
 |---|---|---|
-| Brand | plum + magenta | grayscale |
+| Brand | magenta on light grey, plum text | grayscale |
 | Accent in dark | light magenta, dark text on it | near-white, dark text on it |
 | Links | no underline | **underlined** — no hue left to signal with |
 | Control heights | 30 / 36 / 42 | 28 / 34 / 40 |
