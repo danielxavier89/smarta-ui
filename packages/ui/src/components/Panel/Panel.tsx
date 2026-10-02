@@ -70,10 +70,15 @@ export function Panel({
             "sui:inset-x-0 sui:bottom-0 sui:top-auto sui:h-[88dvh] sui:max-w-none",
             "sui:rounded-t-xl sui:border-t sui:border-border sui:shadow-sheet",
             "sui:data-[state=open]:animate-in sui:data-[state=open]:slide-in-from-bottom",
+            "sui:data-[state=closed]:animate-out sui:data-[state=closed]:slide-out-to-bottom",
             // Tablet up: a side panel.
             "sui:sm:inset-y-0 sui:sm:right-0 sui:sm:left-auto sui:sm:h-auto sui:sm:rounded-none sui:sm:rounded-l-none",
             "sui:sm:border-t-0 sui:sm:border-l sui:sm:shadow-panel",
-            "sui:sm:data-[state=open]:slide-in-from-right",
+            // From the right only. The phone's slide-from-bottom above still
+            // applies at this width — the two are separate variables, x and y —
+            // and together they brought the panel in diagonally from the corner.
+            "sui:sm:data-[state=open]:slide-in-from-right sui:sm:data-[state=open]:[--tw-enter-translate-y:0]",
+            "sui:sm:data-[state=closed]:slide-out-to-right sui:sm:data-[state=closed]:[--tw-exit-translate-y:0]",
             width === "wide"
               ? "sui:sm:w-[min(760px,92vw)]"
               : "sui:sm:w-[min(var(--panel-width),88vw)]",
