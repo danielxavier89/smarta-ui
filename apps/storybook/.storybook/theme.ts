@@ -24,35 +24,36 @@ export const smartaTheme = create({
   brandUrl: "/",
   brandTarget: "_self",
 
-  colorPrimary: "#9B3F92",   // --accent
-  colorSecondary: "#9B3F92", // selection, active sidebar item
+  colorPrimary: "#280028",   // --accent, Deep Purple
+  colorSecondary: "#280028", // selection, active sidebar item
 
-  appBg: "#FBF9FB",          // --canvas
+  appBg: "#F9F7F9",          // --canvas
   appContentBg: "#FFFFFF",   // --surface
   appPreviewBg: "#FFFFFF",
-  appBorderColor: "#EEE7EF", // --border
+  appBorderColor: "#E5E0E5", // --border
   appBorderRadius: 10,       // --radius-md
 
-  fontBase: '"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif',
+  // Poppins, the guidelines' fallback for Euclid Circular A, which is licensed.
+  fontBase: '"Euclid Circular A", Poppins, Arial, ui-sans-serif, system-ui, sans-serif',
   fontCode: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
 
-  textColor: "#432F4A",      // --fg
+  textColor: "#280028",      // --fg
   textInverseColor: "#FFFFFF",
-  textMutedColor: "#7A5D80", // --fg-subtle
+  textMutedColor: "#694D69", // --fg-subtle
 
-  barTextColor: "#6B5271",   // --fg-muted
-  barHoverColor: "#9B3F92",
-  barSelectedColor: "#9B3F92",
+  barTextColor: "#533353",   // --fg-muted
+  barHoverColor: "#280028",
+  barSelectedColor: "#280028",
   barBg: "#FFFFFF",
 
   buttonBg: "#FFFFFF",
-  buttonBorder: "#EEE7EF",
-  booleanBg: "#F5F0F6",      // --surface-sunken
+  buttonBorder: "#E5E0E5",
+  booleanBg: "#F2F0F2",      // --surface-sunken
   booleanSelectedBg: "#FFFFFF",
 
   inputBg: "#FFFFFF",
-  inputBorder: "#EEE7EF",
-  inputTextColor: "#432F4A",
+  inputBorder: "#E5E0E5",
+  inputTextColor: "#280028",
   inputBorderRadius: 10,
 });
 

@@ -127,9 +127,10 @@
   flex: none;
 }
 
-/* A link is underlined in the backoffice and not in the webapp, because a
-   grayscale palette has no hue left to say "this is a link" with. The rule
-   lives on a token so a component never asks which product it is in. */
+/* Links are underlined in both products now — grayscale has no hue left to
+   say "this is a link" with, and the webapp's links are Deep Purple in Deep
+   Purple text. The rule still lives on a token, so a component never asks
+   which product it is in. */
 .smarta-link {
   color: var(--link);
   text-decoration: var(--link-decoration);
@@ -138,6 +139,39 @@
 .smarta-link:hover {
   color: var(--link-hover);
   text-decoration: underline;
+}
+
+/* The navigation's ground: AppShell's sidebar, top bar and drawer.
+
+   Deep Purple in the webapp, so every token a component reads inside it has
+   to change with it — an IconButton or an Avatar a product drops into the top
+   bar must not paint Deep Purple glyphs on a Deep Purple bar. Rather than a
+   "nav" variant of everything, the scope re-points the ordinary tokens to the
+   --nav-* ones, and whatever is inside reads them as usual. In the backoffice
+   the --nav-* values are its ordinary ones, so the scope changes nothing.
+
+   The --nav-* tokens are literals in semantic.css, never var(--fg): set here,
+   --fg: var(--nav-fg) with --nav-fg: var(--fg) would be a cycle. */
+.sui-nav-surface {
+  background-color: var(--nav-bg);
+  color: var(--nav-fg);
+  --fg: var(--nav-fg);
+  --fg-muted: var(--nav-fg-muted);
+  --fg-subtle: var(--nav-fg-subtle);
+  --fg-faint: var(--nav-border);
+  --surface: var(--nav-bg);
+  --surface-raised: var(--nav-bg);
+  --surface-hover: var(--nav-hover);
+  --surface-sunken: var(--nav-sunken);
+  --border: var(--nav-border);
+  --border-soft: var(--nav-border);
+  --selected-bg: var(--nav-selected-bg);
+  --selected-fg: var(--nav-selected-fg);
+  --accent-soft: var(--nav-selected-bg);
+  --accent-soft-fg: var(--nav-selected-fg);
+  --link: var(--nav-fg);
+  --link-hover: var(--nav-fg);
+  --focus-ring: var(--nav-focus-ring);
 }
 
 /* Hover never fires on touch, so anything revealed by hover is pinned to a

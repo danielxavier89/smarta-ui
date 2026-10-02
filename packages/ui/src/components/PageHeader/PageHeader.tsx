@@ -96,7 +96,7 @@ export function PageHeader({
       <div className="sui:flex sui:flex-wrap sui:items-end sui:justify-between sui:gap-x-[16px] sui:gap-y-[12px]">
         <div className="sui:min-w-0 sui:flex-1 sui:basis-[280px]">
           <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-x-[10px] sui:gap-y-[4px]">
-            <h1 className="sui:m-0 sui:text-xl sui:font-semibold sui:tracking-tight sui:text-fg">{title}</h1>
+            <h1 className="sui:m-0 sui:font-display sui:text-xl sui:font-semibold sui:tracking-tight sui:text-fg">{title}</h1>
             {meta}
           </div>
           {description && <p className="sui:m-0 sui:mt-[2px] sui:text-sm sui:text-fg-subtle">{description}</p>}

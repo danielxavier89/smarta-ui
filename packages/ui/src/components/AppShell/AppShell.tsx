@@ -83,7 +83,9 @@ export function AppShell({ brand, nav, navFooter, topBar, children, mainId = "ma
           aria-label={labels.mainNavigation}
           className={cn(
             "sui:sticky sui:top-0 sui:hidden sui:h-dvh sui:w-[var(--sidebar-width)] sui:shrink-0 sui:flex-col",
-            "sui:border-r sui:border-border sui:bg-surface sui:md:flex",
+            // sui-nav-surface (base.css): Deep Purple in the webapp, and every
+            // token inside re-pointed to match. Plain surface in the backoffice.
+            "sui-nav-surface sui:border-r sui:border-border sui:md:flex",
           )}
         >
           {brand && <div className="sui:flex sui:h-[var(--topbar-height)] sui:items-center sui:px-[20px]">{brand}</div>}
@@ -94,7 +96,7 @@ export function AppShell({ brand, nav, navFooter, topBar, children, mainId = "ma
           <div
             className={cn(
               "sui:sticky sui:top-0 sui:z-[var(--z-sticky)] sui:flex sui:h-[var(--topbar-height)] sui:items-center sui:gap-[12px]",
-              "sui:border-b sui:border-border sui:bg-canvas/90 sui:px-[16px] sui:backdrop-blur sui:md:px-[24px]",
+              "sui-nav-surface sui:border-b sui:border-border sui:px-[16px] sui:md:px-[24px]",
               !topBar && "sui:md:hidden",
             )}
           >
@@ -110,7 +112,7 @@ export function AppShell({ brand, nav, navFooter, topBar, children, mainId = "ma
                     aria-describedby={undefined}
                     className={cn(
                       "sui:fixed sui:inset-y-0 sui:left-0 sui:z-[var(--z-panel)] sui:flex sui:w-[min(var(--sidebar-width),85vw)] sui:flex-col",
-                      "sui:border-r sui:border-border sui:bg-surface-raised sui:shadow-panel sui:focus:outline-none",
+                      "sui-nav-surface sui:border-r sui:border-border sui:shadow-panel sui:focus:outline-none",
                       "sui:data-[state=open]:animate-in sui:data-[state=open]:slide-in-from-left",
                     )}
                   >
@@ -173,13 +175,14 @@ export const NavItem = React.forwardRef<HTMLAnchorElement, NavItemProps>(functio
       className={cn(
         "sui:flex sui:h-[36px] sui:items-center sui:gap-[10px] sui:rounded-md sui:px-[10px] sui:text-sm sui:no-underline",
         "sui:text-fg-muted sui:hover:bg-surface-hover sui:hover:text-fg",
-        active && "sui:bg-accent-soft sui:font-medium sui:text-fg sui:hover:bg-accent-soft",
+        // The selected pill: Lime Extra on Deep Purple in the webapp, grey in the backoffice.
+        active && "sui:bg-selected-bg sui:font-medium sui:text-selected-fg sui:hover:bg-selected-bg sui:hover:text-selected-fg",
         className,
       )}
       {...props}
     >
       {icon && (
-        <span aria-hidden className={cn("sui:grid sui:shrink-0 sui:place-items-center", active ? "sui:text-accent" : "sui:text-fg-subtle")}>
+        <span aria-hidden className={cn("sui:grid sui:shrink-0 sui:place-items-center", active ? "sui:text-selected-fg" : "sui:text-fg-subtle")}>
           {icon}
         </span>
       )}

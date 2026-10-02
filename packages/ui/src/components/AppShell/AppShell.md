@@ -40,6 +40,7 @@ The frame every screen sits in: a skip link, the navigation, a top bar, and the 
 ## States
 
 - **Desktop** — a fixed sidebar at `--sidebar-width`, the page beside it.
+- **Webapp** — sidebar, top bar and drawer on Deep Purple, the current page a Lime Extra pill. **Backoffice** — plain surface, a grey pill. This is the clearest difference between the two products at a glance.
 - **Phone** — a top bar with a menu button; the navigation opens as a drawer and closes when an item is followed.
 - **Keyboard** — the first Tab stop is "Skip to content", visible only when focused.
 
@@ -50,6 +51,7 @@ The frame every screen sits in: a skip link, the navigation, a top bar, and the 
 3. **Nav items are links.** They go somewhere, and they open in a new tab.
 4. **Counts are things waiting**, not totals. "Receipts 12" means twelve to look at.
 5. **Following an item closes the drawer.** The drawer is a way to get somewhere, not a place.
+6. **Anything in the top bar or sidebar reads the ordinary tokens.** `.sui-nav-surface` re-points them to the navigation's, so an `IconButton` or `Avatar` passed as `topBar` is right on Deep Purple without a variant. Never colour something there by hand.
 
 ## Do and don't
 

@@ -93,6 +93,11 @@ const PAIRS = [
   ["fg-subtle", "surface-sunken"], ["fg-subtle", "surface-hover"], ["fg-subtle", "accent-soft"],
   ["fg-subtle", "selected-bg"], ["fg-muted", "surface-sunken"], ["fg-muted", "accent-soft"],
   ["fg-muted", "selected-bg"],
+  // AppShell's navigation, through .sui-nav-surface. Deep Purple in the webapp,
+  // so none of the ordinary pairs above say anything about it.
+  ["nav-fg", "nav-bg"], ["nav-fg-muted", "nav-bg"], ["nav-fg-subtle", "nav-bg"],
+  ["nav-fg", "nav-hover"], ["nav-fg-muted", "nav-hover"], ["nav-fg-muted", "nav-sunken"],
+  ["nav-selected-fg", "nav-selected-bg"],
 ];
 
 const MIN = 4.5;
