@@ -24,8 +24,8 @@ export const smartaTheme = create({
   brandUrl: "/",
   brandTarget: "_self",
 
-  colorPrimary: "#9B3F92",   // --accent
-  colorSecondary: "#9B3F92", // selection, active sidebar item
+  colorPrimary: "#280028",   // --accent
+  colorSecondary: "#280028", // selection, active sidebar item
 
   appBg: "#FAFAFA",          // --canvas
   appContentBg: "#FFFFFF",   // --surface
@@ -36,13 +36,13 @@ export const smartaTheme = create({
   fontBase: '"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif',
   fontCode: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
 
-  textColor: "#432F4A",      // --fg
+  textColor: "#280028",      // --fg
   textInverseColor: "#FFFFFF",
-  textMutedColor: "#7A5D80", // --fg-subtle
+  textMutedColor: "#694D69", // --fg-subtle
 
-  barTextColor: "#6B5271",   // --fg-muted
-  barHoverColor: "#9B3F92",
-  barSelectedColor: "#9B3F92",
+  barTextColor: "#533353",   // --fg-muted
+  barHoverColor: "#280028",
+  barSelectedColor: "#280028",
   barBg: "#FFFFFF",
 
   buttonBg: "#FFFFFF",
@@ -52,7 +52,7 @@ export const smartaTheme = create({
 
   inputBg: "#FFFFFF",
   inputBorder: "#E6E6E6",
-  inputTextColor: "#432F4A",
+  inputTextColor: "#280028",
   inputBorderRadius: 10,
 });
 

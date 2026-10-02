@@ -43,7 +43,7 @@ const config: StorybookConfig = {
        * "./Thing" in src. Two module graphs, so two ThemeContexts and two Toast
        * contexts: every Toast story threw "useToast must be used inside
        * <ToastProvider>", and every portalled Panel, Dialog and menu rendered
-       * in the webapp's plum palette inside the backoffice, because ThemeScope
+       * in the webapp's purple palette inside the backoffice, because ThemeScope
        * read the default context instead of the one the provider set. The build
        * was green and all 103 tests passed; it took a screenshot to see it.
        *

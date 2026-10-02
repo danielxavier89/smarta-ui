@@ -6,7 +6,7 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 One component library, two products.
 
-The client-facing **webapp** is plum. The internal **backoffice** is grayscale. Both
+The client-facing **webapp** is Deep Purple. The internal **backoffice** is grayscale. Both
 run in light and dark. That is four combinations every component has to be right in —
 and no component in this library contains a single colour, which is what makes that
 possible without a branch anywhere.
@@ -25,7 +25,7 @@ you look at one state at a time.
 ## How the tokens resolve
 
 ```
-data-product="webapp"      →  plum brand
+data-product="webapp"      →  Deep Purple brand
 data-product="backoffice"  →  grayscale brand
 data-theme="dark"          →  inverted
 data-theme absent          →  follow the operating system
@@ -42,13 +42,13 @@ Three layers sit behind that:
     <tr><th align="left">Layer</th><th align="left">Example</th><th align="left">Who reads it</th></tr>
   </thead>
   <tbody>
-    <tr><td>Primitives</td><td><code>--p-plum-600</code></td><td>the semantic layer, and nothing else</td></tr>
+    <tr><td>Primitives</td><td><code>--p-purple-900</code></td><td>the semantic layer, and nothing else</td></tr>
     <tr><td>Semantics</td><td><code>--fg-muted</code>, <code>--accent</code>, <code>--ok-bg</code></td><td><b>components</b></td></tr>
     <tr><td>Tailwind bridge</td><td><code>bg-canvas</code>, <code>text-fg-muted</code></td><td>components, as utilities</td></tr>
   </tbody>
 </table>
 
-A component that reads `--p-plum-600` is hardcoded to the webapp in light mode. A
+A component that reads `--p-purple-900` is hardcoded to the webapp in light mode. A
 component that reads `--fg-muted` is not. See **Foundations → Design tokens** for
 every token and what it is for.
 
