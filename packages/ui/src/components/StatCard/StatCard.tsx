@@ -66,7 +66,7 @@ export function StatCard({
       {loading ? (
         <div className="sui:mt-[6px] sui:h-[30px] sui:w-[90px] sui:animate-[skeleton_1.4s_ease-in-out_infinite] sui:rounded-sm sui:bg-skeleton" />
       ) : (
-        <p className={cn("sui:m-0 sui:mt-[2px] sui:font-display sui:text-2xl sui:font-semibold sui:tracking-tight sui:tabular-nums", tones)}>
+        <p className={cn("sui:m-0 sui:mt-[2px] sui:text-2xl sui:font-semibold sui:tracking-tight sui:tabular-nums", tones)}>
           {value}
         </p>
       )}

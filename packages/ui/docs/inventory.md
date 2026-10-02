@@ -132,7 +132,7 @@ The only colours a component may read. Anything not listed here does not exist.
 | `--accent` | `bg-accent` | Primary button fills, checked checkboxes, the active tab rule. |
 | `--accent-hover` | `bg-accent-hover` | Hover state of an accent fill. |
 | `--accent-fg` | `bg-accent-fg` | Text on an accent fill. |
-| `--accent-soft` | `bg-accent-soft` | A tinted accent fill: selected rows, avatar backgrounds, quiet emphasis. Lime in the webapp. |
+| `--accent-soft` | `bg-accent-soft` | A tinted accent fill: selected rows, avatar backgrounds, quiet emphasis. |
 | `--accent-soft-fg` | `bg-accent-soft-fg` | Text on accent-soft. |
 | `--link` | `bg-link` | Brand colour used as text on canvas or surface. |
 | `--link-hover` | `bg-link-hover` | Hover state of link text. |
@@ -141,25 +141,10 @@ The only colours a component may read. Anything not listed here does not exist.
 
 | Token | Utility | Use |
 |---|---|---|
-| `--selected-bg` | `bg-selected-bg` | The nav pill, the current page, ::selection. Lime Extra in the webapp. |
+| `--selected-bg` | `bg-selected-bg` | The nav pill, the chosen row, ::selection. |
 | `--selected-fg` | `bg-selected-fg` | Text inside a selected surface. |
 | `--focus-ring` | `bg-focus-ring` | The 2px focus outline. One treatment system-wide. |
 | `--focus-halo` | `bg-focus-halo` | The 3px soft ring behind a focused control that has its own fill. |
-
-### Navigation
-
-| Token | Utility | Use |
-|---|---|---|
-| `--nav-bg` | `bg-—` | The navigation's ground. |
-| `--nav-fg` | `bg-—` | Its text, and --fg inside it. |
-| `--nav-fg-muted` | `bg-—` | Unselected items; --fg-muted inside it. |
-| `--nav-fg-subtle` | `bg-—` | Group labels and icons; --fg-subtle inside it. |
-| `--nav-hover` | `bg-—` | Item hover; --surface-hover inside it. |
-| `--nav-sunken` | `bg-—` | Count pills; --surface-sunken inside it. |
-| `--nav-border` | `bg-—` | Its dividers and edge. |
-| `--nav-selected-bg` | `bg-—` | The current page's pill. Lime Extra in the webapp. |
-| `--nav-selected-fg` | `bg-—` | Text on that pill. |
-| `--nav-focus-ring` | `bg-—` | The focus ring inside it, which Deep Purple would hide. |
 
 ### Status
 
@@ -209,8 +194,6 @@ The only colours a component may read. Anything not listed here does not exist.
 
 | Token | Utility | Use |
 |---|---|---|
-| `--font-sans` | `font-sans` | Euclid Circular A → Poppins → Arial. Everything, by default. |
-| `--font-display` | `font-display` | Ulm Grotesk, else the text face. Page titles and headline figures only. |
 | `--text-2xs` | `text-2xs` | 11px — badge counts, superscript meta. |
 | `--text-xs` | `text-xs` | 12px — chips, table meta, captions. |
 | `--text-sm` | `text-sm` | 13px — buttons, tabs, dense table cells. |

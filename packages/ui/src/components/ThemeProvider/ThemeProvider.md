@@ -28,7 +28,7 @@ Owns a theme scope: which product's tokens resolve, and in which mode.
 ## How resolution works
 
 ```
-data-product  →  which brand    (Deep Purple / grayscale)
+data-product  →  which brand    (plum / grayscale)
 data-theme    →  which mode     (light / dark; absent = system)
 ```
 

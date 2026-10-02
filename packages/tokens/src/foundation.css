@@ -15,21 +15,17 @@
 
 @theme {
   /* --- Type ------------------------------------------------------------
-     The brand guidelines (p.14–16): Euclid Circular A for text, falling back
-     to Poppins and then Arial; Ulm Grotesk — the wordmark's face — for short
-     headings and big numerals, --font-display below. Body at 400 and 500; 600
-     is reserved for headings and the one or two places that mean "unread".
-     There is no 700 anywhere.
+     Plus Jakarta Sans at 400 and 500. 600 is reserved for headings and the
+     one or two places that mean "unread". There is no 700 anywhere.
 
-     The library does not load either font. Both are licensed, and the library
-     ships no font files. It names them and falls back, through
-     --smarta-font-product, to whatever the product is already using.
+     The library does not load the font. It names it and then falls back,
+     through --smarta-font-product, to whatever the product is already using.
 
-     This is deliberate, and it is the smaller of the two options. A font that
-     only Storybook loads leaves a product with a stylesheet asking for a face
-     nobody fetched, silently rendering in the system font while every
-     measurement here was drawn against something else. Loading it ourselves
-     would have fixed the metrics
+     This is deliberate, and it is the smaller of the two options. The font was
+     only ever loaded by Storybook, from Google Fonts — so a product importing
+     this library got a stylesheet asking for a face nobody had fetched, and
+     silently rendered in the system font while every measurement here was
+     drawn against Jakarta. Loading it ourselves would have fixed the metrics
      and broken other things: a request to fonts.gstatic.com from inside a
      component library is a CSP entry the backoffice has to add and a
      third-party request the privacy review has to sign off, neither of which
@@ -38,19 +34,14 @@
      So a product decides, in one line:
 
        :root { --smarta-font-product: "Inter", sans-serif; }   inherit
-       :root { --smarta-font-product: "Euclid Circular A"; }   self-hosted
+       :root { --smarta-font-product: "Plus Jakarta Sans"; }   self-hosted
 
      During the migration the first is the right answer: the library matches
      the page it is on instead of introducing a second typeface halfway down
      a screen. See packages/tokens/README.md. */
-  --font-sans: var(--smarta-font-product, "Euclid Circular A"), Poppins, Arial,
-               ui-sans-serif, system-ui, -apple-system,
-               "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  /* Ulm Grotesk where the product has it; otherwise exactly the text face, so
-     a page without it never shows a third typeface. The guidelines limit it to
-     headings of up to three lines and numerals — PageHeader's title and
-     StatCard's figure. */
-  --font-display: var(--smarta-font-display, "Ulm Grotesk"), var(--sui-font-sans);
+  --font-sans: var(--smarta-font-product, "Plus Jakarta Sans"), ui-sans-serif,
+               system-ui, -apple-system,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
                "Liberation Mono", monospace;
 
@@ -84,7 +75,7 @@
   --radius-full: 999px;  /* pills, avatars, icon buttons */
 
   /* --- Elevation -------------------------------------------------------
-     Built from --shadow-color, which is Deep Purple–tinted in the webapp and neutral
+     Built from --shadow-color, which is plum-tinted in the webapp and neutral
      in the backoffice, so a shadow belongs to its product without any
      component knowing there are two. */
   --shadow-xs:    0 1px 2px   rgb(var(--shadow-color) / 0.05);

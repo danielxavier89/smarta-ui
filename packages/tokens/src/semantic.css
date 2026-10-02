@@ -4,7 +4,7 @@
 
    A token is named for the JOB it does (--canvas, --fg-muted),
    never for the colour it happens to be. That is what lets one <Button/>
-   render Deep Purple on the webapp and graphite in the backoffice without a single
+   render plum on the webapp and graphite in the backoffice without a single
    conditional in the component.
 
    Resolution
@@ -41,153 +41,113 @@
 [data-product="webapp"] {
   color-scheme: light;
 
-  /* Surfaces, back to front. Near-neutral: a few per cent of Deep Purple. */
-  --canvas:          var(--p-purple-50);  /* the page itself */
+  /* Surfaces, back to front */
+  --canvas:          var(--p-plum-50);    /* the page itself */
   --surface:         var(--p-white);      /* cards, tables, rows */
   --surface-raised:  var(--p-white);      /* menus, popovers, panels */
-  --surface-sunken:  var(--p-purple-100); /* wells, segmented tracks */
-  --surface-hover:   #FBFAFB;             /* row and card hover */
+  --surface-sunken:  var(--p-plum-100);   /* wells, segmented tracks */
+  --surface-hover:   #FDFBFD;             /* row and card hover */
 
-  /* Text, most to least prominent. Body text is Deep Purple itself, as in
-     every page of the guidelines.
+  /* Text, most to least prominent.
      -faint is DECORATION ONLY: dots, empty icons, hover borders. It does not
      reach 4.5:1 anywhere and must never carry a word the user has to read. */
-  --fg:              var(--p-purple-900);
-  --fg-muted:        var(--p-purple-700);
-  --fg-subtle:       var(--p-purple-600);
-  --fg-faint:        var(--p-purple-300);
+  --fg:              var(--p-plum-800);
+  --fg-muted:        var(--p-plum-600);
+  --fg-subtle:       var(--p-plum-500);
+  --fg-faint:        var(--p-plum-300);
 
   /* Lines */
-  --border:          var(--p-purple-200);
-  --border-soft:     var(--p-purple-100);
-  --border-strong:   var(--p-purple-300);
+  --border:          var(--p-plum-200);
+  --border-soft:     var(--p-plum-100);
+  --border-strong:   var(--p-plum-300);
 
-  /* Accent — the brand colour used as a FILL (primary buttons, checked states).
-     Deep Purple, with white. Its hover is a step lighter: there is no darker
-     step left, and a hover that moves is what matters. */
-  --accent:          var(--p-purple-900);
-  --accent-hover:    var(--p-purple-800);
+  /* Accent — the brand colour used as a FILL (primary buttons, checked states) */
+  --accent:          var(--p-magenta-600);
+  --accent-hover:    var(--p-magenta-800);
   --accent-fg:       var(--p-white);
-  /* Lime, not Lavender: the tinted fill behind a selected row, option or
-     avatar. The brand pairs Lime with Deep Purple (p.12), and it keeps the
-     webapp's selection unmistakably different from the backoffice's grey. */
-  --accent-soft:     var(--p-lime);
-  --accent-soft-fg:  var(--p-purple-900);
+  --accent-soft:     var(--p-magenta-100);
+  --accent-soft-fg:  var(--p-magenta-700);
 
   /* Link — the brand colour used as TEXT on canvas or surface.
      Split from --accent on purpose: a fill and a glyph need different
-     contrast against different backgrounds, and in dark mode they diverge hard.
-     Underlined here too now: a Deep Purple link in Deep Purple body text has
-     no hue left to tell it apart, exactly the backoffice's situation. */
-  --link:            var(--p-purple-900);
-  --link-hover:      var(--p-purple-700);
-  --link-decoration:       underline;
+     contrast against different backgrounds, and in dark mode they diverge hard. */
+  --link:            var(--p-magenta-600);
+  --link-hover:      var(--p-magenta-800);
+  --link-decoration:       none;                /* backoffice underlines instead */
 
-  /* Selection — the nav pill, the current page. Lime Extra, the brand's
-     accent "for special moments": the one thing on a screen saying "here". */
-  --selected-bg:     var(--p-lime-extra);
-  --selected-fg:     var(--p-purple-900);
+  /* Selection — the nav pill, the chosen row */
+  --selected-bg:     var(--p-magenta-200);
+  --selected-fg:     var(--p-magenta-700);
 
   /* Focus */
-  --focus-ring:      var(--p-purple-900);
-  --focus-halo:      var(--p-purple-150);
+  --focus-ring:      var(--p-magenta-600);
+  --focus-halo:      var(--p-magenta-100);
 
   /* Inversion — tooltips, and only tooltips so far */
-  --inverse-surface: var(--p-purple-900);
+  --inverse-surface: var(--p-plum-950);
   --inverse-fg:      var(--p-white);
 
   /* Scrim behind a panel or dialog */
-  --overlay:         rgb(40 0 40 / 0.32);
+  --overlay:         rgb(67 47 74 / 0.32);
 
   /* Loading placeholder */
-  --skeleton:        var(--p-purple-100);
-  --skeleton-sheen:  var(--p-purple-50);
+  --skeleton:        var(--p-plum-100);
+  --skeleton-sheen:  var(--p-plum-50);
 
-  /* Shadows are Deep Purple–tinted so they sit in the palette rather than on it */
-  --shadow-color:          40 0 40;
-
-  /* Navigation — AppShell's sidebar and top bar, through .sui-nav-surface in
-     base.css, which re-points the ordinary tokens to these inside it. The
-     webapp's navigation is Deep Purple, as the brand sets its big panels;
-     the backoffice's is plain surface. This is the clearest difference
-     between the two products at a glance. */
-  --nav-bg:          var(--p-purple-900);
-  --nav-fg:          var(--p-white);
-  --nav-fg-muted:    #DCCCDC;
-  --nav-fg-subtle:   #B39FB3;
-  --nav-hover:       var(--p-purple-800);
-  --nav-sunken:      var(--p-purple-800);
-  --nav-border:      var(--p-purple-800);
-  --nav-selected-bg: var(--p-lime-extra);
-  --nav-selected-fg: var(--p-purple-900);
-  --nav-focus-ring:  var(--p-lime-extra);
+  /* Shadows are plum-tinted so they sit in the palette rather than on it */
+  --shadow-color:          67 47 74;
 }
 
 /* -------------------------------------------------- webapp / dark -------- */
 [data-product="webapp"][data-theme="dark"] {
   color-scheme: dark;
 
-  /* Deep Purple taken darker, towards black, so long stretches of it stay
-     restful. #280028 itself is kept for nothing larger than a fill. */
-  --canvas:          #160A16;
-  --surface:         #201320;
-  --surface-raised:  #281A28;
-  --surface-sunken:  #1C0F1C;
-  --surface-hover:   #2A1C2A;
+  --canvas:          var(--p-plum-1000);
+  --surface:         #1E1822;
+  --surface-raised:  #261F2B;
+  --surface-sunken:  #221B27;
+  --surface-hover:   #272030;
 
-  --fg:              #FBF4FB;
-  --fg-muted:        #DCCCDC;
-  --fg-subtle:       #B3A0B3;
-  --fg-faint:        #6B566B;
+  --fg:              #F4EFF5;
+  --fg-muted:        #C9BACD;
+  --fg-subtle:       #A392A8;
+  --fg-faint:        #6B5A71;
 
-  --border:          #362536;
-  --border-soft:     #2C1D2C;
-  --border-strong:   #4F3B4F;
+  --border:          #332A38;
+  --border-soft:     #2A2230;
+  --border-strong:   #4A3E51;
 
-  /* In dark mode the accent inverts, as the backoffice's does and as the
-     guidelines pair them: a Lavender fill carrying Deep Purple text. */
-  --accent:          var(--p-lavender);
-  --accent-hover:    var(--p-lavender-50);
-  --accent-fg:       var(--p-purple-900);
-  /* A selected row is tinted purple, not lime: Lime darkened enough to sit
-     behind light text turns khaki on this canvas. Lime stays the highlight —
-     as the text on a tint, and as the solid nav pill. */
-  --accent-soft:     #3B2340;
-  --accent-soft-fg:  var(--p-lime);
+  /* In dark mode the accent inverts, exactly as the backoffice's does: a light
+     fill carrying dark text. White on a mid magenta measured 4.35:1 — and its
+     hover, being lighter still, was worse. A light fill gets better on hover
+     instead of worse, which is the behaviour you want. */
+  --accent:          var(--p-magenta-400);
+  --accent-hover:    #E7A3DE;
+  --accent-fg:       var(--p-magenta-950);
+  --accent-soft:     #34203A;
+  --accent-soft-fg:  var(--p-magenta-300);
 
-  --link:            var(--p-lavender);
-  --link-hover:      var(--p-white);
-  --link-decoration:       underline;
+  /* Text version has to be far lighter than the fill to survive the dark canvas */
+  --link:            var(--p-magenta-400);
+  --link-hover:      var(--p-magenta-300);
+  --link-decoration:       none;
 
-  --selected-bg:     #3B2340;
-  --selected-fg:     var(--p-lime);
+  --selected-bg:     #3A2440;
+  --selected-fg:     var(--p-magenta-300);
 
-  --focus-ring:      var(--p-lavender);
-  --focus-halo:      #4A2F4F;
+  --focus-ring:      var(--p-magenta-400);
+  --focus-halo:      #3E2745;
 
-  /* Inverted again: in dark mode the tooltip is the light thing. Near-white,
-     not Lavender — Lavender is kept for the fill. */
-  --inverse-surface: #F7EFF7;
-  --inverse-fg:      var(--p-purple-900);
+  /* Inverted again: in dark mode the tooltip is the light thing */
+  --inverse-surface: #EDE6EF;
+  --inverse-fg:      var(--p-plum-950);
 
-  --overlay:         rgb(8 0 8 / 0.62);
+  --overlay:         rgb(10 6 12 / 0.60);
 
-  --skeleton:        #2C1D2C;
-  --skeleton-sheen:  #362536;
+  --skeleton:        #2A2230;
+  --skeleton-sheen:  #332A38;
 
   --shadow-color:          0 0 0;
-
-  /* Deep Purple itself, a step out from the darker canvas. */
-  --nav-bg:          var(--p-purple-900);
-  --nav-fg:          var(--p-white);
-  --nav-fg-muted:    #DCCCDC;
-  --nav-fg-subtle:   #B39FB3;
-  --nav-hover:       var(--p-purple-800);
-  --nav-sunken:      var(--p-purple-800);
-  --nav-border:      var(--p-purple-800);
-  --nav-selected-bg: var(--p-lime-extra);
-  --nav-selected-fg: var(--p-purple-900);
-  --nav-focus-ring:  var(--p-lime-extra);
 }
 
 /* -------------------------------------------------- backoffice / light --- */
@@ -218,7 +178,7 @@
   --link:            var(--p-grey-800);
   --link-hover:      var(--p-grey-950);
   /* Grayscale cannot signal "link" with hue, so it signals with a rule.
-     The webapp now does the same, for its own reason; see its block. */
+     This is the one product difference that changes behaviour, not just value. */
   --link-decoration:       underline;
 
   --selected-bg:     var(--p-grey-150);
@@ -236,19 +196,6 @@
   --skeleton-sheen:  var(--p-grey-50);
 
   --shadow-color:          0 0 0;
-
-  /* Navigation is plain surface here: the values AppShell had before the
-     webapp's turned Deep Purple, so nothing in the backoffice moves. */
-  --nav-bg:          var(--p-white);
-  --nav-fg:          var(--p-grey-900);
-  --nav-fg-muted:    var(--p-grey-600);
-  --nav-fg-subtle:   var(--p-grey-500);
-  --nav-hover:       #FCFCFC;
-  --nav-sunken:      var(--p-grey-100);
-  --nav-border:      var(--p-grey-200);
-  --nav-selected-bg: #F0F0F0;
-  --nav-selected-fg: var(--p-grey-900);
-  --nav-focus-ring:  var(--p-grey-800);
 }
 
 /* -------------------------------------------------- backoffice / dark ---- */
@@ -297,17 +244,6 @@
   --skeleton-sheen:  #2E2E2E;
 
   --shadow-color:          0 0 0;
-
-  --nav-bg:          #1A1A1A;
-  --nav-fg:          #F2F2F2;
-  --nav-fg-muted:    #C4C4C4;
-  --nav-fg-subtle:   var(--p-grey-400);
-  --nav-hover:       #242424;
-  --nav-sunken:      #1F1F1F;
-  --nav-border:      #2E2E2E;
-  --nav-selected-bg: #2A2A2A;
-  --nav-selected-fg: #F2F2F2;
-  --nav-focus-ring:  #EDEDED;
 }
 
 /* -------------------------------------------------- status / light -------
@@ -373,45 +309,35 @@
 @media (prefers-color-scheme: dark) {
   [data-product="webapp"]:not([data-theme="light"]) {
     color-scheme: dark;
-    --canvas:          #160A16;
-    --surface:         #201320;
-    --surface-raised:  #281A28;
-    --surface-sunken:  #1C0F1C;
-    --surface-hover:   #2A1C2A;
-    --fg:              #FBF4FB;
-    --fg-muted:        #DCCCDC;
-    --fg-subtle:       #B3A0B3;
-    --fg-faint:        #6B566B;
-    --border:          #362536;
-    --border-soft:     #2C1D2C;
-    --border-strong:   #4F3B4F;
-    --accent:          var(--p-lavender);
-    --accent-hover:    var(--p-lavender-50);
-    --accent-fg:       var(--p-purple-900);
-    --accent-soft:     #3B2340;
-    --accent-soft-fg:  var(--p-lime);
-    --link:            var(--p-lavender);
-    --link-hover:      var(--p-white);
-    --selected-bg:     #3B2340;
-    --selected-fg:     var(--p-lime);
-    --focus-ring:      var(--p-lavender);
-    --focus-halo:      #4A2F4F;
-    --inverse-surface: #F7EFF7;
-    --inverse-fg:      var(--p-purple-900);
-    --overlay:         rgb(8 0 8 / 0.62);
-    --skeleton:        #2C1D2C;
-    --skeleton-sheen:  #362536;
+    --canvas:          var(--p-plum-1000);
+    --surface:         #1E1822;
+    --surface-raised:  #261F2B;
+    --surface-sunken:  #221B27;
+    --surface-hover:   #272030;
+    --fg:              #F4EFF5;
+    --fg-muted:        #C9BACD;
+    --fg-subtle:       #A392A8;
+    --fg-faint:        #6B5A71;
+    --border:          #332A38;
+    --border-soft:     #2A2230;
+    --border-strong:   #4A3E51;
+    --accent:          var(--p-magenta-400);
+    --accent-hover:    #E7A3DE;
+    --accent-fg:       var(--p-magenta-950);
+    --accent-soft:     #34203A;
+    --accent-soft-fg:  var(--p-magenta-300);
+    --link:            var(--p-magenta-400);
+    --link-hover:      var(--p-magenta-300);
+    --selected-bg:     #3A2440;
+    --selected-fg:     var(--p-magenta-300);
+    --focus-ring:      var(--p-magenta-400);
+    --focus-halo:      #3E2745;
+    --inverse-surface: #EDE6EF;
+    --inverse-fg:      var(--p-plum-950);
+    --overlay:         rgb(10 6 12 / 0.60);
+    --skeleton:        #2A2230;
+    --skeleton-sheen:  #332A38;
     --shadow-color:          0 0 0;
-    --nav-bg:          var(--p-purple-900);
-    --nav-fg:          var(--p-white);
-    --nav-fg-muted:    #DCCCDC;
-    --nav-fg-subtle:   #B39FB3;
-    --nav-hover:       var(--p-purple-800);
-    --nav-sunken:      var(--p-purple-800);
-    --nav-border:      var(--p-purple-800);
-    --nav-selected-bg: var(--p-lime-extra);
-    --nav-selected-fg: var(--p-purple-900);
-    --nav-focus-ring:  var(--p-lime-extra);
   }
 
   [data-product="backoffice"]:not([data-theme="light"]) {
@@ -445,16 +371,6 @@
     --skeleton:        #262626;
     --skeleton-sheen:  #2E2E2E;
     --shadow-color:          0 0 0;
-    --nav-bg:          #1A1A1A;
-    --nav-fg:          #F2F2F2;
-    --nav-fg-muted:    #C4C4C4;
-    --nav-fg-subtle:   var(--p-grey-400);
-    --nav-hover:       #242424;
-    --nav-sunken:      #1F1F1F;
-    --nav-border:      #2E2E2E;
-    --nav-selected-bg: #2A2A2A;
-    --nav-selected-fg: #F2F2F2;
-    --nav-focus-ring:  #EDEDED;
   }
 
   [data-product="webapp"]:not([data-theme="light"]),

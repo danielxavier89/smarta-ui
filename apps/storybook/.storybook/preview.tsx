@@ -17,7 +17,7 @@ const globalTypes = {
       title: "Product",
       icon: "component",
       items: [
-        { value: "webapp", title: "Webapp", right: "deep purple" },
+        { value: "webapp", title: "Webapp", right: "plum" },
         { value: "backoffice", title: "Backoffice", right: "grey" },
       ],
       dynamicTitle: true,

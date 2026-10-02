@@ -6,7 +6,7 @@ import { Spinner } from "../Spinner";
 
 /**
  * Every value here is a token. There is no hex, no px radius and no literal
- * font size in this file, which is why the same Button renders Deep Purple in the
+ * font size in this file, which is why the same Button renders plum in the
  * webapp and graphite in the backoffice with no branch anywhere.
  */
 const buttonVariants = cva(

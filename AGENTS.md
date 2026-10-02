@@ -17,10 +17,10 @@ combinations every component must be right in.
 ## The rule that matters
 
 **No component contains a colour.** Not a hex, not `rgb()`, not `bg-red-500`, not
-`var(--p-purple-900)`. Components read semantic tokens only — `bg-canvas`,
+`var(--p-plum-600)`. Components read semantic tokens only — `bg-canvas`,
 `text-fg-muted`, `border-border`.
 
-The moment a component contains `#280028` it belongs to the webapp in light mode,
+The moment a component contains `#9B3F92` it belongs to the webapp in light mode,
 and the library is two libraries. `npm run lint:tokens` enforces it.
 
 If you need a colour that does not exist, **add a semantic token** in

@@ -43,7 +43,7 @@ Default · Hover (underlines, moves to `--link-hover`) · Focus (2px ring) · Di
 
 1. **Never `<a href="#">`.** Both prototypes learned this the hard way: the handler runs, then the anchor empties `location.hash`, the router hears `hashchange`, and the page jumps back to Home. Anything acting on the current page is a `<button>` wearing link clothes — which is this component's whole reason to exist.
 2. **A real destination gets a real href**, via `asChild`, so middle-click, copy-link and open-in-new-tab keep working.
-3. **The underline is a token, not a decision.** `--link-decoration` is `underline` in both products today: the backoffice is grayscale, and the webapp's links are Deep Purple inside Deep Purple text, so neither has a hue left to signal "link" with. Read the token anyway, never hardcode it — it is the place a product changes its mind.
+3. **The underline is a token, not a decision.** `--link-decoration` is `none` in the webapp and `underline` in the backoffice, because a grayscale palette has no hue left to signal "link" with. Never hardcode either.
 4. **It is exempt from the 44px touch minimum**, because a finger-height word breaks the line it sits in. `reset.css` handles this.
 
 ## Do and don't

@@ -83,7 +83,7 @@ export const COLOR_TOKENS: TokenGroup[] = [
       { name: "accent", utility: "accent", use: "Primary button fills, checked checkboxes, the active tab rule." },
       { name: "accent-hover", utility: "accent-hover", use: "Hover state of an accent fill." },
       { name: "accent-fg", utility: "accent-fg", use: "Text on an accent fill." },
-      { name: "accent-soft", utility: "accent-soft", use: "A tinted accent fill: selected rows, avatar backgrounds, quiet emphasis. Lime in the webapp." },
+      { name: "accent-soft", utility: "accent-soft", use: "A tinted accent fill: selected rows, avatar backgrounds, quiet emphasis." },
       { name: "accent-soft-fg", utility: "accent-soft-fg", use: "Text on accent-soft." },
       { name: "link", utility: "link", use: "Brand colour used as text on canvas or surface." },
       { name: "link-hover", utility: "link-hover", use: "Hover state of link text." },
@@ -92,26 +92,10 @@ export const COLOR_TOKENS: TokenGroup[] = [
   {
     title: "Selection and focus",
     tokens: [
-      { name: "selected-bg", utility: "selected-bg", use: "The nav pill, the current page, ::selection. Lime Extra in the webapp." },
+      { name: "selected-bg", utility: "selected-bg", use: "The nav pill, the chosen row, ::selection." },
       { name: "selected-fg", utility: "selected-fg", use: "Text inside a selected surface." },
       { name: "focus-ring", utility: "focus-ring", use: "The 2px focus outline. One treatment system-wide." },
       { name: "focus-halo", utility: "focus-halo", use: "The 3px soft ring behind a focused control that has its own fill." },
-    ],
-  },
-  {
-    title: "Navigation",
-    note: "Read through .sui-nav-surface, which re-points the ordinary tokens inside AppShell's sidebar, top bar and drawer. Deep Purple in the webapp; plain surface in the backoffice.",
-    tokens: [
-      { name: "nav-bg", utility: "—", use: "The navigation's ground." },
-      { name: "nav-fg", utility: "—", use: "Its text, and --fg inside it." },
-      { name: "nav-fg-muted", utility: "—", use: "Unselected items; --fg-muted inside it." },
-      { name: "nav-fg-subtle", utility: "—", use: "Group labels and icons; --fg-subtle inside it." },
-      { name: "nav-hover", utility: "—", use: "Item hover; --surface-hover inside it." },
-      { name: "nav-sunken", utility: "—", use: "Count pills; --surface-sunken inside it." },
-      { name: "nav-border", utility: "—", use: "Its dividers and edge." },
-      { name: "nav-selected-bg", utility: "—", use: "The current page's pill. Lime Extra in the webapp." },
-      { name: "nav-selected-fg", utility: "—", use: "Text on that pill." },
-      { name: "nav-focus-ring", utility: "—", use: "The focus ring inside it, which Deep Purple would hide." },
     ],
   },
   {
@@ -164,8 +148,6 @@ export const SCALE_TOKENS: TokenGroup[] = [
   {
     title: "Type",
     tokens: [
-      { name: "font-sans", utility: "font-sans", use: "Euclid Circular A → Poppins → Arial. Everything, by default." },
-      { name: "font-display", utility: "font-display", use: "Ulm Grotesk, else the text face. Page titles and headline figures only." },
       { name: "text-2xs", utility: "text-2xs", use: "11px — badge counts, superscript meta." },
       { name: "text-xs", utility: "text-xs", use: "12px — chips, table meta, captions." },
       { name: "text-sm", utility: "text-sm", use: "13px — buttons, tabs, dense table cells." },
@@ -179,7 +161,7 @@ export const SCALE_TOKENS: TokenGroup[] = [
   },
   {
     title: "Elevation",
-    note: "Tinted by --shadow-color, so a shadow is Deep Purple in the webapp and neutral in the backoffice.",
+    note: "Tinted by --shadow-color, so a shadow is plum in the webapp and neutral in the backoffice.",
     tokens: [
       { name: "shadow-xs", utility: "shadow-xs", use: "A hairline lift on a hovered card." },
       { name: "shadow-sm", utility: "shadow-sm", use: "Sticky headers, toolbars." },

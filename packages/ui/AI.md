@@ -12,7 +12,7 @@ see_also:
 
 # smarta-ui — start here
 
-One component library, two products. The client-facing **webapp** is Deep Purple; the
+One component library, two products. The client-facing **webapp** is plum; the
 internal **backoffice** is grayscale. Both run in light and dark. That is four
 combinations, and **no component contains a colour**, which is what makes them
 one library instead of two.
@@ -38,7 +38,7 @@ Everything else imports by name from `@smarta/ui`.
 ## Three rules that are never negotiable
 
 1. **Never write a colour.** No hex, no `rgb()`, no `bg-red-500`, no
-   `var(--p-purple-900)`. Use semantic tokens: `bg-canvas`, `text-fg-muted`,
+   `var(--p-plum-600)`. Use semantic tokens: `bg-canvas`, `text-fg-muted`,
    `border-border`, `bg-accent`, `text-ok-fg`. `npm run lint:tokens` fails the
    build otherwise. Full list: `packages/tokens/src/theme.css`.
 2. **Never build a second version of a component that exists.** Especially not a
