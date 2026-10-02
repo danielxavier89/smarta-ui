@@ -1,0 +1,66 @@
+name: Storybook on GitHub Pages
+
+# Publishes the built Storybook to https://danielxavier89.github.io/smarta-ui/ —
+# the link other projects use as their reference for the components, tokens
+# and mockups.
+#
+# It is public, like the repository. The sample data is invented (AGENTS.md,
+# "Sample data is published"). If the repository goes private, Pages needs a
+# paid GitHub plan; netlify.toml is the alternative that keeps working.
+#
+# Built from main, and from the branch carrying the work under review
+# (worktree-mobile-review, PR #2) until that merges — so the link shows the
+# latest version rather than whatever main last held. Whichever ran last is
+# what the link serves. The github-pages environment has to allow each branch
+# listed here; see docs/OWNERSHIP.md.
+
+on:
+  push:
+    branches: [main, worktree-mobile-review]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time, and never cancel one halfway through.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # The same Node as ci.yml and netlify.toml.
+          node-version: "20"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # Storybook resolves @smarta/ui to source, so no library build is needed
+      # first. Its asset paths are relative, which is what lets it live under
+      # /smarta-ui/ rather than at a domain root.
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/storybook/storybook-static
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

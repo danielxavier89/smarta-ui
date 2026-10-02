@@ -28,7 +28,7 @@ order and it takes about twenty minutes:
 
 ```sh
 npm install
-npm run storybook        # http://localhost:6006
+npm run storybook        # http://localhost:6006 — published at https://danielxavier89.github.io/smarta-ui/
 ```
 
 **It builds and installs now.** `npm run build` emits ESM, CJS, `.d.ts`,
@@ -42,7 +42,7 @@ that need someone with admin on the GitHub account.
 
 ```sh
 npm install
-npm run storybook        # http://localhost:6006
+npm run storybook        # http://localhost:6006 — published at https://danielxavier89.github.io/smarta-ui/
 
 npm run check            # typecheck, no hardcoded colours, no hardcoded English,
                          # contrast across the four themes

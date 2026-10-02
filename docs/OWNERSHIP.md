@@ -15,6 +15,7 @@ remembered.
 | **Versioning and changelog** | SemVer with the rules below, written automatically by Changesets — see "Releasing". |
 | **Merges need a green CI** | Branch protection on `main`, applied 2026-10-01 from `.github/branch-protection.json`: `verify` and `audit` must pass on an up-to-date branch, one approval from a code owner, conversations resolved, no force pushes, no deletions. |
 | **The release workflow may open its pull request** | Settings → Actions → "Allow GitHub Actions to create and approve pull requests", on. |
+| **Storybook is published** | https://danielxavier89.github.io/smarta-ui/ — `.github/workflows/storybook-pages.yml`, enabled 2026-10-02. Built on every push to `main` and to `worktree-mobile-review` (PR #2) until that merges; the last run wins. The `github-pages` environment allows exactly those two branches (Settings → Environments). When PR #2 merges, drop the second branch from both the workflow and the environment. |
 
 One consequence of the protection worth knowing: CODEOWNERS names a single
 person, and GitHub does not let anyone approve their own pull request. Until a
@@ -39,9 +40,11 @@ gh api -X PUT repos/danielxavier89/smarta-ui/collaborators/<his-username> -f per
 gh repo edit danielxavier89/smarta-ui --visibility private --accept-visibility-change-consequences
 ```
 
-A Netlify deploy, if one is ever connected, keeps serving the built Storybook at
-a public URL regardless — and the built site contains the whole component
-source. Password protection is a paid feature on Netlify and on Vercel.
+Going private also stops GitHub Pages on the free plan, so the Storybook link
+above goes dark. `netlify.toml` is ready as the alternative: a Netlify deploy
+keeps serving the built Storybook at a public URL regardless — and the built
+site contains the whole component source. Password protection is a paid
+feature on Netlify and on Vercel.
 
 ### 2. Transfer to `taxit-tech`
 
