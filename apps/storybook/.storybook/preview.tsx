@@ -227,6 +227,8 @@ const preview: Preview = {
           "Containers",
           "Navigation",
           "Overlays",
+          // Last: whole pages built from everything above, with sample data.
+          "Mockups",
         ],
       },
     },
