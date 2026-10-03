@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkbox } from "./Checkbox";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Checkbox.md?raw";
 
 const meta = {
@@ -18,7 +18,7 @@ export const Playground: Story = {};
 
 export const States: Story = {
   render: () => (
-    <div className="flex flex-col gap-[14px]">
+    <div className="sui:flex sui:flex-col sui:gap-[14px]">
       <Checkbox label="Unchecked" />
       <Checkbox label="Checked" defaultChecked />
       <Checkbox label="Indeterminate" checked="indeterminate" />
@@ -42,20 +42,20 @@ export const SelectAllRow: Story = {
     const some = picked.length > 0 && !all;
 
     return (
-      <div className="max-w-[320px] overflow-hidden rounded-lg border border-border bg-surface">
-        <div className="flex items-center gap-[10px] border-b border-border bg-surface-sunken/70 px-[16px] py-[10px]">
+      <div className="sui:max-w-[320px] sui:overflow-hidden sui:rounded-lg sui:border sui:border-border sui:bg-surface">
+        <div className="sui:flex sui:items-center sui:gap-[10px] sui:border-b sui:border-border sui:bg-surface-sunken/70 sui:px-[16px] sui:py-[10px]">
           <Checkbox
             size="sm"
             checked={all ? true : some ? "indeterminate" : false}
             onCheckedChange={(v) => setPicked(v === true ? rows : [])}
             aria-label="Select all suppliers"
           />
-          <span className="text-xs text-fg-subtle">
+          <span className="sui:text-xs sui:text-fg-subtle">
             {picked.length ? `${picked.length} selected` : "Supplier"}
           </span>
         </div>
         {rows.map((r) => (
-          <label key={r} className="flex cursor-pointer items-center gap-[10px] border-b border-border-soft px-[16px] py-[10px] last:border-b-0 hover:bg-surface-hover">
+          <label key={r} className="sui:flex sui:cursor-pointer sui:items-center sui:gap-[10px] sui:border-b sui:border-border-soft sui:px-[16px] sui:py-[10px] sui:last:border-b-0 sui:hover:bg-surface-hover">
             <Checkbox
               size="sm"
               checked={picked.includes(r)}
@@ -64,7 +64,7 @@ export const SelectAllRow: Story = {
               }
               aria-label={r}
             />
-            <span className="text-base text-fg">{r}</span>
+            <span className="sui:text-base sui:text-fg">{r}</span>
           </label>
         ))}
       </div>

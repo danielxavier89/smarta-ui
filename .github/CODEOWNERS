@@ -1,0 +1,23 @@
+# Every change to this repository needs a review from someone who owns the
+# design system. Enforced only once "Require review from Code Owners" is turned
+# on for main — see docs/OWNERSHIP.md.
+
+# The default: anything not matched below.
+*                           @danielxavier89
+
+# The token layer decides what every component in both products looks like. A
+# change here is never local.
+/packages/tokens/           @danielxavier89
+
+# The shared contracts: the public surface, the words the library says for
+# itself, and the formatting every screen depends on.
+/packages/ui/src/index.ts   @danielxavier89
+/packages/ui/src/lib/       @danielxavier89
+
+# The gates. Loosening one of these is a decision, not a chore.
+/.github/workflows/         @danielxavier89
+/scripts/                   @danielxavier89
+
+# The rules people and models read before writing a screen.
+/AGENTS.md                  @danielxavier89
+/packages/ui/docs/          @danielxavier89

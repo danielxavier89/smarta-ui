@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Skeleton, SkeletonList } from "./Skeleton";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Skeleton.md?raw";
 
 const meta = { title: "Status/Skeleton", component: Skeleton ,
@@ -11,11 +11,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Shapes: Story = {
   render: () => (
-    <div className="flex max-w-[360px] flex-col gap-[12px]">
+    <div className="sui:flex sui:max-w-[360px] sui:flex-col sui:gap-[12px]">
       <Skeleton width="70%" />
       <Skeleton width="45%" />
       <Skeleton shape="block" width="100%" height="88px" />
-      <div className="flex items-center gap-[10px]">
+      <div className="sui:flex sui:items-center sui:gap-[10px]">
         <Skeleton shape="circle" width="30px" height="30px" />
         <Skeleton width="140px" />
       </div>
@@ -25,7 +25,7 @@ export const Shapes: Story = {
 
 export const AList: Story = {
   render: () => (
-    <div className="max-w-[520px] overflow-hidden rounded-lg border border-border bg-surface">
+    <div className="sui:max-w-[520px] sui:overflow-hidden sui:rounded-lg sui:border sui:border-border sui:bg-surface">
       <SkeletonList rows={5} />
     </div>
   ),
@@ -34,10 +34,10 @@ export const AList: Story = {
 export const WhenNotTo: Story = {
   name: "When not to use one",
   render: () => (
-    <p className="m-0 max-w-[62ch] text-base text-fg-muted">
+    <p className="sui:m-0 sui:max-w-[62ch] sui:text-base sui:text-fg-muted">
       A skeleton only earns its place when it resembles what is coming. Under about
       300ms it is a flash of grey that makes the page feel less finished, not more — keep
-      the old content in place with <code className="text-fg">aria-busy</code> instead.
+      the old content in place with <code className="sui:text-fg">aria-busy</code> instead.
     </p>
   ),
 };

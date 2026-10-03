@@ -1,6 +1,6 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Field } from "@/components/Field";
+import { cn } from "../../lib/utils";
+import { Field } from "../Field";
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -79,14 +79,14 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               onChange?.(e);
             }}
             className={cn(
-              "w-full rounded-md border border-border bg-surface",
-              "px-[var(--control-padding-x-md)] py-[8px] text-[length:var(--field-font-size)] text-fg",
-              "placeholder:text-fg-subtle resize-y",
-              "transition-[border-color,box-shadow] duration-[var(--duration-fast)]",
-              "outline-none focus:border-accent focus:shadow-[var(--shadow-focus)]",
-              "disabled:bg-surface-sunken disabled:opacity-70 disabled:cursor-not-allowed",
-              "aria-[invalid=true]:border-bad aria-[invalid=true]:focus:shadow-none",
-              autoResize && "resize-none overflow-hidden",
+              "sui:w-full sui:rounded-md sui:border sui:border-border sui:bg-surface",
+              "sui:px-[var(--control-padding-x-md)] sui:py-[8px] sui:text-[length:var(--field-font-size)] sui:text-fg",
+              "sui:placeholder:text-fg-subtle sui:resize-y",
+              "sui:transition-[border-color,box-shadow] sui:duration-[var(--duration-fast)]",
+              "sui:focus-visible:outline-none sui:focus:border-accent sui:focus:shadow-focus",
+              "sui:disabled:bg-surface-sunken sui:disabled:opacity-70 sui:disabled:cursor-not-allowed",
+              "sui:aria-[invalid=true]:border-bad sui:aria-[invalid=true]:focus:shadow-none",
+              autoResize && "sui:resize-none sui:overflow-hidden",
               className,
             )}
             {...ids}

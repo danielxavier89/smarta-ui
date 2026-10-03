@@ -1,8 +1,8 @@
 import * as React from "react";
 import { DropdownMenu as RMenu } from "radix-ui";
 import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { ThemeScope } from "@/components/ThemeProvider";
+import { cn } from "../../lib/utils";
+import { ThemeScope } from "../ThemeProvider";
 
 export const DropdownMenu = RMenu.Root;
 export const DropdownMenuTrigger = RMenu.Trigger;
@@ -20,15 +20,15 @@ export const DropdownMenuContent = React.forwardRef<
         align={align}
         collisionPadding={8}
         className={cn(
-          "z-[var(--z-dropdown)] min-w-[200px]",
+          "sui:z-[var(--z-dropdown)] sui:min-w-[200px]",
           // A menu longer than the screen used to be clipped with no way to
           // reach the rest of it — overflow-hidden was there for the rounded
           // corners, and on a phone it hid the items. Radix measures the room
           // it actually has; the menu scrolls inside that.
-          "max-h-[var(--radix-dropdown-menu-content-available-height)] overflow-y-auto",
-          "max-w-[calc(100vw-16px)] overscroll-contain",
-          "rounded-lg border border-border bg-surface-raised p-[4px] shadow-lg",
-          "data-[state=open]:animate-in data-[state=closed]:animate-out",
+          "sui:max-h-[var(--radix-dropdown-menu-content-available-height)] sui:overflow-y-auto",
+          "sui:max-w-[calc(100vw-16px)] sui:overscroll-contain",
+          "sui:rounded-lg sui:border sui:border-border sui:bg-surface-raised sui:p-[4px] sui:shadow-lg",
+          "sui:data-[state=open]:animate-in sui:data-[state=closed]:animate-out",
           className,
         )}
         {...props}
@@ -55,20 +55,20 @@ export const DropdownMenuItem = React.forwardRef<
     <RMenu.Item
       ref={ref}
       className={cn(
-        "flex cursor-pointer select-none items-center gap-[9px] rounded-sm",
-        "px-[9px] py-[7px] text-sm outline-none",
-        "touch:min-h-[var(--touch-target)]",
-        tone === "danger" ? "text-bad" : "text-fg",
-        "data-[highlighted]:bg-surface-hover",
-        tone === "danger" && "data-[highlighted]:bg-bad-bg",
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-55",
+        "sui:flex sui:cursor-pointer sui:select-none sui:items-center sui:gap-[9px] sui:rounded-sm",
+        "sui:px-[9px] sui:py-[7px] sui:text-sm sui:focus-visible:outline-none",
+        "sui:touch:min-h-[var(--touch-target)]",
+        tone === "danger" ? "sui:text-bad" : "sui:text-fg",
+        "sui:data-[highlighted]:bg-surface-hover",
+        tone === "danger" && "sui:data-[highlighted]:bg-bad-bg",
+        "sui:data-[disabled]:pointer-events-none sui:data-[disabled]:opacity-55",
         className,
       )}
       {...props}
     >
-      {icon && <span className="shrink-0 text-fg-subtle">{icon}</span>}
-      <span className="flex-1 truncate">{children}</span>
-      {meta && <span className="shrink-0 text-xs text-fg-subtle">{meta}</span>}
+      {icon && <span className="sui:shrink-0 sui:text-fg-subtle">{icon}</span>}
+      <span className="sui:flex-1 sui:truncate">{children}</span>
+      {meta && <span className="sui:shrink-0 sui:text-xs sui:text-fg-subtle">{meta}</span>}
     </RMenu.Item>
   );
 });
@@ -81,21 +81,21 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
     <RMenu.CheckboxItem
       ref={ref}
       className={cn(
-        "flex cursor-pointer select-none items-center gap-[9px] rounded-sm",
-        "px-[9px] py-[7px] text-sm text-fg outline-none",
-        "touch:min-h-[var(--touch-target)]",
-        "data-[highlighted]:bg-surface-hover",
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-55",
+        "sui:flex sui:cursor-pointer sui:select-none sui:items-center sui:gap-[9px] sui:rounded-sm",
+        "sui:px-[9px] sui:py-[7px] sui:text-sm sui:text-fg sui:focus-visible:outline-none",
+        "sui:touch:min-h-[var(--touch-target)]",
+        "sui:data-[highlighted]:bg-surface-hover",
+        "sui:data-[disabled]:pointer-events-none sui:data-[disabled]:opacity-55",
         className,
       )}
       {...props}
     >
-      <span className="grid size-[14px] shrink-0 place-items-center">
+      <span className="sui:grid sui:size-[14px] sui:shrink-0 sui:place-items-center">
         <RMenu.ItemIndicator>
-          <Check size={13} strokeWidth={3} className="text-accent" aria-hidden />
+          <Check size={13} strokeWidth={3} className="sui:text-accent" aria-hidden />
         </RMenu.ItemIndicator>
       </span>
-      <span className="flex-1 truncate">{children}</span>
+      <span className="sui:flex-1 sui:truncate">{children}</span>
     </RMenu.CheckboxItem>
   );
 });
@@ -107,7 +107,7 @@ export const DropdownMenuLabel = React.forwardRef<
   return (
     <RMenu.Label
       ref={ref}
-      className={cn("px-[9px] pb-[4px] pt-[8px] text-xs font-medium text-fg-subtle", className)}
+      className={cn("sui:px-[9px] sui:pb-[4px] sui:pt-[8px] sui:text-xs sui:font-medium sui:text-fg-subtle", className)}
       {...props}
     />
   );
@@ -117,5 +117,5 @@ export const DropdownMenuSeparator = React.forwardRef<
   React.ComponentRef<typeof RMenu.Separator>,
   React.ComponentPropsWithoutRef<typeof RMenu.Separator>
 >(function DropdownMenuSeparator({ className, ...props }, ref) {
-  return <RMenu.Separator ref={ref} className={cn("my-[4px] h-px bg-border-soft", className)} {...props} />;
+  return <RMenu.Separator ref={ref} className={cn("sui:my-[4px] sui:h-px sui:bg-border-soft", className)} {...props} />;
 });

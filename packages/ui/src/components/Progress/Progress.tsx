@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Progress as RProgress } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export interface ProgressProps
   extends Omit<React.ComponentPropsWithoutRef<typeof RProgress.Root>, "value"> {
@@ -34,32 +34,38 @@ export function Progress({
   ...props
 }: ProgressProps) {
   const pct = value === null ? null : Math.max(0, Math.min(100, value));
-  const fill = { accent: "bg-accent", ok: "bg-ok", warn: "bg-warn", bad: "bg-bad" }[tone];
+  const fill = { accent: "sui:bg-accent", ok: "sui:bg-ok", warn: "sui:bg-warn", bad: "sui:bg-bad" }[tone];
+  const labelId = React.useId();
 
   return (
-    <div className="flex flex-col gap-[5px]">
+    <div className="sui:flex sui:flex-col sui:gap-[5px]">
       {showLabel && (
-        <div className="flex items-baseline justify-between gap-[10px] text-xs">
-          <span className="text-fg-muted">{label}</span>
-          {pct !== null && <span className="tabular-nums text-fg-subtle">{Math.round(pct)}%</span>}
+        <div className="sui:flex sui:items-baseline sui:justify-between sui:gap-[10px] sui:text-xs">
+          <span id={labelId} className="sui:text-fg-muted">{label}</span>
+          {pct !== null && <span className="sui:tabular-nums sui:text-fg-subtle">{Math.round(pct)}%</span>}
         </div>
       )}
+      {/* Named either way. With showLabel the visible text names the bar
+          through aria-labelledby; it used to drop the aria-label on the
+          assumption the visible text was enough, connected to nothing, and a
+          screen reader announced an unnamed progress bar. */}
       <RProgress.Root
         value={pct}
         aria-label={showLabel ? undefined : label}
+        aria-labelledby={showLabel ? labelId : undefined}
         className={cn(
-          "relative w-full overflow-hidden rounded-full bg-surface-sunken",
-          size === "sm" ? "h-[4px]" : "h-[7px]",
+          "sui:relative sui:w-full sui:overflow-hidden sui:rounded-full sui:bg-surface-sunken",
+          size === "sm" ? "sui:h-[4px]" : "sui:h-[7px]",
           className,
         )}
         {...props}
       >
         <RProgress.Indicator
           className={cn(
-            "h-full rounded-full transition-[width] duration-[var(--duration-slow)] ease-[var(--ease-out)]",
+            "sui:h-full sui:rounded-full sui:transition-[width] sui:duration-[var(--duration-slow)] sui:ease-out",
             fill,
             // No known end: a slice that travels rather than a bar that fills.
-            pct === null && "w-1/3 animate-[skeleton_1.4s_ease-in-out_infinite]",
+            pct === null && "sui:w-1/3 sui:animate-[skeleton_1.4s_ease-in-out_infinite]",
           )}
           style={pct === null ? undefined : { width: `${pct}%` }}
         />

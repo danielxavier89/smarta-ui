@@ -1,5 +1,6 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 /**
  * A table, as a card.
@@ -14,22 +15,50 @@ export const Table = React.forwardRef<
   HTMLTableElement,
   React.TableHTMLAttributes<HTMLTableElement> & { containerClassName?: string }
 >(function Table({ className, containerClassName, ...props }, ref) {
+  const labels = useLabels();
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [scrolls, setScrolls] = React.useState(false);
+
+  /**
+   * A table wider than its card scrolls sideways — on a phone, most of them.
+   * A scroll container with nothing focusable inside it cannot be scrolled from
+   * a keyboard at all, so while it overflows the container becomes a named,
+   * focusable region (axe: scrollable-region-focusable, found by the real-
+   * browser gate at 390px). While it fits, it is not a tab stop: an extra stop
+   * on every table on a desktop would be noise in exchange for nothing.
+   */
+  React.useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const check = () => setScrolls(el.scrollWidth > el.clientWidth + 1);
+    check();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    if (el.firstElementChild) ro.observe(el.firstElementChild);
+    return () => ro.disconnect();
+  }, []);
+
   return (
     <div
+      ref={scrollRef}
+      tabIndex={scrolls ? 0 : undefined}
+      role={scrolls ? "region" : undefined}
+      aria-label={scrolls ? (props["aria-label"] ?? labels.scrollableTable) : undefined}
       className={cn(
-        "rounded-lg border border-border bg-surface",
+        "sui:rounded-lg sui:border sui:border-border sui:bg-surface",
         // Horizontal scroll only, so sticky headings still resolve vertically.
-        "overflow-x-auto",
+        "sui:overflow-x-auto",
         // A table is the one thing on a phone the user swipes sideways. Without
         // containment that swipe reaches the browser at the end of the scroll
         // and iOS reads it as "go back".
-        "overscroll-x-contain",
+        "sui:overscroll-x-contain",
         containerClassName,
       )}
     >
       <table
         ref={ref}
-        className={cn("w-full border-collapse text-base", className)}
+        className={cn("sui:w-full sui:border-collapse sui:text-base", className)}
         {...props}
       />
     </div>
@@ -44,7 +73,7 @@ export const THead = React.forwardRef<
     <thead
       ref={ref}
       className={cn(
-        sticky && "sticky top-0 z-[var(--z-sticky)]",
+        sticky && "sui:sticky sui:top-0 sui:z-[var(--z-sticky)]",
         className,
       )}
       {...props}
@@ -58,25 +87,120 @@ export const TBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttribu
   },
 );
 
+/**
+ * Anything inside the row that handles its own Enter, Space or click.
+ *
+ * `label` is in the list and is the one that is easy to miss. A label is not
+ * itself interactive, but clicking one forwards the click to the control it
+ * names — so without it, clicking the text beside a Checkbox toggled the
+ * checkbox AND activated the row. The library's own Checkbox renders exactly
+ * that shape: a Radix button for the box, and a sibling <label> for the words.
+ */
+const INTERACTIVE =
+  'button, a[href], input, select, textarea, label, summary, ' +
+  '[role="button"], [role="link"], [role="checkbox"], [role="menuitem"], ' +
+  '[tabindex]:not([tabindex="-1"])';
+
 export interface TRProps extends React.HTMLAttributes<HTMLTableRowElement> {
-  /** Adds hover, cursor and a focus ring. Give it a tabIndex and a key handler too. */
+  /**
+   * Makes the row activatable — the whole thing, by mouse and by keyboard.
+   *
+   * This is the only supported way to make a row do something. It supplies the
+   * appearance, `tabIndex`, the click handler and Enter/Space itself, because
+   * the previous API supplied only the appearance and asked every caller to
+   * remember the rest. Callers reliably did not, and a row that looks pressable
+   * and does nothing under the keyboard is not a styling slip — it is a screen
+   * a keyboard user cannot operate.
+   */
+  onActivate?: (event: React.MouseEvent | React.KeyboardEvent) => void;
+  /**
+   * @deprecated Use `onActivate`. This gives a row the appearance of being
+   * pressable without making it so; on its own it produces exactly the defect
+   * described above. It is kept only so existing screens keep rendering.
+   */
   clickable?: boolean;
   selected?: boolean;
 }
 
 export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
-  { className, clickable = false, selected = false, ...props },
+  { className, clickable = false, selected = false, onActivate, onClick, onKeyDown, tabIndex, ...props },
   ref,
 ) {
+  const activatable = Boolean(onActivate);
+
+  /**
+   * An activatable row is always in the tab order, even if the caller passed a
+   * negative tabIndex.
+   *
+   * `tabIndex` arrives through React.HTMLAttributes, so nothing stopped
+   * `<TR onActivate tabIndex={-1}>` — which rendered a row with the pressable
+   * appearance, a working click, and no way to reach it from a keyboard. That
+   * is precisely the defect onActivate exists to make impossible, reintroduced
+   * through a prop nobody would think to look at. The guarantee wins over the
+   * override; a warning says so rather than letting it pass silently.
+   */
+  const negativeTabIndex = activatable && typeof tabIndex === "number" && tabIndex < 0;
+  const resolvedTabIndex = activatable ? (negativeTabIndex ? 0 : (tabIndex ?? 0)) : tabIndex;
+
+  if (process.env.NODE_ENV !== "production") {
+    if (clickable && !onActivate) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[@smarta/ui] <TR clickable> without onActivate renders a row that looks " +
+          "pressable but cannot be reached or fired from a keyboard. Pass onActivate instead.",
+      );
+    }
+    if (negativeTabIndex) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[@smarta/ui] <TR onActivate> ignores a negative tabIndex, because it would " +
+          "take an activatable row out of the keyboard's reach. Using 0.",
+      );
+    }
+  }
+
+  /**
+   * A row is often full of its own controls — a menu, a copy button. Those
+   * handle their own activation, and the row must not fire a second time on
+   * top of them.
+   *
+   * The row itself matches INTERACTIVE once onActivate has given it a
+   * tabIndex, so `closest` finds the row when the click was on a plain cell.
+   * Only a match strictly between the target and the row counts.
+   */
+  const fromChildControl = (target: EventTarget | null, row: EventTarget | null) => {
+    if (!(target instanceof Element) || !(row instanceof Element)) return false;
+    const hit = target.closest(INTERACTIVE);
+    return hit !== null && hit !== row && row.contains(hit);
+  };
+
   return (
     <tr
       ref={ref}
       aria-selected={selected || undefined}
+      tabIndex={resolvedTabIndex}
+      onClick={(e) => {
+        onClick?.(e);
+        if (!onActivate || e.defaultPrevented) return;
+        if (fromChildControl(e.target, e.currentTarget)) return;
+        onActivate(e);
+      }}
+      onKeyDown={(e) => {
+        onKeyDown?.(e);
+        if (!onActivate || e.defaultPrevented) return;
+        if (e.key !== "Enter" && e.key !== " ") return;
+        // A control inside the row owns its own keys.
+        if (e.target !== e.currentTarget) return;
+        // Space scrolls the page otherwise, and Enter can submit a form.
+        e.preventDefault();
+        onActivate(e);
+      }}
       className={cn(
-        "border-b border-border-soft last:border-b-0",
-        clickable && "cursor-pointer hover:bg-surface-hover",
-        clickable && "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring",
-        selected && "bg-accent-soft",
+        "sui:border-b sui:border-border-soft sui:last:border-b-0",
+        (clickable || activatable) && "sui:cursor-pointer sui:hover:bg-surface-hover",
+        (clickable || activatable) &&
+          "sui:focus-visible:outline-2 sui:focus-visible:-outline-offset-2 sui:focus-visible:outline-focus-ring",
+        selected && "sui:bg-accent-soft",
         className,
       )}
       {...props}
@@ -99,10 +223,10 @@ export const TH = React.forwardRef<HTMLTableCellElement, THProps>(function TH(
     <button
       type="button"
       onClick={onSort}
-      className="inline-flex items-center gap-[4px] bg-transparent border-0 p-0 font-[inherit] text-[inherit] cursor-pointer hover:text-fg"
+      className="sui:inline-flex sui:items-center sui:gap-[4px] sui:bg-transparent sui:border-0 sui:p-0 sui:font-[inherit] sui:text-[inherit] sui:cursor-pointer sui:hover:text-fg"
     >
       {children}
-      <span aria-hidden className="text-fg-faint">
+      <span aria-hidden className="sui:text-fg-faint">
         {sort === "asc" ? "↑" : sort === "desc" ? "↓" : "↕"}
       </span>
     </button>
@@ -118,11 +242,11 @@ export const TH = React.forwardRef<HTMLTableCellElement, THProps>(function TH(
         sort === "asc" ? "ascending" : sort === "desc" ? "descending" : sort ? "none" : undefined
       }
       className={cn(
-        "border-b border-border bg-surface-sunken/70",
-        "px-[var(--density-row-x)] py-[10px]",
-        "text-xs font-medium text-fg-subtle",
-        "first:rounded-tl-lg last:rounded-tr-lg",
-        { left: "text-left", right: "text-right", center: "text-center" }[align],
+        "sui:border-b sui:border-border sui:bg-surface-sunken/70",
+        "sui:px-[var(--density-row-x)] sui:py-[10px]",
+        "sui:text-xs sui:font-medium sui:text-fg-subtle",
+        "sui:first:rounded-tl-lg sui:last:rounded-tr-lg",
+        { left: "sui:text-left", right: "sui:text-right", center: "sui:text-center" }[align],
         className,
       )}
       {...props}
@@ -149,11 +273,11 @@ export const TD = React.forwardRef<HTMLTableCellElement, TDProps>(function TD(
     <td
       ref={ref}
       className={cn(
-        "px-[var(--density-row-x)] py-[var(--density-row-y)] align-middle",
-        "first:rounded-bl-lg last:rounded-br-lg",
-        { left: "text-left", right: "text-right", center: "text-center" }[a],
-        muted ? "text-fg-subtle" : "text-fg",
-        numeric && "tabular-nums font-medium",
+        "sui:px-[var(--density-row-x)] sui:py-[var(--density-row-y)] sui:align-middle",
+        "sui:first:rounded-bl-lg sui:last:rounded-br-lg",
+        { left: "sui:text-left", right: "sui:text-right", center: "sui:text-center" }[a],
+        muted ? "sui:text-fg-subtle" : "sui:text-fg",
+        numeric && "sui:tabular-nums sui:font-medium",
         className,
       )}
       {...props}
@@ -165,7 +289,7 @@ export const TD = React.forwardRef<HTMLTableCellElement, TDProps>(function TD(
 export function TableEmpty({ colSpan, children }: { colSpan: number; children: React.ReactNode }) {
   return (
     <tr>
-      <td colSpan={colSpan} className="px-[var(--density-row-x)] py-[40px] text-center text-fg-subtle">
+      <td colSpan={colSpan} className="sui:px-[var(--density-row-x)] sui:py-[40px] sui:text-center sui:text-fg-subtle">
         {children}
       </td>
     </tr>

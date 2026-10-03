@@ -4,3 +4,7 @@ storybook-static/
 *.tsbuildinfo
 .DS_Store
 .icloud
+.consumer-smoke/
+.probes/
+.visual-diff/
+.coexistence/

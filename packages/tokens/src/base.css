@@ -1,0 +1,197 @@
+/* ==========================================================================
+   Layer 4a — Base, scoped to the .smarta-ui root
+   Everything the components depend on, and nothing that reaches past them.
+
+   THE ROOT. ThemeProvider puts `.smarta-ui` on the element it renders, and
+   ThemeScope puts it on the wrapper it adds inside every portal. With
+   `asRoot`, it goes on <body> — never <html>, because setting font-size on
+   <html> redefines the rem for the whole document, and that was measured
+   happening: a backoffice page using asRoot would have had every rem-based
+   size in Ant Design and Bootstrap shrink by an eighth.
+
+   Tokens are still keyed on [data-product] (semantic.css), which can sit on
+   <html> harmlessly — custom properties paint nothing. Everything that DOES
+   paint is keyed on .smarta-ui.
+
+   UNLAYERED, ON PURPOSE. Bootstrap's reboot and Ant Design's global styles are
+   unlayered, and unlayered CSS beats any cascade layer whatever its
+   specificity. Shipped in @layer base, every rule here lost to them. Out of
+   the layer, it is a specificity contest this file is built to win at exactly
+   the right rungs — see the ladder in scripts/gen-preflight.mjs:
+
+     host element rules   (0,0,1)-(0,0,2)   lose to this file
+     this file            (0,0,3)+          :not(sui-x) bumps, :where() scope
+     host classes         (0,1,0)           win over this file — an Ant Design
+                                            button inside our panel stays one
+     our sui: utilities   (0,1,0)+          win over this file; emitted AFTER it,
+                                            so they also win ties at (0,1,0)
+
+   That last point is why styles.css imports the tokens before the utilities:
+   the focus ring below is (0,1,0), and a component's `sui:outline-none` must
+   be able to turn it off.
+
+   What must never move to reset.css: the focus ring and the reduced-motion
+   rule. Both are accessibility guarantees this library makes about its own
+   components, so both ship whether or not a product takes the reset.
+   ========================================================================== */
+
+@import "./preflight.css";
+
+/* The root paints its own ground, so a dark panel never sits on a light page.
+   (0,1,0): above the host's `body { … }`, which only reaches us by
+   inheritance anyway. */
+.smarta-ui {
+  background: var(--canvas);
+  color: var(--fg);
+  font-family: var(--sui-font-sans);
+  font-size: var(--sui-text-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Any column of currency lines up without anyone having to ask for it. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* A portal's wrapper is display:contents — it has no box, so a background on
+   it would paint nothing and is not attempted. The type still inherits. */
+.smarta-ui[data-smarta-portal] {
+  background: none;
+}
+
+/* One focus treatment for the whole system, and the one rule in this file that
+   sits ABOVE a host class.
+
+   At (0,1,0) it lost: Ant Design ships `a:focus { outline: 0 }` at (0,1,1),
+   and every link inside our island became invisible to a keyboard user on
+   the backoffice. scripts/coexistence.mjs tabs through the island to catch
+   exactly that. At (0,1,3) it beats any host :focus rule short of a class
+   plus a pseudo-class, and still loses to our own `sui:focus-visible:*`
+   utilities at (0,2,0) — which is how a component that draws its focus
+   elsewhere (SearchInput rings its pill, not the input) switches it off. A
+   bare `sui:outline-none` (0,1,0) no longer can; use the variant. */
+:where(.smarta-ui, .smarta-ui *):focus-visible:not(sui-z):not(sui-y):not(sui-x) {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* The radius is NOT up there with it. At (0,1,3) it would override every
+   component's own `sui:rounded-*` whenever the component had focus — a
+   Button would snap to 4px corners as it was tabbed to. Down here at (0,1,0),
+   emitted before the utilities, it only rounds what has no radius of its own. */
+:where(.smarta-ui, .smarta-ui *):focus-visible {
+  border-radius: var(--sui-radius-xs);
+}
+
+/* Bumped like the preflight: Ant Design sets `::selection` globally, at the
+   same (0,0,1), so without the bump the colour of selected text inside our
+   island depended on which stylesheet loaded last. */
+:where(.smarta-ui, .smarta-ui *):not(sui-z):not(sui-y):not(sui-x)::selection {
+  background: var(--selected-bg);
+  color: var(--selected-fg);
+}
+
+/* What a host's reboot sets on bare elements and Tailwind's preflight never
+   touches, because in a page Tailwind owns the browser default is fine.
+   Found by scripts/coexistence.mjs, not guessed: Bootstrap makes every <dt>
+   bold and every <code> pink, gives headings a line-height of 1.2 and a colour
+   of their own, and makes labels inline-block; Ant Design gives headings
+   rgba(0,0,0,.85). Each value below is the browser's own default — inheriting
+   from the island, as it would on a page with no reboot at all. */
+:where(.smarta-ui) :is(h1, h2, h3, h4, h5, h6):not(sui-z):not(sui-y):not(sui-x) {
+  line-height: inherit;
+  color: inherit;
+}
+:where(.smarta-ui) :is(dt, dd, th, caption, legend):not(sui-z):not(sui-y):not(sui-x) {
+  font-weight: inherit;
+}
+:where(.smarta-ui) th:not(sui-z):not(sui-y):not(sui-x) {
+  text-align: inherit;
+}
+:where(.smarta-ui) :is(code, kbd, samp, pre):not(sui-z):not(sui-y):not(sui-x) {
+  color: inherit;
+}
+:where(.smarta-ui) label:not(sui-z):not(sui-y):not(sui-x) {
+  display: inline;
+}
+
+/* Inputs do not inherit type by default, and a 13px control next to a 14px
+   label is the sort of thing nobody can name but everybody sees. */
+:where(.smarta-ui) :is(button, input, select, textarea, optgroup):not(sui-z):not(sui-y):not(sui-x) {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+/* Icons are sized by their box and coloured by their text. */
+:where(.smarta-ui) svg:not(sui-z):not(sui-y):not(sui-x) {
+  flex: none;
+}
+
+/* Links are underlined in both products: grayscale has no hue left to say
+   "this is a link" with, and the webapp's links are Deep Purple in Deep
+   Purple text. The rule still lives on a token, so a component never asks
+   which product it is in. */
+.smarta-link {
+  color: var(--link);
+  text-decoration: var(--link-decoration);
+  text-underline-offset: 2px;
+}
+.smarta-link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+/* Hover never fires on touch, so anything revealed by hover is pinned to a
+   partial opacity instead of being unreachable. */
+@media (hover: none) {
+  .sui-reveal-on-hover {
+    opacity: 0.6 !important;
+  }
+}
+
+/* Coarse pointers get a finger-sized target.
+
+   This used to read `button { min-height: var(--touch-target) }`, which was
+   the wrong shape of fix: min-height grows the box, and a great many of the
+   controls here are drawn at a fixed size on purpose. A 36px round IconButton
+   became a 36x44 oval; a 17px checkbox became a 17x44 slot next to its own
+   label; the 15px info icon in a KeyValue row pushed every row it appeared in
+   to 44px, so a column of figures gained gaps wherever a note existed. The
+   rule was invisible on every machine it was written on and wrong on every
+   phone.
+
+   So the hit area is separated from the drawn box. The pseudo-element is
+   centred on the control and takes the tap; the control keeps its size, its
+   roundness and its place in a row. Anything that can afford to grow — a menu
+   item, a tab — still just grows, in its own file. */
+.sui-touch-target {
+  position: relative;
+}
+
+@media (pointer: coarse) {
+  .sui-touch-target::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    /* At least a finger, and never smaller than the control it covers. */
+    width: 100%;
+    height: 100%;
+    min-width: var(--touch-target);
+    min-height: var(--touch-target);
+  }
+}
+
+/* Honoured for everything this library animates, scoped rather than global so
+   it cannot fight a product's own motion policy — but unconditional, because a
+   component that ignores this preference is a defect whether or not the
+   product took the reset. reset.css widens the same rule to the document. */
+@media (prefers-reduced-motion: reduce) {
+  :where(.smarta-ui, .smarta-ui *, .smarta-ui *::before, .smarta-ui *::after) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

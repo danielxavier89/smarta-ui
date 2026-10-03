@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Tabs as RTabs } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export const Tabs = RTabs.Root;
 
@@ -15,12 +15,12 @@ export const TabsList = React.forwardRef<
     <RTabs.List
       ref={ref}
       className={cn(
-        "flex items-center gap-[20px] border-b border-border",
+        "sui:flex sui:items-center sui:gap-[20px] sui:border-b sui:border-border",
         // Tabs overflow on a phone long before they wrap well.
-        "overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+        "sui:overflow-x-auto sui:[scrollbar-width:none] sui:[&::-webkit-scrollbar]:hidden",
         // Without this, swiping past the last tab hands the gesture to the
         // browser and iOS navigates back out of the page.
-        "overscroll-x-contain",
+        "sui:overscroll-x-contain",
         className,
       )}
       {...props}
@@ -46,22 +46,22 @@ export const Tab = React.forwardRef<
     <RTabs.Trigger
       ref={ref}
       className={cn(
-        "relative -mb-px shrink-0 cursor-pointer whitespace-nowrap",
-        "border-0 border-b-2 border-transparent bg-transparent",
-        "px-[2px] py-[8px] text-sm font-medium text-fg-subtle",
-        "touch:min-h-[var(--touch-target)]",
-        "transition-[color,border-color] duration-[var(--duration-fast)]",
-        "hover:text-fg",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring rounded-xs",
-        "data-[state=active]:border-accent data-[state=active]:text-accent-soft-fg",
-        "disabled:opacity-55 disabled:cursor-not-allowed",
+        "sui:relative sui:-mb-px sui:shrink-0 sui:cursor-pointer sui:whitespace-nowrap",
+        "sui:border-0 sui:border-b-2 sui:border-transparent sui:bg-transparent",
+        "sui:px-[2px] sui:py-[8px] sui:text-sm sui:font-medium sui:text-fg-subtle",
+        "sui:touch:min-h-[var(--touch-target)]",
+        "sui:transition-[color,border-color] sui:duration-[var(--duration-fast)]",
+        "sui:hover:text-fg",
+        "sui:focus-visible:outline-2 sui:focus-visible:outline-offset-2 sui:focus-visible:outline-focus-ring sui:rounded-xs",
+        "sui:data-[state=active]:border-accent sui:data-[state=active]:text-accent-soft-fg",
+        "sui:disabled:opacity-55 sui:disabled:cursor-not-allowed",
         className,
       )}
       {...props}
     >
       {children}
       {typeof count === "number" && (
-        <span className="ml-[6px] text-fg-subtle tabular-nums">{count}</span>
+        <span className="sui:ml-[6px] sui:text-fg-subtle sui:tabular-nums">{count}</span>
       )}
     </RTabs.Trigger>
   );
@@ -75,7 +75,7 @@ export const TabPanel = React.forwardRef<
     <RTabs.Content
       ref={ref}
       className={cn(
-        "pt-[16px] focus-visible:outline-2 focus-visible:outline-focus-ring rounded-xs",
+        "sui:pt-[16px] sui:focus-visible:outline-2 sui:focus-visible:outline-focus-ring sui:rounded-xs",
         className,
       )}
       {...props}

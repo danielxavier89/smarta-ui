@@ -51,6 +51,7 @@ The number window is never more than seven slots: `1 … 4 5 [6] 7 8 … 20`.
 3. **The current page carries `aria-current="page"`** — handled for you.
 4. **Page state belongs in the URL** where the list is a page of its own, so a shared link lands in the right place.
 5. **Don't mix pagination and infinite scroll** in the same list.
+6. **Two on one page need two names.** Each Pagination is a `<nav>` landmark named "Pagination" (or your `labels.pagination`). Two with the same name are two identical entries in a screen reader's landmark list. Pass `aria-label="Charges"` / `aria-label="Receipts"` so they say which list they page.
 
 ## Do and don't
 

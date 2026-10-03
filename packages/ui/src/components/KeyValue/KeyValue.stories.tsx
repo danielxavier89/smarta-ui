@@ -3,7 +3,7 @@ import { Copy } from "lucide-react";
 import { KeyValue } from "./KeyValue";
 import { IconButton } from "../IconButton";
 import { Chip } from "../Chip";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./KeyValue.md?raw";
 
 const meta = {
@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 export const InAPanel: Story = {
   render: () => (
-    <div className="max-w-[360px] rounded-lg border border-border bg-surface p-[20px]">
+    <div className="sui:max-w-[360px] sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[20px]">
       <KeyValue
         rows={[
           { key: "Supplier", value: "Staples Lisboa" },
@@ -45,7 +45,7 @@ export const InAPanel: Story = {
 
 export const Tones: Story = {
   render: () => (
-    <div className="max-w-[360px] rounded-lg border border-border bg-surface p-[20px]">
+    <div className="sui:max-w-[360px] sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[20px]">
       <KeyValue
         rows={[
           { key: "Receipt total", value: "$540.00", nowrap: true },
@@ -80,9 +80,9 @@ export const NarrowColumn: Story = {
     },
   },
   render: () => (
-    <div className="flex flex-wrap gap-[16px]">
-      <div className="w-[200px] rounded-lg border border-border bg-surface p-[16px]">
-        <p className="m-0 mb-[10px] text-xs font-medium text-fg-subtle">200px, rows</p>
+    <div className="sui:flex sui:flex-wrap sui:gap-[16px]">
+      <div className="sui:w-[200px] sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[16px]">
+        <p className="sui:m-0 sui:mb-[10px] sui:text-xs sui:font-medium sui:text-fg-subtle">200px, rows</p>
         <KeyValue
           size="sm"
           rows={[
@@ -94,8 +94,8 @@ export const NarrowColumn: Story = {
         />
       </div>
 
-      <div className="w-[200px] rounded-lg border border-border bg-surface p-[16px]">
-        <p className="m-0 mb-[10px] text-xs font-medium text-fg-subtle">200px, stacked</p>
+      <div className="sui:w-[200px] sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[16px]">
+        <p className="sui:m-0 sui:mb-[10px] sui:text-xs sui:font-medium sui:text-fg-subtle">200px, stacked</p>
         <KeyValue
           size="sm"
           layout="stacked"
@@ -113,7 +113,7 @@ export const NarrowColumn: Story = {
 
 export const Stacked: Story = {
   render: () => (
-    <div className="max-w-[240px] rounded-lg border border-border bg-surface p-[16px]">
+    <div className="sui:max-w-[240px] sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[16px]">
       <KeyValue
         layout="stacked"
         rows={[

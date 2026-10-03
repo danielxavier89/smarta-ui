@@ -161,7 +161,7 @@ export const SCALE_TOKENS: TokenGroup[] = [
   },
   {
     title: "Elevation",
-    note: "Tinted by --shadow-color, so a shadow is plum in the webapp and neutral in the backoffice.",
+    note: "Tinted by --shadow-color, so a shadow is Deep Purple in the webapp and neutral in the backoffice.",
     tokens: [
       { name: "shadow-xs", utility: "shadow-xs", use: "A hairline lift on a hovered card." },
       { name: "shadow-sm", utility: "shadow-sm", use: "Sticky headers, toolbars." },
@@ -188,10 +188,10 @@ export const SCALE_TOKENS: TokenGroup[] = [
     note: "Named, because a raw z-index is a number nobody can rank six months on.",
     tokens: [
       { name: "z-sticky", utility: "—", use: "10 — sticky table headings." },
-      { name: "z-dropdown", utility: "—", use: "20 — menus and popovers." },
       { name: "z-overlay", utility: "—", use: "30 — the scrim." },
       { name: "z-panel", utility: "—", use: "40 — the side panel." },
       { name: "z-dialog", utility: "—", use: "50 — modal dialogs." },
+      { name: "z-dropdown", utility: "—", use: "55 — menus, calendars and option lists, above the Dialog or Panel they open from." },
       { name: "z-toast", utility: "—", use: "60 — toasts, above a dialog." },
       { name: "z-tooltip", utility: "—", use: "70 — tooltips, above everything." },
     ],

@@ -11,7 +11,7 @@
   // The same pass stamps the product on the manager's own <html>, so the
   // sidebar is painted in the right palette on the very first frame. manager.ts
   // keeps it in step afterwards, but it cannot run this early, and a sidebar
-  // that starts plum and turns grey a moment later is worse than one that never
+  // that starts purple and turns grey a moment later is worse than one that never
   // moved.
   //
   // In <head>, so it runs before the manager reads the query string.
@@ -60,13 +60,13 @@
      setting; Storybook's own theme is light and stays light.
      --------------------------------------------------------------------- */
   :root {
-    --sb-canvas:      #FBF9FB;  /* --canvas */
-    --sb-border:      #EEE7EF;  /* --border */
-    --sb-sunken:      #F5F0F6;  /* --surface-sunken */
-    --sb-fg:          #432F4A;  /* --fg */
-    --sb-fg-subtle:   #7A5D80;  /* --fg-subtle */
-    --sb-selected-bg: #FAE4F7;  /* --selected-bg */
-    --sb-selected-fg: #8A3D86;  /* --selected-fg */
+    --sb-canvas:      #FAFAFA;  /* --canvas */
+    --sb-border:      #E6E6E6;  /* --border */
+    --sb-sunken:      #F1F1F1;  /* --surface-sunken */
+    --sb-fg:          #280028;  /* --fg, Deep Purple */
+    --sb-fg-subtle:   #694D69;  /* --fg-subtle */
+    --sb-selected-bg: #EAEAEA;  /* --selected-bg */
+    --sb-selected-fg: #280028;  /* --selected-fg */
   }
 
   :root[data-product="backoffice"] {
@@ -81,7 +81,7 @@
 
   /* The ground. Three surfaces, because Storybook paints the sidebar column
      twice — the <nav> and the wrapper holding it — over a body that shows
-     through at the seam. Miss the wrapper and a 1px strip stays plum. */
+     through at the seam. Miss the wrapper and a 1px strip stays the webapp's colour. */
   body,
   div:has(> nav.sidebar-container),
   nav.sidebar-container {
@@ -133,7 +133,7 @@
 
      The selected pill is the part that actually carries the product: both
      canvases are near-white and a reader will not name the difference between
-     #FBF9FB and #FAFAFA, but pale pink against grey is unmistakable. The
+     the two greys, but Deep Purple text against grey text is unmistakable. The
      webapp marks the active page with a tinted pill and brand-coloured text,
      never a solid fill; the backoffice does the same in grey, because a
      grayscale palette has no hue to spend on it.

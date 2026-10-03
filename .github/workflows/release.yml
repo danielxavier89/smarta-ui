@@ -1,0 +1,61 @@
+name: Release
+
+# Versioning and the changelog, automated — Alisson's "usar SemVer, gerar
+# changelog automaticamente".
+#
+# On every push to main this either:
+#   - opens (or updates) a "Version packages" pull request that turns the
+#     pending notes in .changeset/ into a version bump and
+#     packages/ui/CHANGELOG.md, or
+#   - when that pull request has just been merged, tags the release and, if a
+#     registry is configured, publishes it.
+#
+# Publishing stays off until someone decides WHERE. GitHub Packages requires
+# the package scope to match the repository owner, so `@smarta/ui` cannot
+# publish to npm.pkg.github.com from danielxavier89 — that decision belongs with
+# the transfer to taxit-tech (docs/OWNERSHIP.md). To switch it on, set:
+#
+#   variable  PUBLISH_ENABLED   true
+#   secret    NPM_TOKEN         a token for the chosen registry
+#
+# and point packages/ui's publishConfig.registry at it.
+
+on:
+  push:
+    branches: [main]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Version packages, or publish
+        uses: changesets/action@v1
+        with:
+          title: "Version packages"
+          commit: "Version packages"
+          version: npm run version-packages
+          # Empty means "version only": the action still opens the version PR
+          # and tags nothing until a registry exists.
+          publish: ${{ vars.PUBLISH_ENABLED == 'true' && 'npm run release' || '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

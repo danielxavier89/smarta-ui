@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export interface EmptyStateProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
@@ -44,8 +44,8 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center text-center",
-        size === "sm" ? "gap-[8px] px-[20px] py-[28px]" : "gap-[10px] px-[24px] py-[48px]",
+        "sui:flex sui:flex-col sui:items-center sui:justify-center sui:text-center",
+        size === "sm" ? "sui:gap-[8px] sui:px-[20px] sui:py-[28px]" : "sui:gap-[10px] sui:px-[24px] sui:py-[48px]",
         className,
       )}
       role={variant === "error" ? "alert" : undefined}
@@ -55,22 +55,22 @@ export function EmptyState({
         <div
           aria-hidden
           className={cn(
-            "grid place-items-center rounded-full",
-            size === "sm" ? "size-[36px]" : "size-[46px]",
-            variant === "error" ? "bg-bad-bg text-bad" : "bg-surface-sunken text-fg-faint",
+            "sui:grid sui:place-items-center sui:rounded-full",
+            size === "sm" ? "sui:size-[36px]" : "sui:size-[46px]",
+            variant === "error" ? "sui:bg-bad-bg sui:text-bad" : "sui:bg-surface-sunken sui:text-fg-faint",
           )}
         >
           {icon}
         </div>
       )}
-      <p className={cn("m-0 font-semibold text-fg", size === "sm" ? "text-base" : "text-lg")}>
+      <p className={cn("sui:m-0 sui:font-semibold sui:text-fg", size === "sm" ? "sui:text-base" : "sui:text-lg")}>
         {title}
       </p>
       {description && (
-        <p className="m-0 max-w-[42ch] text-sm text-fg-subtle">{description}</p>
+        <p className="sui:m-0 sui:max-w-[42ch] sui:text-sm sui:text-fg-subtle">{description}</p>
       )}
       {(action || secondaryAction) && (
-        <div className="mt-[6px] flex flex-wrap items-center justify-center gap-[8px]">
+        <div className="sui:mt-[6px] sui:flex sui:flex-wrap sui:items-center sui:justify-center sui:gap-[8px]">
           {action}
           {secondaryAction}
         </div>

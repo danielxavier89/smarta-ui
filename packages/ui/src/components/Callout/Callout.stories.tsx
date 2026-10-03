@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Callout } from "./Callout";
 import { Button } from "../Button";
 import { TextLink } from "../TextLink";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Callout.md?raw";
 
 const meta = {
@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Tones: Story = {
   render: () => (
-    <div className="flex max-w-[560px] flex-col gap-[10px]">
+    <div className="sui:flex sui:max-w-[560px] sui:flex-col sui:gap-[10px]">
       <Callout tone="info" title="June is open until 20 August">
         <p>Anything you upload before then lands in this period.</p>
       </Callout>
@@ -41,7 +41,7 @@ export const Tones: Story = {
 
 export const Dismissible: Story = {
   render: () => (
-    <div className="max-w-[560px]">
+    <div className="sui:max-w-[560px]">
       <Callout tone="info" title="Receipts can be forwarded by email" onDismiss={() => {}}>
         <p>Send them to receipts@marcondesvale.pt and they will appear here.</p>
       </Callout>
@@ -52,7 +52,7 @@ export const Dismissible: Story = {
 export const OrAToast: Story = {
   name: "Callout or toast?",
   render: () => (
-    <p className="m-0 max-w-[62ch] text-base text-fg-muted">
+    <p className="sui:m-0 sui:max-w-[62ch] sui:text-base sui:text-fg-muted">
       A Callout persists and belongs to a place — it is still there when the user comes
       back tomorrow. A Toast is transient and belongs to a moment. Use a toast for
       &ldquo;that worked&rdquo;, and a callout for &ldquo;here is why this is the way it

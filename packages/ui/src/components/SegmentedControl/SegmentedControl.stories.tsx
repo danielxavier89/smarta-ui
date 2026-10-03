@@ -2,7 +2,7 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LayoutGrid, List as ListIcon } from "lucide-react";
 import { SegmentedControl } from "./SegmentedControl";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./SegmentedControl.md?raw";
 
 const meta = {
@@ -56,7 +56,7 @@ export const VersusTabs: Story = {
   render: function Versus() {
     const [v, setV] = React.useState("list");
     return (
-      <div className="flex max-w-[62ch] flex-col gap-[12px]">
+      <div className="sui:flex sui:max-w-[62ch] sui:flex-col sui:gap-[12px]">
         <SegmentedControl
           label="View"
           value={v}
@@ -68,7 +68,7 @@ export const VersusTabs: Story = {
             { value: "calendar", label: "Calendar" },
           ]}
         />
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           A segmented control changes <em>how</em> the same content is shown. Tabs change
           <em> what</em> is shown, and carry counts. A RadioGroup records an answer in a
           form. Past four options, or once the labels stop fitting on one line, it is a
@@ -84,7 +84,7 @@ export const DisabledSegment: Story = {
   render: function DisabledSegment() {
     const [view, setView] = React.useState("month");
     return (
-      <div className="flex flex-col items-start gap-[10px]">
+      <div className="sui:flex sui:flex-col sui:items-start sui:gap-[10px]">
         <SegmentedControl
           label="Period"
           value={view}
@@ -95,7 +95,7 @@ export const DisabledSegment: Story = {
             { value: "year", label: "Year", disabled: true },
           ]}
         />
-        <p className="m-0 max-w-[60ch] text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:max-w-[60ch] sui:text-sm sui:text-fg-subtle">
           The year view needs four filed quarters; Q3 is still open. The sentence under
           the control is the reachable reason — without it the third segment is just a
           segment that ignores you.

@@ -1,19 +1,19 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Info } from "lucide-react";
-import { Button } from "@/components/Button";
-import { Callout } from "@/components/Callout";
-import { Card, CardHeader, CardTitle, CardBody } from "@/components/Card";
-import { Chip } from "@/components/Chip";
-import { EmptyState } from "@/components/EmptyState";
-import { Input } from "@/components/Input";
-import { KeyValue } from "@/components/KeyValue";
-import { List, ListItem } from "@/components/ListItem";
-import { Progress } from "@/components/Progress";
-import { SkeletonList } from "@/components/Skeleton";
-import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "@/components/Table";
-import { TextLink } from "@/components/TextLink";
-import { Tooltip } from "@/components/Tooltip";
+import { Button } from "../components/Button";
+import { Callout } from "../components/Callout";
+import { Card, CardHeader, CardTitle, CardBody } from "../components/Card";
+import { Chip } from "../components/Chip";
+import { EmptyState } from "../components/EmptyState";
+import { Input } from "../components/Input";
+import { KeyValue } from "../components/KeyValue";
+import { List, ListItem } from "../components/ListItem";
+import { Progress } from "../components/Progress";
+import { SkeletonList } from "../components/Skeleton";
+import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "../components/Table";
+import { TextLink } from "../components/TextLink";
+import { Tooltip } from "../components/Tooltip";
 
 /**
  * The six states, in one place.
@@ -60,10 +60,10 @@ function State({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col gap-[12px] border-b border-border-soft pb-[28px] last:border-b-0 last:pb-0">
-      <div className="flex flex-col gap-[4px]">
-        <h3 className="m-0 text-lg font-semibold tracking-tight text-fg">{name}</h3>
-        <p className="m-0 max-w-[70ch] text-sm text-fg-muted">{rule}</p>
+    <section className="sui:flex sui:flex-col sui:gap-[12px] sui:border-b sui:border-border-soft sui:pb-[28px] sui:last:border-b-0 sui:last:pb-0">
+      <div className="sui:flex sui:flex-col sui:gap-[4px]">
+        <h3 className="sui:m-0 sui:text-lg sui:font-semibold sui:tracking-tight sui:text-fg">{name}</h3>
+        <p className="sui:m-0 sui:max-w-[70ch] sui:text-sm sui:text-fg-muted">{rule}</p>
       </div>
       {children}
     </section>
@@ -74,7 +74,7 @@ export const TheSixStates: Story = {
   name: "The six states every screen owes the user",
   render: function TheSixStates() {
     return (
-      <div className="flex max-w-[760px] flex-col gap-[28px]">
+      <div className="sui:flex sui:max-w-[760px] sui:flex-col sui:gap-[28px]">
         {/* ------------------------------------------------------- empty --- */}
         <State
           name="Empty"
@@ -87,7 +87,7 @@ export const TheSixStates: Story = {
             </>
           }
         >
-          <div className="overflow-hidden rounded-lg border border-border bg-surface">
+          <div className="sui:overflow-hidden sui:rounded-lg sui:border sui:border-border sui:bg-surface">
             <EmptyState
               variant="first-run"
               title="No receipts yet"
@@ -95,7 +95,7 @@ export const TheSixStates: Story = {
               action={<Button variant="primary" size="sm">Upload a receipt</Button>}
             />
           </div>
-          <p className="m-0 text-sm text-fg-subtle">
+          <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
             Nothing yet is not the same as nothing found. See EmptyState for
             <code> first-run</code>, <code>no-results</code>, <code>locked</code> and
             <code> error</code> side by side.
@@ -114,7 +114,7 @@ export const TheSixStates: Story = {
             </>
           }
         >
-          <div className="overflow-hidden rounded-lg border border-border bg-surface p-[var(--density-card-p)]">
+          <div className="sui:overflow-hidden sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[var(--density-card-p)]">
             <SkeletonList rows={3} />
           </div>
         </State>
@@ -131,7 +131,7 @@ export const TheSixStates: Story = {
             </>
           }
         >
-          <div className="flex flex-col gap-[12px]">
+          <div className="sui:flex sui:flex-col sui:gap-[12px]">
             <Callout
               tone="bad"
               title="The upload failed"
@@ -142,7 +142,7 @@ export const TheSixStates: Story = {
                 well under it.
               </p>
             </Callout>
-            <div className="max-w-[360px]">
+            <div className="sui:max-w-[360px]">
               <Input
                 label="NIF"
                 defaultValue="503214"
@@ -164,19 +164,19 @@ export const TheSixStates: Story = {
             </>
           }
         >
-          <div className="flex flex-wrap items-center gap-[10px]">
+          <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[10px]">
             <Tooltip content="Ana has to sign off June before it can be filed.">
               <Button aria-disabled onClick={() => {}}>
                 File the VAT return
               </Button>
             </Tooltip>
-            <span className="text-sm text-fg-subtle">
+            <span className="sui:text-sm sui:text-fg-subtle">
               Enabled, focusable, and it answers when pressed.
             </span>
           </div>
-          <div className="flex flex-wrap items-center gap-[10px]">
+          <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[10px]">
             <Button disabled>File the VAT return</Button>
-            <span className="text-sm text-fg-subtle">
+            <span className="sui:text-sm sui:text-fg-subtle">
               Off with no reason anywhere. This is the one the house rules ban.
             </span>
           </div>
@@ -244,10 +244,10 @@ export const TheSixStates: Story = {
               <CardTitle>June is not ready to file</CardTitle>
             </CardHeader>
             <CardBody>
-              <div className="flex flex-col gap-[14px]">
-                <div className="flex flex-col gap-[6px]">
+              <div className="sui:flex sui:flex-col sui:gap-[14px]">
+                <div className="sui:flex sui:flex-col sui:gap-[6px]">
                   <Progress value={41} max={53} label="Receipts matched" />
-                  <p className="m-0 text-sm text-fg-subtle">
+                  <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
                     41 of 53 charges have a receipt behind them.
                   </p>
                 </div>
@@ -294,7 +294,7 @@ export const EmptyIsNotOneState: Story = {
   },
   render: function EmptyIsNotOneState() {
     return (
-      <div className="flex max-w-[620px] flex-col gap-[16px]">
+      <div className="sui:flex sui:max-w-[620px] sui:flex-col sui:gap-[16px]">
         <Table>
           <THead>
             <TR>
@@ -314,7 +314,7 @@ export const EmptyIsNotOneState: Story = {
             </TableEmpty>
           </TBody>
         </Table>
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           Inside <code>TableEmpty</code>, so the header row survives and the user can see
           what they filtered. An empty state that replaces the whole table takes away the
           evidence of why it is empty.
@@ -322,7 +322,7 @@ export const EmptyIsNotOneState: Story = {
 
         <List>
           <ListItem
-            leading={<Info size={16} className="text-fg-faint" />}
+            leading={<Info size={16} className="sui:text-fg-faint" />}
             title="Nothing here yet, versus nothing found"
             description="First-run offers the action that creates the first one. No-results offers to widen the search. They are never the same button."
           />

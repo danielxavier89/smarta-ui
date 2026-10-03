@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RadioGroup } from "./RadioGroup";
-import { docsPage } from "@/lib/docs";
+import { RadioGroup, type RadioGroupProps } from "./RadioGroup";
+import { docsPage } from "../../lib/docs";
 import rules from "./RadioGroup.md?raw";
 
 const meta = {
@@ -21,11 +21,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a) => <div className="max-w-[420px]"><RadioGroup {...a} /></div> };
+export const Playground: Story = { render: (a: RadioGroupProps) => <div className="sui:max-w-[420px]"><RadioGroup {...a} /></div> };
 
 export const Cards: Story = {
   render: () => (
-    <div className="max-w-[420px]">
+    <div className="sui:max-w-[420px]">
       <RadioGroup
         label="Which offer template?"
         appearance="card"
@@ -41,7 +41,7 @@ export const Cards: Story = {
 
 export const WithError: Story = {
   render: () => (
-    <div className="max-w-[420px]">
+    <div className="sui:max-w-[420px]">
       <RadioGroup
         label="Who owes the missing document?"
         options={[

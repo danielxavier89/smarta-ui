@@ -14,9 +14,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": { "@/*": ["./src/*"] }
+    "noEmit": true
   },
   "include": ["src"]
 }

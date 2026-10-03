@@ -84,7 +84,7 @@
      One trap worth knowing: shadcn's --accent is its *hover fill*, not a
      brand colour. It maps to surface-hover here. smarta's brand accent is
      --color-accent, which is shadcn's --primary. Getting those two the wrong
-     way round paints every hover state magenta.
+     way round paints every hover state Deep Purple.
      ------------------------------------------------------------------ */
   --color-background:            var(--canvas);
   --color-foreground:            var(--fg);

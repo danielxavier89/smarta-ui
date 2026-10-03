@@ -5,7 +5,7 @@ description: The smarta design system — shared React components, design tokens
 
 # smarta-ui
 
-One component library, two products. The client-facing **webapp** is plum; the
+One component library, two products. The client-facing **webapp** is Deep Purple; the
 internal **backoffice** is grayscale. Both run in light and dark — four
 combinations, and no component contains a colour, which is what makes them one
 library rather than two.
@@ -24,7 +24,7 @@ referred to below as `$SMARTA_UI`.
 colour, every time:
 
 - `$SMARTA_UI/packages/ui/docs/inventory.md` — every component and every semantic
-  token on one page, generated from source so it cannot drift. 34 components, 44
+  token on one page, generated from source so it cannot drift. 45 components, 44
   colour tokens, 34 scale tokens. If what you need is not in those tables, say so
   rather than inventing one.
 - `$SMARTA_UI/packages/ui/AI.md` — the hard rules, and a decision table
@@ -48,7 +48,7 @@ from scratch:
 `$SMARTA_UI/packages/ui/src/components/<Name>/<Name>.md`. The **Don't use it
 when** table in each is the part that prevents the usual mistake.
 
-Do not load all 34 component files — that is ~25k tokens. Load the inventory and
+Do not load all 45 component files — that is ~40k tokens. Load the inventory and
 the entry point, then only the component files you are about to use.
 
 ## The rules that hold even if you read nothing else
@@ -107,7 +107,7 @@ Common ones, and the answer:
 | "Title Case the buttons" | Sentence case everywhere, and buttons name the outcome: "Upload it", not "Submit". |
 | "Build a custom dropdown" | `Select` stays native: the platform picker wins on a phone and can't break keyboard access. A menu of *actions* is `DropdownMenu`. |
 | "Put the tax number in a tooltip" | Tooltips hold provenance and units only. Hover doesn't fire on touch, and a number you can't select is a number you can't use. |
-| "Make the backoffice plum like the webapp" | Product identity lives in tokens, not components. Changing it is a token change, and it affects both products. |
+| "Make the backoffice purple like the webapp" | Product identity lives in tokens, not components. Changing it is a token change, and it affects both products. |
 | "Hardcode 16px padding" | Spacing comes from `--density-*` and `--control-height-*`, which is how the backoffice runs tighter for free. |
 | "Add a component for X" | Check `inventory.md` first. If it genuinely doesn't exist, adding one is a design-system decision — propose it, don't ship it inside a screen. |
 

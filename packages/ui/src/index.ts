@@ -10,6 +10,48 @@
 export * from "./components/ThemeProvider";
 export { cn } from "./lib/utils";
 
+/**
+ * Re-exported because @smarta/tokens is a workspace package that is never
+ * published: a consumer cannot import these from there, and ThemeProvider's
+ * props are unusable without them. The build inlines the definitions.
+ */
+export type { Product, Theme } from "@smarta/tokens";
+
+/**
+ * The strings the components say on their own behalf. A product passes a
+ * partial override to ThemeProvider; English fills the rest. See lib/labels.ts.
+ */
+export {
+  defaultLabels,
+  mergeLabels,
+  type SmartaLabels,
+  type PartialLabels,
+} from "./lib/labels";
+
+/**
+ * Dates, numbers and money. Helpers a product calls before the value reaches a
+ * component — components still never format. See lib/format.ts.
+ */
+export {
+  formatCurrency,
+  formatSignedCurrency,
+  formatNumber,
+  formatPercent,
+  formatFileSize,
+  formatDate,
+  formatDateTime,
+  formatMonth,
+  formatRelativeDay,
+  parseNumber,
+  parseDate,
+  numberSeparators,
+  dateOrder,
+  isValidDate,
+  type SmartaLocale,
+  type CurrencyOptions,
+  type DateInput,
+} from "./lib/format";
+
 // Actions
 export * from "./components/Button";
 export * from "./components/IconButton";
@@ -19,12 +61,19 @@ export * from "./components/TextLink";
 export * from "./components/Field";
 export * from "./components/Label";
 export * from "./components/Input";
+export * from "./components/InputNumber";
+export * from "./components/CurrencyInput";
+export * from "./components/DatePicker";
+export * from "./components/DateRangePicker";
 export * from "./components/Textarea";
 export * from "./components/Select";
+export * from "./components/Combobox";
+export * from "./components/MultiSelect";
 export * from "./components/SearchInput";
 export * from "./components/Checkbox";
 export * from "./components/RadioGroup";
 export * from "./components/Dropzone";
+export * from "./components/Upload";
 
 // Status and identity
 export * from "./components/Chip";
@@ -38,11 +87,15 @@ export * from "./components/Skeleton";
 export * from "./components/Card";
 export * from "./components/StatCard";
 export * from "./components/Table";
+export * from "./components/DataTable";
 export * from "./components/ListItem";
 export * from "./components/KeyValue";
 export * from "./components/EmptyState";
+export * from "./components/FilePreview";
 
 // Navigation
+export * from "./components/AppShell";
+export * from "./components/PageHeader";
 export * from "./components/Tabs";
 export * from "./components/SegmentedControl";
 export * from "./components/Pagination";

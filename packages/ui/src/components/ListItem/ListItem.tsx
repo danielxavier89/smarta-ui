@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Slot } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export interface ListItemProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
@@ -53,41 +53,41 @@ export const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(function
       type={clickable && !asChild ? "button" : undefined}
       aria-disabled={disabled || undefined}
       className={cn(
-        "flex w-full flex-wrap items-start gap-[14px] text-left",
-        "border-b border-border-soft last:border-b-0",
-        "px-[var(--density-row-x)] py-[var(--density-row-y)]",
-        "bg-transparent",
+        "sui:flex sui:w-full sui:flex-wrap sui:items-start sui:gap-[14px] sui:text-left",
+        "sui:border-b sui:border-border-soft sui:last:border-b-0",
+        "sui:px-[var(--density-row-x)] sui:py-[var(--density-row-y)]",
+        "sui:bg-transparent",
         clickable && [
-          "cursor-pointer transition-colors duration-[var(--duration-fast)]",
-          "hover:bg-surface-hover",
-          "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus-ring",
+          "sui:cursor-pointer sui:transition-colors sui:duration-[var(--duration-fast)]",
+          "sui:hover:bg-surface-hover",
+          "sui:focus-visible:outline-2 sui:focus-visible:-outline-offset-2 sui:focus-visible:outline-focus-ring",
         ],
-        selected && "bg-accent-soft",
-        disabled && "pointer-events-none opacity-60",
+        selected && "sui:bg-accent-soft",
+        disabled && "sui:pointer-events-none sui:opacity-60",
         className,
       )}
       {...props}
     >
-      {leading && <span className="mt-[1px] shrink-0">{leading}</span>}
+      {leading && <span className="sui:mt-[1px] sui:shrink-0">{leading}</span>}
 
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-[7px]">
-          {unread && <span aria-hidden className="size-[6px] shrink-0 rounded-full bg-accent" />}
-          <p className={cn("m-0 truncate text-base", unread ? "font-semibold text-fg" : "text-fg")}>
+      <div className="sui:min-w-0 sui:flex-1">
+        <div className="sui:flex sui:items-center sui:gap-[7px]">
+          {unread && <span aria-hidden className="sui:size-[6px] sui:shrink-0 sui:rounded-full sui:bg-accent" />}
+          <p className={cn("sui:m-0 sui:truncate sui:text-base", unread ? "sui:font-semibold sui:text-fg" : "sui:text-fg")}>
             {title}
           </p>
         </div>
         {description && (
-          <div className="mt-[2px] text-sm text-fg-subtle [&>p]:m-0">{description}</div>
+          <div className="sui:mt-[2px] sui:text-sm sui:text-fg-subtle sui:[&>p]:m-0">{description}</div>
         )}
       </div>
 
-      {meta && <div className="shrink-0 text-right text-xs text-fg-subtle">{meta}</div>}
+      {meta && <div className="sui:shrink-0 sui:text-right sui:text-xs sui:text-fg-subtle">{meta}</div>}
 
       {actions && (
         // Full width on a phone, where a button squeezed beside two lines of
         // text is a button nobody can hit.
-        <div className="order-5 flex w-full shrink-0 gap-[8px] sm:order-none sm:w-auto sm:items-center">
+        <div className="sui:order-5 sui:flex sui:w-full sui:shrink-0 sui:gap-[8px] sui:sm:order-none sui:sm:w-auto sui:sm:items-center">
           {actions}
         </div>
       )}
@@ -101,7 +101,7 @@ export const List = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
     return (
       <div
         ref={ref}
-        className={cn("overflow-hidden rounded-lg border border-border bg-surface", className)}
+        className={cn("sui:overflow-hidden sui:rounded-lg sui:border sui:border-border sui:bg-surface", className)}
         {...props}
       />
     );

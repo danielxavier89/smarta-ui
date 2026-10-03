@@ -1,10 +1,11 @@
 import * as React from "react";
 import { UploadCloud } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { TextLink } from "@/components/TextLink";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
+import { TextLink } from "../TextLink";
 
 export interface DropzoneProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onDrop" | "children"> {
+  extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, "onDrop" | "children"> {
   onFiles: (files: File[]) => void;
   /** Passed straight to the input, e.g. "image/*,.pdf". */
   accept?: string;
@@ -21,11 +22,20 @@ export interface DropzoneProps
 }
 
 /**
- * A drop target that is also a button that is also a file input.
+ * A drop target that is also a file input.
  *
  * Drag is the affordance, not the requirement: the whole zone is clickable and
  * reachable by keyboard, because dragging a file is impossible on a phone and
  * awkward with a screen reader.
+ *
+ * The zone is a <label> owning a real file input, not a div with
+ * role="button". The div version failed axe twice over, and both were real:
+ * the input inside it had no accessible name, and an interactive wrapper
+ * containing an interactive input is nested-interactive, which leaves screen
+ * readers disagreeing about what the control even is. A label gives the input
+ * its name from the visible text, opens the picker natively on click, and
+ * needs no key handler of its own — Enter and Space on a focused file input
+ * already open it.
  */
 export function Dropzone({
   className,
@@ -33,13 +43,15 @@ export function Dropzone({
   accept,
   multiple = true,
   disabled = false,
-  label = "Drop files here",
+  label,
   hint,
   error,
   uploading = false,
   children,
   ...props
 }: DropzoneProps) {
+  const labels = useLabels();
+
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [over, setOver] = React.useState(false);
   const blocked = disabled || uploading;
@@ -54,21 +66,17 @@ export function Dropzone({
     if (files.length) onFiles(multiple ? files : files.slice(0, 1));
   };
 
+  const hintId = React.useId();
+  const errorId = React.useId();
+  const hintRendered = Boolean(hint) && !children;
+  const describedBy = [hintRendered ? hintId : null, error ? errorId : null].filter(Boolean).join(" ");
+
   return (
-    <div className="flex flex-col gap-[6px]">
-      <div
-        role="button"
-        tabIndex={blocked ? -1 : 0}
+    <div className="sui:flex sui:flex-col sui:gap-[6px]">
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- the
+          input is a child, which is the association. */}
+      <label
         aria-disabled={blocked || undefined}
-        aria-describedby={undefined}
-        onClick={() => !blocked && inputRef.current?.click()}
-        onKeyDown={(e) => {
-          if (blocked) return;
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            inputRef.current?.click();
-          }
-        }}
         onDragEnter={(e) => {
           e.preventDefault();
           depth.current += 1;
@@ -86,29 +94,41 @@ export function Dropzone({
           handleFiles(e.dataTransfer.files);
         }}
         className={cn(
-          "flex flex-col items-center justify-center gap-[6px] text-center",
-          "rounded-lg border-[length:var(--border-width-strong)] border-dashed border-border",
-          "bg-surface px-[24px] py-[26px] text-sm text-fg-subtle",
-          "transition-[border-color,background-color] duration-[var(--duration-fast)]",
-          !blocked && "cursor-pointer hover:border-border-strong",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
-          over && "border-accent bg-accent-soft",
-          error && "border-bad",
-          blocked && "cursor-not-allowed opacity-60",
+          "sui:flex sui:flex-col sui:items-center sui:justify-center sui:gap-[6px] sui:text-center",
+          "sui:rounded-lg sui:border-[length:var(--border-width-strong)] sui:border-dashed sui:border-border",
+          "sui:bg-surface sui:px-[24px] sui:py-[26px] sui:text-sm sui:text-fg-subtle",
+          "sui:transition-[border-color,background-color] sui:duration-[var(--duration-fast)]",
+          !blocked && "sui:cursor-pointer sui:hover:border-border-strong",
+          // The input takes the focus and is visually hidden, so the zone draws
+          // the ring on its behalf.
+          "sui:has-[:focus-visible]:outline-2 sui:has-[:focus-visible]:outline-offset-2 sui:has-[:focus-visible]:outline-focus-ring",
+          over && "sui:border-accent sui:bg-accent-soft",
+          error && "sui:border-bad",
+          blocked && "sui:cursor-not-allowed sui:opacity-60",
           className,
         )}
         {...props}
       >
         {children ?? (
           <>
-            <UploadCloud size={22} aria-hidden className="text-fg-faint" />
-            <p className="m-0 text-base text-fg">
-              {label}{" "}
+            <UploadCloud size={22} aria-hidden className="sui:text-fg-faint" />
+            <p className="sui:m-0 sui:text-base sui:text-fg">
+              {label ?? labels.dropFiles}{" "}
               <TextLink asChild>
-                <span>or choose them</span>
+                <span>{labels.chooseFiles}</span>
               </TextLink>
             </p>
-            {hint && <p className="m-0 text-xs text-fg-subtle">{hint}</p>}
+            {/* Inside the zone, where the design puts it — and aria-hidden, so
+                it stays out of the input's accessible name, which is built from
+                everything the label contains. A name that recites the size
+                limit is read out in full on every focus. The input still gets
+                the hint, as a description: aria-describedby reads a referenced
+                element even when it is hidden from the tree, by design. */}
+            {hint && (
+              <p id={hintId} aria-hidden="true" className="sui:m-0 sui:text-xs sui:text-fg-subtle">
+                {hint}
+              </p>
+            )}
           </>
         )}
         <input
@@ -117,16 +137,19 @@ export function Dropzone({
           accept={accept}
           multiple={multiple}
           disabled={blocked}
-          className="sr-only"
+          aria-describedby={describedBy || undefined}
+          aria-invalid={error ? true : undefined}
+          className="sui:sr-only"
           onChange={(e) => {
             handleFiles(e.target.files);
             // Reset so choosing the same file twice still fires a change.
             e.target.value = "";
           }}
         />
-      </div>
+      </label>
+
       {error && (
-        <p role="alert" className="text-xs text-bad-fg">
+        <p id={errorId} role="alert" className="sui:text-xs sui:text-bad-fg">
           {error}
         </p>
       )}

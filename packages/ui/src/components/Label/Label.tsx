@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Label as RLabel } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export interface LabelProps
   extends React.ComponentPropsWithoutRef<typeof RLabel.Root> {
@@ -19,19 +20,21 @@ export const Label = React.forwardRef<
   React.ComponentRef<typeof RLabel.Root>,
   LabelProps
 >(function Label({ className, optional = false, children, ...props }, ref) {
+  const labels = useLabels();
+
   return (
     <RLabel.Root
       ref={ref}
       className={cn(
-        "inline-flex items-center gap-[6px] text-sm font-medium text-fg-muted",
-        "peer-disabled:opacity-55",
+        "sui:inline-flex sui:items-center sui:gap-[6px] sui:text-sm sui:font-medium sui:text-fg-muted",
+        "sui:peer-disabled:opacity-55",
         className,
       )}
       {...props}
     >
       {children}
       {optional && (
-        <span className="text-xs font-normal text-fg-subtle">optional</span>
+        <span className="sui:text-xs sui:font-normal sui:text-fg-subtle">{labels.optional}</span>
       )}
     </RLabel.Root>
   );

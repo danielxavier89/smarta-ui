@@ -22,9 +22,12 @@ A single-line text field with its label, hint and error wired to it.
 | Situation | Use instead |
 |---|---|
 | The answer is more than a line | `Textarea` |
-| The answer is one of a known set | `Select` (or `RadioGroup` for ≤5 important choices) |
+| The answer is one of a known set | `Select` (or `RadioGroup` for ≤5 important choices, `Combobox` for a long list) |
 | It filters a list on the page | `SearchInput` |
-| It is a date | a native `<input type="date">` wrapped in `Field` |
+| It is a date | `DatePicker` (a period: `DateRangePicker`) |
+| It is an amount of money | `CurrencyInput` |
+| It is a number someone steps or that has a range — a quantity, a percentage | `InputNumber` |
+| It is a file | `Upload`, or `Dropzone` for one |
 | You are building a control we don't have | `Field` — it provides the label/hint/error wiring |
 
 ## Props

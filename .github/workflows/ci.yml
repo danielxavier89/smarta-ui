@@ -1,0 +1,199 @@
+name: CI
+
+# The repository had no automated anything: no tests, no workflows, and the
+# accessibility addon set to "todo" so violations failed nothing. This is the
+# gate. Nothing merges past a red run — see .github/branch-protection.json for the
+# settings that make that true, which have to be applied in the repository's
+# own configuration and cannot live in a file.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # So a dependency advisory does not sit undiscovered until the next commit.
+  schedule:
+    - cron: "0 6 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: the changeset check below compares against the base
+          # branch, and needs the merge base to do it.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          # Storybook 9 and Vite 7 both want a current Node, and this is the
+          # version netlify.toml pins for the deploy. They must not drift.
+          node-version: "20"
+          cache: npm
+
+      # ci, not install: it installs exactly the lockfile and fails if
+      # package.json and package-lock.json disagree.
+      - name: Install
+        run: npm ci
+
+      # A pull request that changes what a product installs must say so, in a
+      # .changeset/ note: which version bump, and what to do when upgrading.
+      # That note is the changelog. See .changeset/README.md.
+      - name: A changeset accompanies every library change
+        if: github.event_name == 'pull_request'
+        run: node scripts/run-bin.mjs @changesets/cli::changeset status --since="origin/${{ github.base_ref }}"
+
+      # typecheck, no hardcoded colours, no hardcoded English, contrast across
+      # the four themes, and the component inventory regenerated from source.
+      - name: Check
+        run: npm run check
+
+      # The inventory is generated. If `check` changed it, the committed copy
+      # was stale and the docs were lying about what exists.
+      - name: The generated inventory is committed
+        run: git diff --exit-code -- packages/ui/docs/inventory.md
+
+      - name: Build the library
+        run: npm run build
+
+      # Behaviour, not appearance: keyboard, focus, overlays opening and
+      # closing, forms, upload, disabled and loading, the providers, the labels
+      # layer, the formatting helpers, and axe over a composed surface.
+      #
+      # The axe run loops the four product/mode combinations, but no component
+      # branches on either and the tests load no CSS — so it is three assertions
+      # run four times, kept as insurance rather than as evidence about theming.
+      # Contrast cannot run under jsdom; `npm run check` covers it.
+      - name: Test
+        run: npm test
+
+      # The check that would have caught the package being unusable: resolve it
+      # through its exports map and build it with both products' bundlers.
+      - name: Consumer build (Webpack and Vite)
+        run: npm run test:consumer
+
+      # Everything below runs CSS in a real browser, which nothing above does.
+      - name: Install Chromium for the browser checks
+        run: npx playwright install --with-deps chromium
+
+      # The library on a page running Ant Design 4, Bootstrap 5 and a host
+      # Tailwind, measured in both directions and both import orders: the host's
+      # computed styles unchanged by ours, ours unchanged by the host's, host
+      # content inside our island keeping its own classes, and the focus ring
+      # surviving the host's :focus rules. This is Alisson's P0-2 as a test —
+      # and the half of it that only ever failed in the second direction.
+      - name: Coexistence with Ant Design, Bootstrap and Tailwind
+        run: npm run test:coexistence
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      # Every story, in Chromium, in all four product/mode combinations, at
+      # 390 and 1280px: axe with colour contrast on, a crash check, and
+      # horizontal overflow at 320, 390, 768 and 1280px. The jsdom axe run in
+      # `npm test` is the same DOM four times with no CSS; this one renders.
+      - name: Every story in a real browser
+        run: npm run test:browser
+
+  # The library installed into the REAL products and built with their own
+  # build — Alisson's "consumer build: kontax-webapp/Webpack,
+  # kontax-backoffice/Vite". test:consumer and test:coexistence stand in for
+  # this with synthetic hosts; this is the real thing.
+  #
+  # It cannot run yet, and says so instead of passing: the account that owns
+  # this repository has no access to the taxit-tech organisation. To switch it
+  # on, someone with access sets, under Settings → Secrets and variables:
+  #
+  #   variables  KONTAX_WEBAPP_REPO        taxit-tech/kontax-webapp
+  #              KONTAX_BACKOFFICE_REPO    taxit-tech/kontax-backoffice
+  #              KONTAX_WEBAPP_BUILD       (optional, default: npm run build)
+  #              KONTAX_BACKOFFICE_BUILD   (optional, default: npm run build)
+  #   secret     PRODUCTS_TOKEN            a fine-grained token with read access
+  #                                        to both repositories
+  #
+  # Each product gets the packed tarball — the same file a registry would
+  # serve — not a workspace link.
+  products:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: kontax-webapp
+            repo: ${{ vars.KONTAX_WEBAPP_REPO }}
+            build: ${{ vars.KONTAX_WEBAPP_BUILD || 'npm run build' }}
+          - name: kontax-backoffice
+            repo: ${{ vars.KONTAX_BACKOFFICE_REPO }}
+            build: ${{ vars.KONTAX_BACKOFFICE_BUILD || 'npm run build' }}
+    name: product build (${{ matrix.name }})
+    steps:
+      - name: Not configured
+        if: matrix.repo == ''
+        run: |
+          echo "::warning title=${{ matrix.name }} not built::KONTAX_*_REPO is not set, so the library was not built into the real product. See the comment on this job in ci.yml."
+
+      - uses: actions/checkout@v4
+        if: matrix.repo != ''
+        with:
+          path: smarta-ui
+
+      - uses: actions/setup-node@v4
+        if: matrix.repo != ''
+        with:
+          node-version: "20"
+
+      - name: Pack @smarta/ui
+        if: matrix.repo != ''
+        working-directory: smarta-ui
+        run: |
+          npm ci
+          npm run build
+          npm pack -w @smarta/ui --pack-destination "$RUNNER_TEMP"
+
+      - uses: actions/checkout@v4
+        if: matrix.repo != ''
+        with:
+          repository: ${{ matrix.repo }}
+          token: ${{ secrets.PRODUCTS_TOKEN }}
+          path: product
+
+      - name: Install the product, then the tarball
+        if: matrix.repo != ''
+        working-directory: product
+        run: |
+          npm ci
+          npm install --no-save "$RUNNER_TEMP"/smarta-ui-*.tgz
+
+      - name: Build the product with its own build
+        if: matrix.repo != ''
+        working-directory: product
+        run: ${{ matrix.build }}
+
+  # Separate job so an advisory is visible as its own red mark rather than
+  # buried in the middle of the build's log.
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      # Production dependencies are what reaches a product. A dev-only advisory
+      # is reported by the scheduled run and Dependabot without blocking a PR
+      # that has nothing to do with it.
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=moderate

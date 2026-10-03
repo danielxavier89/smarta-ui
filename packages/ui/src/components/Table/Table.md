@@ -33,7 +33,7 @@ Rows with the same columns, meant to be compared.
 <Table>
   <THead sticky><TR><TH/><TH align="right"/><TH sort onSort/></TR></THead>
   <TBody>
-    <TR clickable selected tabIndex={0} onClick onKeyDown>
+    <TR onActivate selected>
       <TD muted/><TD numeric/><TD><Chip size="sm"/></TD>
     </TR>
     <TableEmpty colSpan={3}><EmptyState/></TableEmpty>
@@ -45,7 +45,7 @@ Rows with the same columns, meant to be compared.
 
 **`Table`** — `containerClassName` targets the bordered wrapper.
 **`THead`** — `sticky` pins the heading row.
-**`TR`** — `clickable`, `selected`.
+**`TR`** — `onActivate`, `selected`. (`clickable` is deprecated; see rule 3.)
 **`TH`** — `align`, `sort` (`asc | desc | none`), `onSort`. Sets `aria-sort` for you.
 **`TD`** — `align`, `muted`, `numeric` (right-aligns and sets tabular figures).
 
@@ -55,14 +55,15 @@ Rows with the same columns, meant to be compared.
 - **Empty** — `TableEmpty` wrapping an `EmptyState`, so the header row stays and the user can see what the columns were.
 - **Loading** — `SkeletonList`, or keep the old rows with `aria-busy`.
 - **Row selected** — `--accent-soft` fill, `aria-selected`.
-- **Row hover** — only when `clickable`.
+- **Row hover** — only when `onActivate` is set.
 
 ## Rules
 
 1. **The wrapper is `overflow-x-auto`, never `overflow-hidden`.** `overflow-hidden` establishes a scroll container, which becomes the containing block for `position: sticky` — so sticky column headings get scoped to the card and scroll away with it. The corners are clipped by rounding the first and last cells instead. This is a real regression the webapp prototype hit; the fix is load-bearing.
 2. **Every column of money uses `numeric`.** Tabular figures are global, but the right alignment is not.
-3. **A clickable row needs `tabIndex={0}` and a key handler.** The component gives you the focus ring; it cannot give you the keyboard.
-4. **Never put a second interactive element in a clickable row** unless it stops propagation — same trap as `Card`.
+3. **An activatable row uses `onActivate`, and nothing else.** It supplies the appearance, `tabIndex`, the click and Enter/Space together, so the four cannot come apart. The old `clickable` prop gave you only the appearance and asked you to remember the rest — and a row that looks pressable but does nothing under the keyboard is not a styling slip, it is a screen a keyboard user cannot operate. `clickable` still renders, and warns in development.
+4. **A row with `onActivate` may still carry its own controls.** A button, link, menu, or a `Checkbox` and its label, all handle their own click and their own Enter, and the row does not fire a second time on top of them. This is the one place `Table` differs from `Card`, which cannot nest interactive elements at all.
+5. **An activatable row is still only a row, to a screen reader.** It takes focus and it fires, but `<tr tabindex="0">` has no widget role and no accessible name of its own — the user hears the cells, not "button". That is a real limit of the pattern, not an oversight: giving the row `role="button"` would break the table semantics that make the columns readable. Where the destination matters more than the row, put a named link or button in the first cell and let that be the control.
 5. **The empty state keeps the header.** A table that vanishes when filtered to nothing leaves the user unable to see what they filtered.
 6. **Don't paginate a list whose total you cannot state.** See `Pagination`.
 7. **Row identity is a stable id, not an array index**, the moment anything can be inserted or removed.
@@ -88,8 +89,7 @@ Rows with the same columns, meant to be compared.
   </THead>
   <TBody>
     {rows.map((r) => (
-      <TR key={r.id} clickable tabIndex={0} onClick={() => open(r)}
-          onKeyDown={(e) => { if (e.key === "Enter") open(r); }}>
+      <TR key={r.id} onActivate={() => open(r)}>
         <TD muted>{r.date}</TD>
         <TD>{r.supplier}</TD>
         <TD numeric>{eur(r.amount)}</TD>

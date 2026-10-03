@@ -14,10 +14,36 @@
     "typecheck": "npm run typecheck -w @smarta/ui",
     "lint:tokens": "node scripts/lint-tokens.mjs",
     "audit:contrast": "node scripts/audit-contrast.mjs",
-    "check": "npm run gen:inventory && npm run typecheck && npm run lint:tokens && npm run audit:contrast",
-    "gen:inventory": "node scripts/gen-inventory.mjs"
+    "check": "npm run gen:inventory && node scripts/gen-preflight.mjs --check && npm run typecheck && npm run lint:tokens && npm run lint:i18n && npm run lint:prefix && npm run audit:contrast",
+    "gen:inventory": "node scripts/gen-inventory.mjs",
+    "test": "npm run test -w @smarta/ui",
+    "lint:i18n": "node scripts/lint-i18n.mjs",
+    "test:consumer": "node scripts/consumer-smoke.mjs",
+    "gen:preflight": "node scripts/gen-preflight.mjs",
+    "lint:prefix": "node scripts/prefix-classes.mjs --check",
+    "test:coexistence": "node scripts/coexistence.mjs",
+    "visual-diff": "node scripts/visual-diff.mjs",
+    "ci": "node scripts/ci-local.mjs",
+    "test:browser": "node scripts/browser-gate.mjs",
+    "changeset": "node scripts/run-bin.mjs @changesets/cli::changeset",
+    "changeset:status": "node scripts/run-bin.mjs @changesets/cli::changeset status --since=origin/main",
+    "version-packages": "node scripts/run-bin.mjs @changesets/cli::changeset version",
+    "release": "npm run build && node scripts/run-bin.mjs @changesets/cli::changeset publish"
   },
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "@changesets/cli": "^2.31.1",
+    "@vitejs/plugin-react": "^5.2.0",
+    "antd": "^4.24.16",
+    "bootstrap": "^5.3.8",
+    "css-loader": "^7.1.5",
+    "esbuild-loader": "^4.5.0",
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.63.0",
+    "pngjs": "^7.0.0",
+    "style-loader": "^4.0.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.3.6",
+    "webpack": "^5.111.1",
+    "webpack-cli": "^6.0.1"
   }
 }

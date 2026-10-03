@@ -1,24 +1,25 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SlidersHorizontal } from "lucide-react";
-import { Button } from "@/components/Button";
-import { Chip } from "@/components/Chip";
+import { Button } from "../components/Button";
+import { Chip } from "../components/Chip";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
   DropdownMenuLabel,
-} from "@/components/DropdownMenu";
-import { EmptyState } from "@/components/EmptyState";
-import { KeyValue } from "@/components/KeyValue";
-import { Pagination } from "@/components/Pagination";
-import { Panel, PanelSection } from "@/components/Panel";
-import { SearchInput } from "@/components/SearchInput";
-import { SkeletonList } from "@/components/Skeleton";
-import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "@/components/Table";
-import { Tabs, TabsList, Tab, TabPanel } from "@/components/Tabs";
-import { docsPage } from "@/lib/docs";
+} from "../components/DropdownMenu";
+import { EmptyState } from "../components/EmptyState";
+import { KeyValue } from "../components/KeyValue";
+import { PageHeader } from "../components/PageHeader";
+import { Pagination } from "../components/Pagination";
+import { Panel, PanelSection } from "../components/Panel";
+import { SearchInput } from "../components/SearchInput";
+import { SkeletonList } from "../components/Skeleton";
+import { Table, THead, TBody, TR, TH, TD, TableEmpty } from "../components/Table";
+import { Tabs, TabsList, Tab, TabPanel } from "../components/Tabs";
+import { docsPage } from "../lib/docs";
 import recipe from "../../docs/recipes/list-page.md?raw";
 
 /**
@@ -107,25 +108,17 @@ export const TheScreen: Story = {
     const open = ROWS.find((r) => r.id === openId);
 
     return (
-      <div className="flex flex-col gap-[16px]">
-        {/* The page header is assembled by hand because there is no PageHeader
-            component. The recipe's shape diagram names one; the inventory does
-            not have one. Until that is resolved, every page invents this row —
-            which is the argument for adding it. */}
-        <div className="flex flex-wrap items-end justify-between gap-[12px]">
-          <div>
-            <h1 className="m-0 text-xl font-semibold tracking-tight text-fg">June charges</h1>
-            <p className="m-0 mt-[2px] text-sm text-fg-subtle">
-              53 charges on the statement. 41 have a receipt behind them.
-            </p>
-          </div>
-          <Button variant="primary">Upload a receipt</Button>
-        </div>
+      <div className="sui:flex sui:flex-col sui:gap-[16px]">
+        <PageHeader
+          title="June charges"
+          description="53 charges on the statement. 41 have a receipt behind them."
+          actions={<Button variant="primary">Upload a receipt</Button>}
+        />
 
         {/* Toolbar: search, then filters. One row, wraps on a phone. */}
-        <div className="flex flex-wrap items-center gap-[10px]">
+        <div className="sui:flex sui:flex-wrap sui:items-center sui:gap-[10px]">
           <SearchInput
-            containerClassName="flex-1 min-w-[200px] max-w-[340px]"
+            containerClassName="sui:flex-1 sui:min-w-[200px] sui:max-w-[340px]"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onClear={() => setQ("")}
@@ -174,16 +167,8 @@ export const TheScreen: Story = {
                 {rows.map((r) => (
                   <TR
                     key={r.id}
-                    clickable
-                    tabIndex={0}
                     selected={openId === r.id}
-                    onClick={() => setOpenId(r.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setOpenId(r.id);
-                      }
-                    }}
+                    onActivate={() => setOpenId(r.id)}
                   >
                     <TD muted>{r.date}</TD>
                     <TD>{r.supplier}</TD>
@@ -240,7 +225,7 @@ export const TheScreen: Story = {
           footer={
             <>
               <Button variant="ghost" onClick={() => setOpenId(null)}>Close</Button>
-              <Button variant="primary" className="ml-auto">
+              <Button variant="primary" className="sui:ml-auto">
                 {open?.status === "matched" ? "Send to Ana" : "Upload the receipt"}
               </Button>
             </>
@@ -278,7 +263,7 @@ export const TheScreen: Story = {
               )}
 
               <PanelSection title={open.nif ? "Why these were matched" : "What is missing"}>
-                <p className="m-0 text-base text-fg-muted">{open.why}</p>
+                <p className="sui:m-0 sui:text-base sui:text-fg-muted">{open.why}</p>
               </PanelSection>
             </>
           )}
@@ -300,12 +285,12 @@ export const WhileItLoads: Story = {
   },
   render: function WhileItLoads() {
     return (
-      <div className="flex flex-col gap-[16px]">
+      <div className="sui:flex sui:flex-col sui:gap-[16px]">
         <div>
-          <h1 className="m-0 text-xl font-semibold tracking-tight text-fg">June charges</h1>
-          <p className="m-0 mt-[2px] text-sm text-fg-subtle">Loading the statement…</p>
+          <h1 className="sui:m-0 sui:text-xl sui:font-semibold sui:tracking-tight sui:text-fg">June charges</h1>
+          <p className="sui:m-0 sui:mt-[2px] sui:text-sm sui:text-fg-subtle">Loading the statement…</p>
         </div>
-        <div className="overflow-hidden rounded-lg border border-border bg-surface p-[var(--density-card-p)]">
+        <div className="sui:overflow-hidden sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[var(--density-card-p)]">
           <SkeletonList rows={5} />
         </div>
       </div>
@@ -324,7 +309,7 @@ export const NothingYet: Story = {
     },
   },
   render: () => (
-    <div className="overflow-hidden rounded-lg border border-border bg-surface">
+    <div className="sui:overflow-hidden sui:rounded-lg sui:border sui:border-border sui:bg-surface">
       <EmptyState
         variant="first-run"
         title="No charges yet"

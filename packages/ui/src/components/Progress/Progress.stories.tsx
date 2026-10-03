@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Progress } from "./Progress";
-import { docsPage } from "@/lib/docs";
+import { Progress, type ProgressProps } from "./Progress";
+import { docsPage } from "../../lib/docs";
 import rules from "./Progress.md?raw";
 
 const meta = { title: "Status/Progress", component: Progress, args: { value: 62, label: "Uploading receipts" } ,
@@ -9,11 +9,11 @@ const meta = { title: "Status/Progress", component: Progress, args: { value: 62,
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = { render: (a) => <div className="max-w-[320px]"><Progress {...a} /></div> };
+export const Playground: Story = { render: (a: ProgressProps) => <div className="sui:max-w-[320px]"><Progress {...a} /></div> };
 
 export const Variants: Story = {
   render: () => (
-    <div className="flex max-w-[320px] flex-col gap-[18px]">
+    <div className="sui:flex sui:max-w-[320px] sui:flex-col sui:gap-[18px]">
       <Progress value={62} label="Uploading receipts" showLabel />
       <Progress value={100} label="Upload complete" tone="ok" showLabel />
       <Progress value={34} label="Documents verified" tone="warn" showLabel />
@@ -26,7 +26,7 @@ export const Variants: Story = {
 export const OrASpinner: Story = {
   name: "Progress or spinner?",
   render: () => (
-    <p className="m-0 max-w-[62ch] text-base text-fg-muted">
+    <p className="sui:m-0 sui:max-w-[62ch] sui:text-base sui:text-fg-muted">
       A Progress bar is for work whose end is known: an upload, a checklist, a period&rsquo;s
       completeness. For a request in flight with no knowable end, a Spinner says the same
       thing without implying a finish line. And do not draw a bar to report that fine

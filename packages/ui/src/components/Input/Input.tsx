@@ -1,24 +1,24 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import { Field } from "@/components/Field";
+import { cn } from "../../lib/utils";
+import { Field } from "../Field";
 
-const inputShell = cva(
+export const inputShell = cva(
   [
-    "flex w-full items-center gap-[8px]",
-    "rounded-md border border-border bg-surface",
-    "text-fg transition-[border-color,box-shadow] duration-[var(--duration-fast)]",
-    "focus-within:border-accent focus-within:shadow-[var(--shadow-focus)]",
-    "has-[input:disabled]:bg-surface-sunken has-[input:disabled]:opacity-70",
-    "has-[input:disabled]:cursor-not-allowed",
-    "has-[[aria-invalid=true]]:border-bad has-[[aria-invalid=true]]:focus-within:shadow-none",
+    "sui:flex sui:w-full sui:items-center sui:gap-[8px]",
+    "sui:rounded-md sui:border sui:border-border sui:bg-surface",
+    "sui:text-fg sui:transition-[border-color,box-shadow] sui:duration-[var(--duration-fast)]",
+    "sui:focus-within:border-accent sui:focus-within:shadow-focus",
+    "sui:has-[input:disabled]:bg-surface-sunken sui:has-[input:disabled]:opacity-70",
+    "sui:has-[input:disabled]:cursor-not-allowed",
+    "sui:has-[[aria-invalid=true]]:border-bad sui:has-[[aria-invalid=true]]:focus-within:shadow-none",
   ],
   {
     variants: {
       size: {
-        sm: "h-[var(--control-height-sm)] px-[var(--control-padding-x-sm)] text-[length:var(--field-font-size-sm)]",
-        md: "h-[var(--control-height-md)] px-[var(--control-padding-x-md)] text-[length:var(--field-font-size)]",
-        lg: "h-[var(--control-height-lg)] px-[var(--control-padding-x-lg)] text-[length:var(--field-font-size)]",
+        sm: "sui:h-[var(--control-height-sm)] sui:px-[var(--control-padding-x-sm)] sui:text-[length:var(--field-font-size-sm)]",
+        md: "sui:h-[var(--control-height-md)] sui:px-[var(--control-padding-x-md)] sui:text-[length:var(--field-font-size)]",
+        lg: "sui:h-[var(--control-height-lg)] sui:px-[var(--control-padding-x-lg)] sui:text-[length:var(--field-font-size)]",
       },
     },
     defaultVariants: { size: "md" },
@@ -73,22 +73,22 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
       {(ids) => (
         <div className={cn(inputShell({ size }))}>
           {prefix && (
-            <span aria-hidden className="text-fg-subtle shrink-0">
+            <span aria-hidden className="sui:text-fg-subtle sui:shrink-0">
               {prefix}
             </span>
           )}
           <input
             ref={ref}
             className={cn(
-              "w-full min-w-0 border-0 bg-transparent p-0 outline-none",
-              "text-[inherit] placeholder:text-fg-subtle",
-              "disabled:cursor-not-allowed",
+              "sui:w-full sui:min-w-0 sui:border-0 sui:bg-transparent sui:p-0 sui:focus-visible:outline-none",
+              "sui:text-[inherit] sui:placeholder:text-fg-subtle",
+              "sui:disabled:cursor-not-allowed",
               className,
             )}
             {...ids}
             {...props}
           />
-          {suffix && <span className="text-fg-subtle shrink-0">{suffix}</span>}
+          {suffix && <span className="sui:text-fg-subtle sui:shrink-0">{suffix}</span>}
         </div>
       )}
     </Field>

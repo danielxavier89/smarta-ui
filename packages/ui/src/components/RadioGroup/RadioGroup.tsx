@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RadioGroup as RRadioGroup } from "radix-ui";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 export interface RadioOption {
   value: string;
@@ -39,15 +39,15 @@ export const RadioGroup = React.forwardRef<
   const errorId = error ? `${reactId}-error` : undefined;
 
   return (
-    <fieldset className="m-0 border-0 p-0" aria-describedby={errorId ?? hintId}>
+    <fieldset className="sui:m-0 sui:border-0 sui:p-0" aria-describedby={errorId ?? hintId}>
       {label && (
-        <legend className="mb-[8px] p-0 text-sm font-medium text-fg-muted">
+        <legend className="sui:mb-[8px] sui:p-0 sui:text-sm sui:font-medium sui:text-fg-muted">
           {label}
         </legend>
       )}
       <RRadioGroup.Root
         ref={ref}
-        className={cn("flex flex-col gap-[8px]", className)}
+        className={cn("sui:flex sui:flex-col sui:gap-[8px]", className)}
         aria-invalid={error ? true : undefined}
         {...props}
       >
@@ -58,10 +58,10 @@ export const RadioGroup = React.forwardRef<
             <div
               key={o.value}
               className={cn(
-                "flex items-start gap-[9px]",
+                "sui:flex sui:items-start sui:gap-[9px]",
                 appearance === "card" &&
-                  "rounded-md border border-border bg-surface p-[12px] transition-[border-color] duration-[var(--duration-fast)] has-[[data-state=checked]]:border-accent has-[[data-state=checked]]:bg-accent-soft",
-                appearance === "card" && o.disabled && "opacity-55",
+                  "sui:rounded-md sui:border sui:border-border sui:bg-surface sui:p-[12px] sui:transition-[border-color] sui:duration-[var(--duration-fast)] sui:has-[[data-state=checked]]:border-accent sui:has-[[data-state=checked]]:bg-accent-soft",
+                appearance === "card" && o.disabled && "sui:opacity-55",
               )}
             >
               <RRadioGroup.Item
@@ -71,30 +71,30 @@ export const RadioGroup = React.forwardRef<
                 aria-describedby={descId}
                 className={cn(
                   // The dot keeps its 17px; the tap around it is 44px on a
-                  // phone. See .touch-target in the token reset.
-                  "touch-target mt-[2px] size-[17px] shrink-0 rounded-full border border-border-strong bg-surface",
-                  "grid place-items-center cursor-pointer",
-                  "transition-[border-color] duration-[var(--duration-fast)]",
-                  "hover:border-accent",
-                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
-                  "data-[state=checked]:border-accent",
-                  "disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:border-border-strong",
+                  // phone. See .sui-touch-target in the token reset.
+                  "sui-touch-target sui:mt-[2px] sui:size-[17px] sui:shrink-0 sui:rounded-full sui:border sui:border-border-strong sui:bg-surface",
+                  "sui:grid sui:place-items-center sui:cursor-pointer",
+                  "sui:transition-[border-color] sui:duration-[var(--duration-fast)]",
+                  "sui:hover:border-accent",
+                  "sui:focus-visible:outline-2 sui:focus-visible:outline-offset-2 sui:focus-visible:outline-focus-ring",
+                  "sui:data-[state=checked]:border-accent",
+                  "sui:disabled:cursor-not-allowed sui:disabled:opacity-55 sui:disabled:hover:border-border-strong",
                 )}
               >
-                <RRadioGroup.Indicator className="size-[9px] rounded-full bg-accent" />
+                <RRadioGroup.Indicator className="sui:size-[9px] sui:rounded-full sui:bg-accent" />
               </RRadioGroup.Item>
-              <div className="flex flex-col gap-[1px]">
+              <div className="sui:flex sui:flex-col sui:gap-[1px]">
                 <label
                   htmlFor={id}
                   className={cn(
-                    "text-base text-fg cursor-pointer select-none",
-                    o.disabled && "cursor-not-allowed",
+                    "sui:text-base sui:text-fg sui:cursor-pointer sui:select-none",
+                    o.disabled && "sui:cursor-not-allowed",
                   )}
                 >
                   {o.label}
                 </label>
                 {o.description && (
-                  <span id={descId} className="text-xs text-fg-subtle">
+                  <span id={descId} className="sui:text-xs sui:text-fg-subtle">
                     {o.description}
                   </span>
                 )}
@@ -104,11 +104,11 @@ export const RadioGroup = React.forwardRef<
         })}
       </RRadioGroup.Root>
       {error ? (
-        <p id={errorId} role="alert" className="mt-[6px] text-xs text-bad-fg">
+        <p id={errorId} role="alert" className="sui:mt-[6px] sui:text-xs sui:text-bad-fg">
           {error}
         </p>
       ) : hint ? (
-        <p id={hintId} className="mt-[6px] text-xs text-fg-subtle">
+        <p id={hintId} className="sui:mt-[6px] sui:text-xs sui:text-fg-subtle">
           {hint}
         </p>
       ) : null}

@@ -3,7 +3,7 @@ import { ListItem, List } from "./ListItem";
 import { Avatar } from "../Avatar";
 import { Chip } from "../Chip";
 import { Button } from "../Button";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./ListItem.md?raw";
 
 const meta = {
@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Messages: Story = {
   render: () => (
-    <div className="max-w-[560px]">
+    <div className="sui:max-w-[560px]">
       <List>
         <ListItem
           clickable
@@ -48,7 +48,7 @@ export const Messages: Story = {
 
 export const WithActions: Story = {
   render: () => (
-    <div className="max-w-[560px]">
+    <div className="sui:max-w-[560px]">
       <List>
         <ListItem
           leading={<Chip tone="warn" dot>Waiting</Chip>}
@@ -69,7 +69,7 @@ export const WithActions: Story = {
 
 export const States: Story = {
   render: () => (
-    <div className="max-w-[560px]">
+    <div className="sui:max-w-[560px]">
       <List>
         <ListItem clickable title="Normal" description="Hover me." />
         <ListItem clickable selected title="Selected" description="The row a panel is open for." />

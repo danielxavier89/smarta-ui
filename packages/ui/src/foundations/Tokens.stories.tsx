@@ -33,14 +33,14 @@ function Swatch({ name }: { name: string }) {
   });
 
   return (
-    <div ref={ref} className="flex items-center gap-[10px]">
+    <div ref={ref} className="sui:flex sui:items-center sui:gap-[10px]">
       <span
-        className="size-[34px] shrink-0 rounded-md border border-border"
+        className="sui:size-[34px] sui:shrink-0 sui:rounded-md sui:border sui:border-border"
         style={{ background: `var(--${name})` }}
       />
-      <div className="min-w-0">
-        <code className="block text-xs text-fg">--{name}</code>
-        <span className="block text-2xs tabular-nums text-fg-subtle">{resolved || "—"}</span>
+      <div className="sui:min-w-0">
+        <code className="sui:block sui:text-xs sui:text-fg">--{name}</code>
+        <span className="sui:block sui:text-2xs sui:tabular-nums sui:text-fg-subtle">{resolved || "—"}</span>
       </div>
     </div>
   );
@@ -48,20 +48,20 @@ function Swatch({ name }: { name: string }) {
 
 function Group({ group, swatches }: { group: TokenGroup; swatches: boolean }) {
   return (
-    <section className="mb-[28px]">
-      <h3 className="m-0 text-lg font-semibold tracking-tight text-fg">{group.title}</h3>
-      {group.note && <p className="m-0 mt-[3px] max-w-[70ch] text-sm text-fg-subtle">{group.note}</p>}
-      <div className="mt-[12px] grid gap-[14px] sm:grid-cols-2 lg:grid-cols-3">
+    <section className="sui:mb-[28px]">
+      <h3 className="sui:m-0 sui:text-lg sui:font-semibold sui:tracking-tight sui:text-fg">{group.title}</h3>
+      {group.note && <p className="sui:m-0 sui:mt-[3px] sui:max-w-[70ch] sui:text-sm sui:text-fg-subtle">{group.note}</p>}
+      <div className="sui:mt-[12px] sui:grid sui:gap-[14px] sui:sm:grid-cols-2 sui:lg:grid-cols-3">
         {group.tokens.map((t) => (
-          <div key={t.name} className="rounded-lg border border-border bg-surface p-[12px]">
+          <div key={t.name} className="sui:rounded-lg sui:border sui:border-border sui:bg-surface sui:p-[12px]">
             {swatches ? (
               <Swatch name={t.name} />
             ) : (
-              <code className="block text-xs text-fg">--{t.name}</code>
+              <code className="sui:block sui:text-xs sui:text-fg">--{t.name}</code>
             )}
-            <p className="m-0 mt-[8px] text-xs text-fg-subtle">{t.use}</p>
+            <p className="sui:m-0 sui:mt-[8px] sui:text-xs sui:text-fg-subtle">{t.use}</p>
             {t.utility !== "—" && (
-              <code className="mt-[6px] inline-block rounded-xs bg-surface-sunken px-[5px] py-[1px] text-2xs text-fg-muted">
+              <code className="sui:mt-[6px] sui:inline-block sui:rounded-xs sui:bg-surface-sunken sui:px-[5px] sui:py-[1px] sui:text-2xs sui:text-fg-muted">
                 {swatches ? `bg-${t.utility}` : t.utility}
               </code>
             )}
@@ -96,22 +96,22 @@ export const Scales: Story = {
 export const TypeScale: Story = {
   name: "The type scale, set",
   render: () => (
-    <div className="flex flex-col gap-[10px]">
+    <div className="sui:flex sui:flex-col sui:gap-[10px]">
       {[
-        ["text-3xl", "30px — the one number a page is about"],
-        ["text-2xl", "24px — a headline figure in a stat"],
-        ["text-xl", "19px — page titles"],
-        ["text-lg", "16px — card titles"],
-        ["text-md", "15px — a lede line"],
-        ["text-base", "14px — body, the default"],
-        ["text-sm", "13px — buttons, tabs, dense cells"],
-        ["text-xs", "12px — chips, captions"],
-        ["text-2xs", "11px — badge counts"],
+        ["sui:text-3xl", "30px — the one number a page is about"],
+        ["sui:text-2xl", "24px — a headline figure in a stat"],
+        ["sui:text-xl", "19px — page titles"],
+        ["sui:text-lg", "16px — card titles"],
+        ["sui:text-md", "15px — a lede line"],
+        ["sui:text-base", "14px — body, the default"],
+        ["sui:text-sm", "13px — buttons, tabs, dense cells"],
+        ["sui:text-xs", "12px — chips, captions"],
+        ["sui:text-2xs", "11px — badge counts"],
       ].map(([cls, note]) => (
-        <div key={cls} className="flex flex-wrap items-baseline gap-[14px] border-b border-border-soft pb-[8px]">
-          <span className={`${cls} text-fg`}>Twelve charges, €3,094.10</span>
-          <code className="text-2xs text-fg-subtle">{cls}</code>
-          <span className="text-2xs text-fg-subtle">{note}</span>
+        <div key={cls} className="sui:flex sui:flex-wrap sui:items-baseline sui:gap-[14px] sui:border-b sui:border-border-soft sui:pb-[8px]">
+          <span className={`${cls} sui:text-fg`}>Twelve charges, €3,094.10</span>
+          <code className="sui:text-2xs sui:text-fg-subtle">{cls}</code>
+          <span className="sui:text-2xs sui:text-fg-subtle">{note}</span>
         </div>
       ))}
     </div>
@@ -129,14 +129,14 @@ export const DensityDiffers: Story = {
     },
   },
   render: () => (
-    <div className="overflow-hidden rounded-lg border border-border bg-surface">
+    <div className="sui:overflow-hidden sui:rounded-lg sui:border sui:border-border sui:bg-surface">
       {["Staples Lisboa", "Lisbon Coffee", "Vodafone Portugal"].map((r) => (
         <div
           key={r}
-          className="flex items-center justify-between border-b border-border-soft px-[var(--density-row-x)] py-[var(--density-row-y)] last:border-b-0"
+          className="sui:flex sui:items-center sui:justify-between sui:border-b sui:border-border-soft sui:px-[var(--density-row-x)] sui:py-[var(--density-row-y)] sui:last:border-b-0"
         >
-          <span className="text-base text-fg">{r}</span>
-          <span className="text-base tabular-nums text-fg-muted">-€86.40</span>
+          <span className="sui:text-base sui:text-fg">{r}</span>
+          <span className="sui:text-base sui:tabular-nums sui:text-fg-muted">-€86.40</span>
         </div>
       ))}
     </div>

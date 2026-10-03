@@ -1,0 +1,15 @@
+Copyright (c) 2026 taxit-tech. All rights reserved.
+
+This software and its accompanying documentation are the confidential and
+proprietary property of taxit-tech. They are made available only to employees
+and contractors of taxit-tech, and only for the purpose of building and
+maintaining the smarta products.
+
+No licence is granted. You may not copy, modify, distribute, sublicense, sell
+or publish this software, in whole or in part, outside taxit-tech without
+prior written permission.
+
+The absence of a licence file previously meant this repository was, by default,
+all rights reserved — which is the same outcome, arrived at by accident. Stating
+it removes the ambiguity, and matters more than usual while the repository is
+still public: see docs/OWNERSHIP.md for what remains to be done about that.

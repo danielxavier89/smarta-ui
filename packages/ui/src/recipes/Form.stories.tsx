@@ -1,13 +1,19 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "@/components/Button";
-import { Callout } from "@/components/Callout";
-import { Input } from "@/components/Input";
-import { RadioGroup } from "@/components/RadioGroup";
-import { Select } from "@/components/Select";
-import { Textarea } from "@/components/Textarea";
-import { TextLink } from "@/components/TextLink";
-import { docsPage } from "@/lib/docs";
+import { Formik, Form } from "formik";
+import { Button } from "../components/Button";
+import { Combobox } from "../components/Combobox";
+import { CurrencyInput } from "../components/CurrencyInput";
+import { DatePicker } from "../components/DatePicker";
+import { MultiSelect } from "../components/MultiSelect";
+import { useFormikField, useFormikValue, useFormikSubmit } from "../formik";
+import { Callout } from "../components/Callout";
+import { Input } from "../components/Input";
+import { RadioGroup } from "../components/RadioGroup";
+import { Select } from "../components/Select";
+import { Textarea } from "../components/Textarea";
+import { TextLink } from "../components/TextLink";
+import { docsPage } from "../lib/docs";
 import recipe from "../../docs/recipes/form.md?raw";
 
 /**
@@ -84,7 +90,7 @@ export const TheScreen: Story = {
     };
 
     return (
-      <form onSubmit={onSubmit} className="flex max-w-[420px] flex-col gap-[16px]">
+      <form onSubmit={onSubmit} className="sui:flex sui:max-w-[420px] sui:flex-col sui:gap-[16px]">
         {/* A rule that applies before they start, not after they fail. */}
         <Callout tone="neutral" title="May 2026 is closed">
           <p>
@@ -139,14 +145,14 @@ export const TheScreen: Story = {
           </Callout>
         )}
 
-        <div className="flex gap-[8px]">
+        <div className="sui:flex sui:gap-[8px]">
           <Button variant="ghost" type="button">Cancel</Button>
-          <Button variant="primary" type="submit" loading={saving} className="ml-auto">
+          <Button variant="primary" type="submit" loading={saving} className="sui:ml-auto">
             Convert Petra
           </Button>
         </div>
 
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           One primary, and it names the outcome. &ldquo;Submit&rdquo; tells the user what
           they are doing to the form; &ldquo;Convert Petra&rdquo; tells them what happens
           to Petra.
@@ -174,13 +180,13 @@ export const ValidationTiming: Story = {
     );
 
     return (
-      <div className="flex max-w-[420px] flex-col gap-[14px]">
+      <div className="sui:flex sui:max-w-[420px] sui:flex-col sui:gap-[14px]">
         <Input label="NIF" hint="Nine digits, no spaces." {...nif.props} error={nif.error} />
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           The error replaces the hint rather than stacking under it. Two lines of small
           print beneath one field is where people stop reading either of them.
         </p>
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           Note what the message says: what a NIF is, and what is wrong with this one. Not
           &ldquo;Invalid input&rdquo;, which tells the user only that the computer is
           unhappy.
@@ -188,4 +194,72 @@ export const ValidationTiming: Story = {
       </div>
     );
   },
+};
+
+/**
+ * The same timing, with Formik doing the bookkeeping: `@smarta/ui/formik`
+ * returns each field's props with the error gated on `touched`, which is the
+ * house rule. Submit an empty form to see every error at once.
+ */
+type Booking = { supplier: string | null; amount: number | null; bookedOn: Date | null; categories: string[]; note: string };
+
+function BookingFields() {
+  const supplier = useFormikValue<string | null>("supplier");
+  const amount = useFormikValue<number | null>("amount");
+  const bookedOn = useFormikValue<Date | null>("bookedOn");
+  const categories = useFormikValue<string[]>("categories");
+  const note = useFormikField("note");
+  return (
+    <Form noValidate className="sui:grid sui:max-w-[420px] sui:gap-[16px]">
+      <Combobox
+        label="Supplier"
+        options={[
+          { value: "s1", label: "Druckerei Weidmann" },
+          { value: "s2", label: "Bürowelt Hansen" },
+          { value: "s3", label: "Café Miradouro" },
+        ]}
+        {...supplier}
+      />
+      <CurrencyInput label="Amount" currency="EUR" {...amount} />
+      <DatePicker label="Booked on" max={new Date(2026, 11, 31)} {...bookedOn} />
+      <MultiSelect
+        label="Categories"
+        optional
+        options={[
+          { value: "office", label: "Office supplies" },
+          { value: "print", label: "Printing" },
+          { value: "meals", label: "Meals and entertainment" },
+        ]}
+        {...categories}
+      />
+      <Textarea label="Note for your accountant" optional rows={3} {...note} />
+      <div>
+        <Button type="submit" variant="primary" {...useFormikSubmit()}>
+          Book the charge
+        </Button>
+      </div>
+    </Form>
+  );
+}
+
+export const WithFormik: Story = {
+  name: "With Formik",
+  render: () => (
+    <Formik<Booking>
+      initialValues={{ supplier: null, amount: null, bookedOn: null, categories: [], note: "" }}
+      validate={(v) => {
+        const e: Partial<Record<keyof Booking, string>> = {};
+        if (!v.supplier) e.supplier = "Choose who the charge is from.";
+        if (v.amount === null) e.amount = "Enter the amount on the receipt.";
+        else if (v.amount <= 0) e.amount = "Enter an amount above zero.";
+        if (!v.bookedOn) e.bookedOn = "Enter the date on the receipt.";
+        return e;
+      }}
+      onSubmit={(_values, { setSubmitting }) => {
+        setTimeout(() => setSubmitting(false), 800);
+      }}
+    >
+      <BookingFields />
+    </Formik>
+  ),
 };

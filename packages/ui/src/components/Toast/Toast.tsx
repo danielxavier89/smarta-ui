@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Toast as RToast } from "radix-ui";
 import { CheckCircle2, AlertTriangle, XCircle, Info, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { useLabels } from "../ThemeProvider";
 
 export type ToastTone = "ok" | "warn" | "bad" | "info";
 
@@ -46,6 +47,7 @@ export function ToastProvider({
   children: React.ReactNode;
   swipeDirection?: "right" | "up" | "down" | "left";
 }) {
+  const labels = useLabels();
   const [messages, setMessages] = React.useState<ToastMessage[]>([]);
 
   const dismiss = React.useCallback((id: string) => {
@@ -67,10 +69,10 @@ export function ToastProvider({
         {messages.map((m) => {
           const Icon = icons[m.tone ?? "ok"];
           const tones = {
-            ok: "text-ok",
-            warn: "text-warn",
-            bad: "text-bad",
-            info: "text-info",
+            ok: "sui:text-ok",
+            warn: "sui:text-warn",
+            bad: "sui:text-bad",
+            info: "sui:text-info",
           }[m.tone ?? "ok"];
           return (
             <RToast.Root
@@ -80,17 +82,17 @@ export function ToastProvider({
               duration={m.duration ?? (m.action ? 8000 : 4500)}
               onOpenChange={(open) => !open && dismiss(m.id)}
               className={cn(
-                "flex items-start gap-[10px] rounded-lg border border-border bg-surface-raised",
-                "px-[14px] py-[12px] shadow-md",
-                "data-[state=open]:animate-in data-[state=closed]:animate-out",
-                "data-[swipe=end]:animate-out",
+                "sui:flex sui:items-start sui:gap-[10px] sui:rounded-lg sui:border sui:border-border sui:bg-surface-raised",
+                "sui:px-[14px] sui:py-[12px] sui:shadow-md",
+                "sui:data-[state=open]:animate-in sui:data-[state=closed]:animate-out",
+                "sui:data-[swipe=end]:animate-out",
               )}
             >
-              <Icon size={16} aria-hidden className={cn("mt-[1px] shrink-0", tones)} />
-              <div className="min-w-0 flex-1">
-                <RToast.Title className="m-0 text-sm font-medium text-fg">{m.title}</RToast.Title>
+              <Icon size={16} aria-hidden className={cn("sui:mt-[1px] sui:shrink-0", tones)} />
+              <div className="sui:min-w-0 sui:flex-1">
+                <RToast.Title className="sui:m-0 sui:text-sm sui:font-medium sui:text-fg">{m.title}</RToast.Title>
                 {m.description && (
-                  <RToast.Description className="m-0 mt-[2px] text-xs text-fg-subtle">
+                  <RToast.Description className="sui:m-0 sui:mt-[2px] sui:text-xs sui:text-fg-subtle">
                     {m.description}
                   </RToast.Description>
                 )}
@@ -100,15 +102,15 @@ export function ToastProvider({
                   <button
                     type="button"
                     onClick={m.action.onClick}
-                    className="touch-target shrink-0 rounded-xs bg-transparent p-0 text-sm font-medium text-link hover:underline focus-visible:outline-2 focus-visible:outline-focus-ring"
+                    className="sui-touch-target sui:shrink-0 sui:rounded-xs sui:bg-transparent sui:p-0 sui:text-sm sui:font-medium sui:text-link sui:hover:underline sui:focus-visible:outline-2 sui:focus-visible:outline-focus-ring"
                   >
                     {m.action.label}
                   </button>
                 </RToast.Action>
               )}
               <RToast.Close
-                aria-label="Dismiss"
-                className="touch-target shrink-0 rounded-xs text-fg-faint hover:text-fg-muted focus-visible:outline-2 focus-visible:outline-focus-ring"
+                aria-label={labels.dismiss}
+                className="sui-touch-target sui:shrink-0 sui:rounded-xs sui:text-fg-faint sui:hover:text-fg-muted sui:focus-visible:outline-2 sui:focus-visible:outline-focus-ring"
               >
                 <X size={14} aria-hidden />
               </RToast.Close>
@@ -120,10 +122,10 @@ export function ToastProvider({
             // 100%, not 100vw — vw counts the scrollbar, and a toast that is
             // fifteen pixels wider than the window scrolls the page sideways
             // behind it for the four seconds it is up.
-            "fixed bottom-0 right-0 z-[var(--z-toast)] m-0 flex w-[min(400px,100%)] list-none flex-col gap-[8px] p-[16px]",
-            "pb-[max(16px,env(safe-area-inset-bottom))] outline-none",
+            "sui:fixed sui:bottom-0 sui:right-0 sui:z-[var(--z-toast)] sui:m-0 sui:flex sui:w-[min(400px,100%)] sui:list-none sui:flex-col sui:gap-[8px] sui:p-[16px]",
+            "sui:pb-[max(16px,env(safe-area-inset-bottom))] sui:focus-visible:outline-none",
             // A phone held sideways puts the notch over the right-hand edge.
-            "pr-[max(16px,env(safe-area-inset-right))]",
+            "sui:pr-[max(16px,env(safe-area-inset-right))]",
           )}
         />
       </RToast.Provider>

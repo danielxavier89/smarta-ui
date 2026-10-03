@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Tooltip as RTooltip } from "radix-ui";
-import { cn } from "@/lib/utils";
-import { ThemeScope } from "@/components/ThemeProvider";
+import { cn } from "../../lib/utils";
+import { ThemeScope } from "../ThemeProvider";
 
 /**
  * True when an app has mounted TooltipProvider above us.
@@ -75,14 +75,14 @@ export function Tooltip({
           sideOffset={6}
           collisionPadding={8}
           className={cn(
-            "z-[var(--z-tooltip)] max-w-[260px] rounded-md",
-            "bg-inverse-surface px-[9px] py-[6px] text-xs text-inverse-fg",
-            "shadow-md",
-            "data-[state=delayed-open]:animate-in data-[state=closed]:animate-out",
+            "sui:z-[var(--z-tooltip)] sui:max-w-[260px] sui:rounded-md",
+            "sui:bg-inverse-surface sui:px-[9px] sui:py-[6px] sui:text-xs sui:text-inverse-fg",
+            "sui:shadow-md",
+            "sui:data-[state=delayed-open]:animate-in sui:data-[state=closed]:animate-out",
           )}
         >
           {content}
-          <RTooltip.Arrow className="fill-[var(--inverse-surface)]" width={10} height={5} />
+          <RTooltip.Arrow className="sui:fill-[var(--inverse-surface)]" width={10} height={5} />
         </RTooltip.Content>
       </ThemeScope>
       </RTooltip.Portal>

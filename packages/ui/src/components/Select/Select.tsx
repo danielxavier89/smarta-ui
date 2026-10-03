@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Field } from "@/components/Field";
+import { cn } from "../../lib/utils";
+import { Field } from "../Field";
 
 export interface SelectOption {
   value: string;
@@ -62,24 +62,24 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(function 
   }, [options]);
 
   const heights = {
-    sm: "h-[var(--control-height-sm)] pl-[var(--control-padding-x-sm)] text-[length:var(--field-font-size-sm)]",
-    md: "h-[var(--control-height-md)] pl-[var(--control-padding-x-md)] text-[length:var(--field-font-size)]",
-    lg: "h-[var(--control-height-lg)] pl-[var(--control-padding-x-lg)] text-[length:var(--field-font-size)]",
+    sm: "sui:h-[var(--control-height-sm)] sui:pl-[var(--control-padding-x-sm)] sui:text-[length:var(--field-font-size-sm)]",
+    md: "sui:h-[var(--control-height-md)] sui:pl-[var(--control-padding-x-md)] sui:text-[length:var(--field-font-size)]",
+    lg: "sui:h-[var(--control-height-lg)] sui:pl-[var(--control-padding-x-lg)] sui:text-[length:var(--field-font-size)]",
   }[size];
 
   return (
     <Field label={label} hint={hint} error={error} optional={optional} id={id} className={containerClassName}>
       {(ids) => (
-        <div className="relative">
+        <div className="sui:relative">
           <select
             ref={ref}
             className={cn(
-              "w-full appearance-none rounded-md border border-border bg-surface",
-              "pr-[34px] text-fg outline-none cursor-pointer",
-              "transition-[border-color,box-shadow] duration-[var(--duration-fast)]",
-              "focus:border-accent focus:shadow-[var(--shadow-focus)]",
-              "disabled:bg-surface-sunken disabled:opacity-70 disabled:cursor-not-allowed",
-              "aria-[invalid=true]:border-bad aria-[invalid=true]:focus:shadow-none",
+              "sui:w-full sui:appearance-none sui:rounded-md sui:border sui:border-border sui:bg-surface",
+              "sui:pr-[34px] sui:text-fg sui:focus-visible:outline-none sui:cursor-pointer",
+              "sui:transition-[border-color,box-shadow] sui:duration-[var(--duration-fast)]",
+              "sui:focus:border-accent sui:focus:shadow-focus",
+              "sui:disabled:bg-surface-sunken sui:disabled:opacity-70 sui:disabled:cursor-not-allowed",
+              "sui:aria-[invalid=true]:border-bad sui:aria-[invalid=true]:focus:shadow-none",
               heights,
               className,
             )}
@@ -112,7 +112,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(function 
           <ChevronDown
             size={15}
             aria-hidden
-            className="pointer-events-none absolute right-[11px] top-1/2 -translate-y-1/2 text-fg-subtle"
+            className="sui:pointer-events-none sui:absolute sui:right-[11px] sui:top-1/2 sui:-translate-y-1/2 sui:text-fg-subtle"
           />
         </div>
       )}

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useToast } from "./Toast";
 import { Button } from "../Button";
-import { docsPage } from "@/lib/docs";
+import { docsPage } from "../../lib/docs";
 import rules from "./Toast.md?raw";
 
 const meta = { title: "Overlays/Toast", component: Button ,
@@ -14,7 +14,7 @@ export const Tones: Story = {
   render: function Tones() {
     const { toast } = useToast();
     return (
-      <div className="flex flex-wrap gap-[8px]">
+      <div className="sui:flex sui:flex-wrap sui:gap-[8px]">
         <Button onClick={() => toast({ tone: "ok", title: "Moved to Tax Ops", description: "Petra Lang is now with Annekatrin." })}>
           Something moved
         </Button>
@@ -57,11 +57,11 @@ export const WhenToUseOne: Story = {
   render: function When() {
     const { toast } = useToast();
     return (
-      <div className="flex max-w-[62ch] flex-col gap-[12px]">
+      <div className="sui:flex sui:max-w-[62ch] sui:flex-col sui:gap-[12px]">
         <Button onClick={() => toast({ title: "Sent to Ana", description: "She will see it in her queue this morning." })}>
           Send to Ana
         </Button>
-        <p className="m-0 text-sm text-fg-subtle">
+        <p className="sui:m-0 sui:text-sm sui:text-fg-subtle">
           The rule from the backoffice prototype: a state change the user cannot see on
           screen gets a toast; everything else shows in place. A toast that announces
           something already visible is noise, and it is the wrong home for anything the

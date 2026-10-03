@@ -1,10 +1,58 @@
 /* The library's own stylesheet. A product imports this once; it pulls in
    Tailwind and every token layer in the right order. */
-@import "tailwindcss";
+
+/* Tailwind is imported in pieces rather than as `@import "tailwindcss"`,
+   and the piece left out is the point.
+
+   `@import "tailwindcss"` is theme + preflight + utilities. Preflight is
+   Tailwind's own reset, and it is ~150 lines of unscoped element selectors:
+   `*` with margin/padding/border zeroed, `h1`–`h6` stripped of size and
+   weight, `ol`/`ul` stripped of bullets, `img` made a block, every
+   button/input/select/textarea given a transparent background and square
+   corners, `table` set to border-collapse, and `[hidden]` forced to
+   display:none with !important.
+
+   Splitting the hand-written reset out into reset.css and shipping this
+   anyway would have been theatre: preflight does the great majority of the
+   damage to a host page, and it is exactly the damage the backoffice cannot
+   take. Ant Design 4 and Bootstrap both survive a rule they explicitly
+   override — author styles beat any layer — but neither styles every heading,
+   list and image on every page, and those are what preflight silently
+   rewrites. `[hidden]` is worse: an important declaration inside a layer beats
+   an unlayered important one, so that rule wins unconditionally.
+
+   So preflight is not here. The components get the same rules, scoped to the
+   .smarta-ui root, in @smarta/tokens/preflight.css. A product that wants the
+   real thing document-wide imports @smarta/ui/reset.css, which carries it.
+
+   Two more decisions in these two lines, both measured by
+   scripts/coexistence.mjs on a page running Ant Design 4, Bootstrap 5 and a
+   host Tailwind:
+
+   prefix(sui) — every utility is written `sui:flex`. Without it our class
+   names ARE the host's class names: the webapp's own Tailwind also defines
+   `.text-base`, at 16px where ours is 14px, and whichever stylesheet loaded
+   last restyled the other's elements. The prefix also renames our theme
+   variables to --sui-*, so they cannot collide either.
+
+   No layer() on the utilities — they ship unlayered, on purpose. Unlayered CSS
+   beats every cascade layer regardless of specificity, and Bootstrap's reboot
+   and Ant Design's global styles are unlayered. Shipped in @layer utilities,
+   our `sui:text-lg` lost to Bootstrap's `h3 { font-size: 1.75rem }` and every
+   CardTitle in the backoffice rendered at 28px. Unlayered, it is an ordinary
+   specificity contest, and a class beats an element selector. */
+@import "tailwindcss/theme.css" layer(theme) prefix(sui);
+
+/* Before the utilities, not after. Both are unlayered, so where a base rule and
+   a utility tie on specificity — the focus ring and `sui:outline-none` are both
+   (0,1,0) — the one emitted later wins, and that has to be the utility. */
 @import "@smarta/tokens/css";
+
 /* data-[state=open]:animate-in and friends. Tailwind v4 successor to
    tailwindcss-animate; without it those classes silently do nothing. */
 @import "tw-animate-css";
+
+@import "tailwindcss/utilities.css";
 
 /* Tailwind's automatic content detection walks out from this file, and this
    file is reached through a workspace symlink into node_modules — which is
@@ -13,22 +61,20 @@
    from the build and the components render unstyled. */
 @source "./components";
 @source "./foundations";
+/* The recipes are stories, but they are the screens people copy, and three of
+   their classes exist nowhere else. They used to be found by accident:
+   `@import "tailwindcss"` brings automatic source detection with it, and the
+   piecewise import does not. A visual diff found the Form recipe's primary
+   button sitting beside Cancel instead of at the far end of the row. */
+@source "./recipes";
+/* The mockups, for the same reason: whole pages with layout classes of their own. */
+@source "./mockups";
 
 /* `touch:` — a coarse pointer, which in practice means a finger.
 
    Not a width breakpoint: a phone held in landscape is wider than a small
    window on a laptop, and it is the pointer that decides how big a target
    has to be, not the number of pixels across. Controls that can afford to
-   grow use this; controls drawn at a fixed size use .touch-target in the
+   grow use this; controls drawn at a fixed size use .sui-touch-target in the
    token reset, which grows the tap and leaves the box alone. */
 @custom-variant touch (@media (pointer: coarse));
-
-/* Storybook and the products both render components inside a wrapper that
-   carries data-product/data-theme, so the wrapper — not just <body> — has to
-   paint its own ground. Without this a dark panel sits on a light page. */
-@layer base {
-  [data-product] {
-    background: var(--canvas);
-    color: var(--fg);
-  }
-}
