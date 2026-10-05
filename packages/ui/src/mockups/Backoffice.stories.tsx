@@ -11,10 +11,8 @@ import { Button } from "../components/Button";
 import { List, ListItem } from "../components/ListItem";
 import { Chip } from "../components/Chip";
 import { Avatar } from "../components/Avatar";
-import { DataTable, type DataTableColumn } from "../components/DataTable";
+import { DataTable, type DataTableColumn, type DataTableFilterValues } from "../components/DataTable";
 import { EmptyState } from "../components/EmptyState";
-import { SearchInput } from "../components/SearchInput";
-import { MultiSelect } from "../components/MultiSelect";
 import { Tabs, TabsList, Tab, TabPanel } from "../components/Tabs";
 import { Panel, PanelSection } from "../components/Panel";
 import { KeyValue } from "../components/KeyValue";
@@ -158,14 +156,15 @@ export const ReviewQueue: Story = {
   name: "Review queue",
   render: function QueuePage() {
     const [tab, setTab] = React.useState("to-review");
-    const [query, setQuery] = React.useState("");
-    const [who, setWho] = React.useState<string[]>([]);
+    const [filters, setFilters] = React.useState<DataTableFilterValues>({});
     const [open, setOpen] = React.useState<Client | null>(null);
     const { toast } = useToast();
 
+    const query = ((filters.q as string | undefined) ?? "").trim().toLowerCase();
+    const who = (filters.who as string[] | undefined) ?? [];
     const filtered = clients.filter(
       (c) =>
-        (!query || `${c.company} ${c.owner}`.toLowerCase().includes(query.toLowerCase())) &&
+        (!query || `${c.company} ${c.owner}`.toLowerCase().includes(query)) &&
         (who.length === 0 || who.includes(c.assignee)),
     );
     const count = (s: string) => filtered.filter((c) => c.status === s).length;
@@ -223,17 +222,6 @@ export const ReviewQueue: Story = {
             <StatCard label="Waiting on clients" value={String(clients.filter((c) => c.status === "waiting").length)} tone="warn" caption="Oldest asked 6 days ago" />
             <StatCard label="Done this close" value={String(clients.filter((c) => c.status === "done").length)} tone="ok" caption="2 more than last month" />
           </div>
-          <div className="sui:flex sui:flex-wrap sui:items-end sui:gap-[12px]">
-            <SearchInput
-              label="Search the queue"
-              placeholder="Search by client or owner"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onClear={() => setQuery("")}
-              containerClassName="sui:w-full sui:sm:w-[280px]"
-            />
-            <MultiSelect aria-label="Assigned to" options={staff} value={who} onValueChange={setWho} placeholder="Everyone" className="sui:w-full sui:sm:w-[300px]" />
-          </div>
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList>
               <Tab value="to-review" count={count("to-review")}>
@@ -267,17 +255,20 @@ export const ReviewQueue: Story = {
                     </Button>
                   </>
                 )}
+                // Controlled: this page filters, so the tab counts can follow the
+                // filters too. A product filtering on its server does the same.
+                filters={[
+                  { id: "q", type: "search", label: "Search the queue", placeholder: "Search by client or owner" },
+                  { id: "who", type: "options", label: "Assigned to", options: staff, value: (c) => c.assignee },
+                ]}
+                filterValues={filters}
+                onFiltersChange={setFilters}
                 empty={
                   <EmptyState
-                    variant="no-results"
+                    variant="first-run"
                     size="sm"
-                    title="Nobody in this list"
-                    description="Nothing matches the search and the people chosen. Clear them to see the whole queue."
-                    action={
-                      <Button size="sm" onClick={() => { setQuery(""); setWho([]); }}>
-                        Clear the search
-                      </Button>
-                    }
+                    title={tab === "done" ? "Nothing done yet this close" : "Nobody in this list"}
+                    description="Periods move here as clients and accountants work through them."
                   />
                 }
               />

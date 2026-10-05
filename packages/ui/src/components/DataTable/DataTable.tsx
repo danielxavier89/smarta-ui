@@ -7,6 +7,10 @@ import { Skeleton } from "../Skeleton";
 import { EmptyState } from "../EmptyState";
 import { Button } from "../Button";
 import { Pagination } from "../Pagination";
+import { SearchInput } from "../SearchInput";
+import { MultiSelect } from "../MultiSelect";
+import { DateRangePicker, type DateRange, type DateRangePreset } from "../DateRangePicker";
+import { fold, type ComboboxOption } from "../Combobox/OptionList";
 
 export type SortDirection = "asc" | "desc";
 export interface DataTableSort {
@@ -32,6 +36,41 @@ export interface DataTableColumn<T> {
   /** A CSS width for the column: "120px", "30%". */
   width?: string;
 }
+
+/**
+ * A filter above the table. Three kinds, which between them cover the list
+ * screens in both products: words to search for, values to pick several of,
+ * and a period.
+ */
+export type DataTableFilter<T> =
+  | {
+      id: string;
+      type: "search";
+      /** Names the field for a screen reader: "Search charges". */
+      label: string;
+      placeholder?: string;
+      /** Whether a row matches. Defaults to any of the row's own text and numbers, ignoring case and accents. */
+      match?: (row: T, query: string) => boolean;
+    }
+  | {
+      id: string;
+      type: "options";
+      label: string;
+      options: ComboboxOption[];
+      /** The row's value, or values, for this filter. A row matches if any is picked. */
+      value: (row: T) => string | string[] | null | undefined;
+    }
+  | {
+      id: string;
+      type: "dateRange";
+      label: string;
+      /** The row's date for this filter. Rows without one never match a period. */
+      value: (row: T) => Date | null | undefined;
+      presets?: DateRangePreset[];
+    };
+
+/** Per filter id: the search text, the picked values, or the period. */
+export type DataTableFilterValues = Record<string, string | string[] | DateRange | undefined>;
 
 export interface DataTableProps<T> {
   columns: DataTableColumn<T>[];
@@ -69,6 +108,21 @@ export interface DataTableProps<T> {
   error?: React.ReactNode;
   onRetry?: () => void;
 
+  /**
+   * Filters above the table. Uncontrolled, the table filters `rows` itself;
+   * with `filterValues`, the product filters (on the server, usually) and the
+   * table only shows the controls — the same split as sorting.
+   */
+  filters?: DataTableFilter<T>[];
+  filterValues?: DataTableFilterValues;
+  defaultFilterValues?: DataTableFilterValues;
+  onFiltersChange?: (values: DataTableFilterValues) => void;
+  /**
+   * What the table says when the filters, not the data, left it empty.
+   * Defaults to "Nothing matches these filters" with a button to clear them.
+   */
+  emptyFiltered?: React.ReactNode;
+
   /** Server pagination: the product slices, the table shows the control. */
   pagination?: { page: number; pageCount: number; onPageChange: (page: number) => void; totalItems?: number; pageSize?: number };
   /** Client pagination: the table slices `rows` itself into pages this long. */
@@ -76,6 +130,20 @@ export interface DataTableProps<T> {
 
   stickyHeader?: boolean;
   className?: string;
+}
+
+function isActive(v: DataTableFilterValues[string]): boolean {
+  if (typeof v === "string") return v.trim() !== "";
+  if (Array.isArray(v)) return v.length > 0;
+  return Boolean(v && (v.from || v.to));
+}
+
+/** A row's own words and numbers, for the default search. */
+function rowText(row: unknown): string {
+  if (row == null || typeof row !== "object") return String(row ?? "");
+  return Object.values(row as Record<string, unknown>)
+    .filter((v) => typeof v === "string" || typeof v === "number")
+    .join(" ");
 }
 
 function compare(a: unknown, b: unknown, collator: Intl.Collator) {
@@ -119,6 +187,11 @@ export function DataTable<T>({
   loading = false,
   error,
   onRetry,
+  filters,
+  filterValues: filterValuesProp,
+  defaultFilterValues = {},
+  onFiltersChange,
+  emptyFiltered,
   pagination,
   pageSize,
   stickyHeader = false,
@@ -135,6 +208,49 @@ export function DataTable<T>({
       );
     }
   }, [selectable, rowLabel]);
+
+  // --- Filters ----------------------------------------------------------
+  const filtersControlled = filterValuesProp !== undefined;
+  const [innerFilters, setInnerFilters] = React.useState<DataTableFilterValues>(defaultFilterValues);
+  const filterValues = filtersControlled ? filterValuesProp : innerFilters;
+  const commitFilters = (next: DataTableFilterValues) => {
+    if (!filtersControlled) setInnerFilters(next);
+    onFiltersChange?.(next);
+    // A narrower list starts at its first page, not on page 3 of it.
+    setInnerPage(1);
+  };
+  const setFilter = (id: string, value: DataTableFilterValues[string]) => commitFilters({ ...filterValues, [id]: value });
+  const anyActive = (filters ?? []).some((f) => isActive(filterValues[f.id]));
+  const clearFilters = () => commitFilters({});
+
+  const filtered = React.useMemo(() => {
+    // Filtered here only when the table owns the filters.
+    if (!filters?.length || filtersControlled) return rows;
+    return rows.filter((row) =>
+      filters.every((f) => {
+        const v = filterValues[f.id];
+        if (!isActive(v)) return true;
+        if (f.type === "search") {
+          const q = v as string;
+          return f.match ? f.match(row, q) : fold(rowText(row), locale).includes(fold(q.trim(), locale));
+        }
+        if (f.type === "options") {
+          const picked = v as string[];
+          const own = f.value(row);
+          const values = Array.isArray(own) ? own : own == null ? [] : [own];
+          return values.some((x) => picked.includes(x));
+        }
+        const period = v as DateRange;
+        const d = f.value(row);
+        if (!d) return false;
+        // Whole days at both ends: a charge at 18:00 on the 30th is in a period ending the 30th.
+        const day = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+        const from = period.from ? new Date(period.from.getFullYear(), period.from.getMonth(), period.from.getDate()).getTime() : -Infinity;
+        const to = period.to ? new Date(period.to.getFullYear(), period.to.getMonth(), period.to.getDate()).getTime() : Infinity;
+        return day >= from && day <= to;
+      }),
+    );
+  }, [rows, filters, filterValues, filtersControlled, locale]);
 
   // --- Sort -------------------------------------------------------------
   const sortControlled = sortProp !== undefined;
@@ -157,18 +273,18 @@ export function DataTable<T>({
   const sorted = React.useMemo(() => {
     const column = columns.find((c) => c.id === sort?.columnId);
     // Sorted here only when the table owns the sort and the column says how.
-    if (!sort || sortControlled || !column || typeof column.sort !== "function") return rows;
+    if (!sort || sortControlled || !column || typeof column.sort !== "function") return filtered;
     const by = column.sort;
     const collator = new Intl.Collator(locale, { numeric: true, sensitivity: "base" });
     const dir = sort.direction === "asc" ? 1 : -1;
-    return rows
+    return filtered
       .map((row, i) => ({ row, i, key: by(row) }))
       .sort((a, b) => {
         if (a.key == null || b.key == null) return compare(a.key, b.key, collator) || a.i - b.i;
         return dir * compare(a.key, b.key, collator) || a.i - b.i;
       })
       .map((x) => x.row);
-  }, [rows, columns, sort, sortControlled, locale]);
+  }, [filtered, columns, sort, sortControlled, locale]);
 
   // --- Pages ------------------------------------------------------------
   const [innerPage, setInnerPage] = React.useState(1);
@@ -188,7 +304,7 @@ export function DataTable<T>({
   // selection of rows nobody can see is a bulk action on records nobody can
   // see. With server pagination `rows` is one page and the product owns the
   // rest, so it is left alone.
-  const rowIds = new Set(rows.map(getRowId));
+  const rowIds = new Set(filtered.map(getRowId));
   const selected = (selControlled ? selectedProp : innerSelected).filter((id) => pagination || rowIds.has(id));
   const setSelected = (ids: string[]) => {
     if (!selControlled) setInnerSelected(ids);
@@ -204,6 +320,52 @@ export function DataTable<T>({
 
   return (
     <div className={cn("sui:flex sui:flex-col sui:gap-[12px]", className)}>
+      {filters && filters.length > 0 && (
+        <div className="sui:flex sui:flex-wrap sui:items-end sui:gap-[12px]">
+          {filters.map((f) =>
+            f.type === "search" ? (
+              <SearchInput
+                key={f.id}
+                label={f.label}
+                placeholder={f.placeholder}
+                value={(filterValues[f.id] as string | undefined) ?? ""}
+                onChange={(e) => setFilter(f.id, e.target.value)}
+                onClear={() => setFilter(f.id, "")}
+                containerClassName="sui:w-full sui:sm:w-[260px]"
+              />
+            ) : f.type === "options" ? (
+              <MultiSelect
+                key={f.id}
+                label={f.label}
+                options={f.options}
+                value={(filterValues[f.id] as string[] | undefined) ?? []}
+                onValueChange={(v) => setFilter(f.id, v)}
+                placeholder={labels.filterAll}
+                className="sui:w-full sui:sm:w-[340px]"
+              />
+            ) : (
+              <DateRangePicker
+                key={f.id}
+                label={f.label}
+                value={(filterValues[f.id] as DateRange | undefined) ?? { from: null, to: null }}
+                onValueChange={(v) => setFilter(f.id, v)}
+                presets={f.presets}
+                className="sui:w-full sui:sm:w-[300px]"
+              />
+            ),
+          )}
+          {anyActive && (
+            <Button variant="ghost" onClick={clearFilters}>
+              {labels.clearFilters}
+            </Button>
+          )}
+          {/* What a sighted user sees as the table shrinking. */}
+          <span className="sui:sr-only" aria-live="polite">
+            {anyActive && !filtersControlled ? labels.filteredCount(filtered.length, rows.length) : ""}
+          </span>
+        </div>
+      )}
+
       {selectable && bulkActions && selected.length > 0 && !loading && !error && (
         <div
           role="toolbar"
@@ -278,7 +440,18 @@ export function DataTable<T>({
           {!loading && !error && visible.length === 0 && (
             <tr>
               <td colSpan={colCount} className="sui:p-[8px]">
-                {empty}
+                {/* Emptied by the filters, not the data: say so, and offer the way back. */}
+                {anyActive
+                  ? (emptyFiltered ?? (
+                      <EmptyState
+                        variant="no-results"
+                        size="sm"
+                        title={labels.noFilterMatches}
+                        description={labels.noFilterMatchesHint}
+                        action={<Button onClick={clearFilters}>{labels.clearFilters}</Button>}
+                      />
+                    ))
+                  : empty}
               </td>
             </tr>
           )}
