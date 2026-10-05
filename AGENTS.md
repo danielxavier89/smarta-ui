@@ -90,11 +90,17 @@ npm run visual-diff -- <baseline-storybook-static> apps/storybook/storybook-stat
 ```
 
 It screenshots every story in all four themes from both builds and reports
-what differs. It is not in CI, because screenshots move by a pixel between
-machines, but it is the only check that looks at the result. It found, in one
+what differs. It is the only check that looks at the result. It found, in one
 afternoon, a focus halo that had vanished, every Toast story crashing, a
 Panel rendering in the wrong product's palette, and a rem that had shrunk
 by an eighth — with every other check green.
+
+It also runs on every pull request, as `.github/workflows/visual.yml`. That
+builds the base and the head side by side on one runner — screenshots move by
+a pixel between machines, never within one run — and fails if any story looks
+different. When the change is the point (a new colour, a fixed layout), add
+the `visual-change` label to the pull request: the check passes and the report
+and images stay attached to the run for the reviewer.
 
 CI runs all of it on every pull request.
 

@@ -1,0 +1,91 @@
+name: Visual regression
+
+# Every story, in all four product/mode combinations, screenshotted from the
+# pull request's base and from its head, and compared pixel by pixel.
+#
+# Both Storybooks are built and photographed on the same runner in the same
+# run. That is what makes this a gate rather than noise: screenshots taken on
+# two machines differ by a pixel of font rasterising, the same build on the
+# same machine does not. The unit tests load no CSS at all, so this is the
+# only check that looks at what a change did to how things look.
+#
+# A pull request that changes the look on purpose — a new colour, a fixed
+# animation — gets the `visual-change` label, and the check passes with the
+# report still attached for the reviewer. The label is the reviewer's cue to
+# open the artifact.
+
+on:
+  pull_request:
+    # labeled/unlabeled so adding `visual-change` re-runs the check.
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out this branch
+        uses: actions/checkout@v4
+        with:
+          path: candidate
+
+      - name: Check out the base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: baseline
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: |
+            candidate/package-lock.json
+            baseline/package-lock.json
+
+      - name: Build this branch's Storybook
+        working-directory: candidate
+        run: |
+          npm ci
+          npm run build-storybook
+
+      - name: Build the base's Storybook
+        working-directory: baseline
+        run: |
+          npm ci
+          npm run build-storybook
+
+      - name: Install Chromium
+        working-directory: candidate
+        run: npx playwright install --with-deps chromium
+
+      - name: Compare every story in every theme
+        working-directory: candidate
+        env:
+          # A labelled pull request still runs the comparison and posts the
+          # report; it just does not fail on what it finds.
+          FAIL_FLAG: ${{ contains(github.event.pull_request.labels.*.name, 'visual-change') && '' || '--fail' }}
+        run: >
+          node scripts/visual-diff.mjs
+          ../baseline/apps/storybook/storybook-static
+          apps/storybook/storybook-static
+          --out ../visual-diff
+          --min-pixels 10
+          --summary "$GITHUB_STEP_SUMMARY"
+          $FAIL_FLAG
+
+      - name: Keep the screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff
+          path: visual-diff
+          if-no-files-found: ignore
+          retention-days: 14

@@ -11,12 +11,16 @@
  * against variables that were no longer there. Every focus halo in the library
  * disappeared with 103 green tests.
  *
- * It is a local tool rather than a CI gate. Screenshots differ by a pixel
- * between machines and font rasterisers, and a gate that fails on that gets
- * ignored. The deterministic checks — axe including contrast, horizontal
- * overflow — run in CI through scripts/browser-gate.mjs. This one is for the
- * moment a change is supposed to be visually invisible and you need to know
- * that it was.
+ * Screenshots differ by a pixel between machines and font rasterisers, so the
+ * two builds are only ever compared on the same machine in the same run. In CI
+ * that is .github/workflows/visual.yml, which builds the pull request's base
+ * and head side by side and runs this with --fail. Locally it is the tool for
+ * the moment a change is supposed to be visually invisible and you need to
+ * know that it was.
+ *
+ *     --fail           exit 1 when a screenshot differs or a story crashes
+ *     --min-pixels N   ignore differences of N pixels or fewer (antialiasing)
+ *     --summary file   append a Markdown report (CI: $GITHUB_STEP_SUMMARY)
  */
 import http from "node:http";
 import { createReadStream, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -30,7 +34,13 @@ const outIdx = args.indexOf("--out");
 const OUT = resolve(outIdx >= 0 ? args[outIdx + 1] : ".visual-diff");
 const onlyIdx = args.indexOf("--only");
 const ONLY = onlyIdx >= 0 ? new RegExp(args[onlyIdx + 1]) : null;
-const [A, B] = args.filter((a, i) => !a.startsWith("--") && args[i - 1] !== "--out" && args[i - 1] !== "--only").map((p) => resolve(p));
+const FAIL = args.includes("--fail");
+const minIdx = args.indexOf("--min-pixels");
+const MIN_PIXELS = minIdx >= 0 ? Number(args[minIdx + 1]) : 0;
+const sumIdx = args.indexOf("--summary");
+const SUMMARY = sumIdx >= 0 ? args[sumIdx + 1] : null;
+const VALUED = new Set(["--out", "--only", "--min-pixels", "--summary"]);
+const [A, B] = args.filter((a, i) => !a.startsWith("--") && !VALUED.has(args[i - 1])).map((p) => resolve(p));
 
 if (!A || !B) {
   console.error("usage: node scripts/visual-diff.mjs <baseline-dir> <candidate-dir> [--out dir] [--only regex]");
@@ -136,7 +146,7 @@ for (const id of common) {
     const ia = sa_.png;
     const ib = sb_.png;
     const r = compare(ia, ib);
-    if (r.pixels > 0) {
+    if (r.pixels > MIN_PIXELS) {
       const name = `${id}--${product}-${theme}`;
       writeFileSync(join(OUT, `${name}.a.png`), ia);
       writeFileSync(join(OUT, `${name}.b.png`), ib);
@@ -166,3 +176,27 @@ for (const c of changed.slice(0, 60)) {
 if (added.length) console.log(`\nOnly in candidate: ${added.length}\n  ${added.join("\n  ")}`);
 if (removed.length) console.log(`\nOnly in baseline: ${removed.length}\n  ${removed.join("\n  ")}`);
 console.log(`\nImages and report.json in ${OUT}`);
+
+if (SUMMARY) {
+  const lines = ["## Visual regression", ""];
+  lines.push(`${common.length} stories × 4 themes compared against the base branch.`, "");
+  if (!changed.length && !crashes.length) {
+    lines.push("No screenshot changed.");
+  } else {
+    if (crashes.length) lines.push(`**${crashes.length} story renders threw:**`, "", ...crashes.map((c) => `- ${c}`), "");
+    if (changed.length) {
+      lines.push(`**${changed.length} screenshots differ.** The images are in the run's \`visual-diff\` artifact: \`.a\` is the base, \`.b\` this branch, \`.diff\` the difference.`, "");
+      lines.push("| Story and theme | Changed | Pixels |", "|---|---:|---:|");
+      for (const c of changed.slice(0, 50)) lines.push(`| ${c.name}${c.sizeChanged ? " (size)" : ""} | ${(c.ratio * 100).toFixed(3)}% | ${c.pixels} |`);
+      if (changed.length > 50) lines.push("", `…and ${changed.length - 50} more in report.json.`);
+      lines.push("", "If every change is intended, add the `visual-change` label to the pull request and this check passes.");
+    }
+  }
+  if (added.length) lines.push("", `New stories, not compared: ${added.length}.`);
+  writeFileSync(SUMMARY, lines.join("\n") + "\n", { flag: "a" });
+}
+
+if (FAIL && (changed.length || crashes.length)) {
+  console.log("\nFailing: screenshots changed. Add the `visual-change` label if they are intended.");
+  process.exit(1);
+}
