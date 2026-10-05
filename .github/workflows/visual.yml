@@ -71,7 +71,11 @@ jobs:
         env:
           # A labelled pull request still runs the comparison and posts the
           # report; it just does not fail on what it finds.
-          FAIL_FLAG: ${{ contains(github.event.pull_request.labels.*.name, 'visual-change') && '' || '--fail' }}
+          #
+          # Written this way round on purpose. Actions has no ternary, only
+          # `a && b || c`, and an empty `b` counts as false — so the obvious
+          # `labelled && '' || '--fail'` gives --fail whether labelled or not.
+          FAIL_FLAG: ${{ !contains(github.event.pull_request.labels.*.name, 'visual-change') && '--fail' || '' }}
         run: >
           node scripts/visual-diff.mjs
           ../baseline/apps/storybook/storybook-static
