@@ -98,8 +98,9 @@ for (const r of ROOTS) walk(r);
 const problems = [];
 
 for (const file of files) {
-  // labels.ts is the one place the English words are supposed to be.
-  if (file.endsWith("lib/labels.ts")) continue;
+  // The label files are the one place words are supposed to be: English in
+  // labels.ts, its translations beside it (labels.de.ts).
+  if (/lib\/labels(\.[a-z]{2})?\.ts$/.test(file)) continue;
 
   const text = readFileSync(file, "utf8");
   const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);

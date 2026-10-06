@@ -45,7 +45,7 @@ Rows with the same columns, meant to be compared.
 
 **`Table`** — `containerClassName` targets the bordered wrapper.
 **`THead`** — `sticky` pins the heading row.
-**`TR`** — `onActivate`, `selected`. (`clickable` is deprecated; see rule 3.)
+**`TR`** — `onActivate`, `selected`. (`clickable` has been removed; see rule 3.)
 **`TH`** — `align`, `sort` (`asc | desc | none`), `onSort`. Sets `aria-sort` for you.
 **`TD`** — `align`, `muted`, `numeric` (right-aligns and sets tabular figures).
 
@@ -61,7 +61,7 @@ Rows with the same columns, meant to be compared.
 
 1. **The wrapper is `overflow-x-auto`, never `overflow-hidden`.** `overflow-hidden` establishes a scroll container, which becomes the containing block for `position: sticky` — so sticky column headings get scoped to the card and scroll away with it. The corners are clipped by rounding the first and last cells instead. This is a real regression the webapp prototype hit; the fix is load-bearing.
 2. **Every column of money uses `numeric`.** Tabular figures are global, but the right alignment is not.
-3. **An activatable row uses `onActivate`, and nothing else.** It supplies the appearance, `tabIndex`, the click and Enter/Space together, so the four cannot come apart. The old `clickable` prop gave you only the appearance and asked you to remember the rest — and a row that looks pressable but does nothing under the keyboard is not a styling slip, it is a screen a keyboard user cannot operate. `clickable` still renders, and warns in development.
+3. **An activatable row uses `onActivate`, and nothing else.** It supplies the appearance, `tabIndex`, the click and Enter/Space together, so the four cannot come apart. The old `clickable` prop gave you only the appearance and asked you to remember the rest — and a row that looks pressable but does nothing under the keyboard is not a styling slip, it is a screen a keyboard user cannot operate. It has been removed: a row looks pressable only when it is.
 4. **A row with `onActivate` may still carry its own controls.** A button, link, menu, or a `Checkbox` and its label, all handle their own click and their own Enter, and the row does not fire a second time on top of them. This is the one place `Table` differs from `Card`, which cannot nest interactive elements at all.
 5. **An activatable row is still only a row, to a screen reader.** It takes focus and it fires, but `<tr tabindex="0">` has no widget role and no accessible name of its own — the user hears the cells, not "button". That is a real limit of the pattern, not an oversight: giving the row `role="button"` would break the table semantics that make the columns readable. Where the destination matters more than the row, put a named link or button in the first cell and let that be the control.
 5. **The empty state keeps the header.** A table that vanishes when filtered to nothing leaves the user unable to see what they filtered.

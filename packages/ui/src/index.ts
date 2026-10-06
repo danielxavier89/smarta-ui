@@ -27,6 +27,8 @@ export {
   type SmartaLabels,
   type PartialLabels,
 } from "./lib/labels";
+/** Every label in German: `<ThemeProvider labels={labelsDe} locale="de-DE">`. */
+export { labelsDe } from "./lib/labels.de";
 
 /**
  * Dates, numbers and money. Helpers a product calls before the value reaches a

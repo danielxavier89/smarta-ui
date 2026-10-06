@@ -46,9 +46,43 @@ execFileSync(
     resolve(pkg, "src/styles.css"),
     "--output",
     resolve(dist, "styles.css"),
+    // A sourcemap, so a host's devtools trace a rule back to the token or
+    // component source rather than to line 2000 of the build.
+    "--map",
   ],
   { cwd: pkg, stdio: "inherit" },
 );
+
+/**
+ * The CLI inlines the map as base64 — a quarter of a megabyte added to the
+ * file every product downloads — and names every source by its absolute path
+ * on the machine that built it, home directory included, which would then ship
+ * in the published tarball. So the map moves to its own file, and each source
+ * becomes a short path a reader can place: `tokens/src/base.css`,
+ * `ui/src/styles.css`, `tailwindcss/theme.css`. sourcesContent stays, since
+ * the token sources are not in the tarball to be looked up.
+ */
+{
+  const cssPath = resolve(dist, "styles.css");
+  const css = readFileSync(cssPath, "utf8");
+  const inline = /\/\*# sourceMappingURL=data:application\/json;base64,([A-Za-z0-9+/=]+) \*\/\s*$/;
+  const m = css.match(inline);
+  if (!m) throw new Error("build-css: expected an inline sourcemap from the Tailwind CLI and found none.");
+  const map = JSON.parse(Buffer.from(m[1], "base64").toString("utf8"));
+  const packagesDir = resolve(pkg, "..");
+  map.sources = map.sources.map((src) => {
+    const nm = src.lastIndexOf("/node_modules/");
+    if (nm >= 0) return src.slice(nm + "/node_modules/".length);
+    if (src.startsWith(packagesDir + "/")) return src.slice(packagesDir.length + 1);
+    return src.split("/").slice(-2).join("/");
+  });
+  if (map.sources.some((s) => s.startsWith("/"))) {
+    throw new Error(`build-css: a sourcemap path is still absolute: ${map.sources.find((s) => s.startsWith("/"))}`);
+  }
+  map.file = "styles.css";
+  writeFileSync(resolve(dist, "styles.css.map"), JSON.stringify(map));
+  writeFileSync(cssPath, css.replace(inline, "/*# sourceMappingURL=styles.css.map */\n"));
+}
 
 /**
  * reset.css is assembled rather than copied, because it opens with

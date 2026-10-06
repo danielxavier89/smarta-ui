@@ -84,9 +84,15 @@ for (const s of stories) {
   for (const [product, theme] of THEMES) {
     for (const width of AXE_WIDTHS) jobs.push({ s, product, theme, width, axe: !antiPattern, overflow: true });
   }
-  // The remaining widths only need one theme: layout does not change by theme.
-  for (const width of OVERFLOW_WIDTHS.filter((w) => !AXE_WIDTHS.includes(w))) {
-    jobs.push({ s, product: "webapp", theme: "light", width, axe: false, overflow: true });
+  // The remaining widths in every theme too. It used to be one theme, on the
+  // reasoning that layout does not change by theme — but the two products have
+  // different control heights and row density, so a backoffice row can wrap
+  // where a webapp one does not. A review caught it, not a failure; better it
+  // stays that way.
+  for (const [product, theme] of THEMES) {
+    for (const width of OVERFLOW_WIDTHS.filter((w) => !AXE_WIDTHS.includes(w))) {
+      jobs.push({ s, product, theme, width, axe: false, overflow: true });
+    }
   }
 }
 
@@ -174,6 +180,6 @@ if (failures.length) {
 console.log(
   `\nbrowser gate: ${stories.length} stories, ${jobs.length} page loads — no crashes, no axe violations ` +
     `(contrast included) in any of the four themes at ${AXE_WIDTHS.join(" and ")}px, ` +
-    `and no horizontal overflow at ${OVERFLOW_WIDTHS.join(", ")}px.` +
+    `and no horizontal overflow at ${OVERFLOW_WIDTHS.join(", ")}px in any of them.` +
     (skipped ? ` ${skipped} anti-pattern stor${skipped === 1 ? "y" : "ies"} excused from axe only.` : ""),
 );
