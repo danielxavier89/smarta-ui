@@ -117,3 +117,59 @@ export const Failed: Story = {
     />
   ),
 };
+
+/** Search, pick several, and a period — all filtering in the browser. Type "zzz" to see the filtered-empty state. */
+export const Filtered: Story = {
+  render: () => (
+    <DataTable
+      caption="Charges in June"
+      columns={columns}
+      rows={charges}
+      getRowId={(c) => c.id}
+      empty={empty}
+      defaultSort={{ columnId: "date", direction: "asc" }}
+      pageSize={8}
+      filters={[
+        { id: "q", type: "search", label: "Search charges", placeholder: "Search by supplier" },
+        {
+          id: "status",
+          type: "options",
+          label: "Status",
+          value: (c: Charge) => c.status,
+          options: [
+            { value: "matched", label: "Matched" },
+            { value: "missing", label: "No receipt" },
+            { value: "waiting", label: "Waiting" },
+          ],
+        },
+        {
+          id: "period",
+          type: "dateRange",
+          label: "Period",
+          value: (c: Charge) => c.date,
+          presets: [
+            { label: "First half of June", range: { from: new Date(2026, 5, 1), to: new Date(2026, 5, 15) } },
+            { label: "Second half of June", range: { from: new Date(2026, 5, 16), to: new Date(2026, 5, 30) } },
+          ],
+        },
+      ]}
+      defaultFilterValues={{ status: ["missing", "waiting"] }}
+    />
+  ),
+};
+
+/** The filters left nothing: the table says so and offers the way back, instead of the product's "no charges yet". */
+export const FilteredToNothing: Story = {
+  name: "Filtered to nothing",
+  render: () => (
+    <DataTable
+      caption="Charges in June"
+      columns={columns}
+      rows={charges}
+      getRowId={(c) => c.id}
+      empty={empty}
+      filters={[{ id: "q", type: "search", label: "Search charges", placeholder: "Search by supplier" }]}
+      defaultFilterValues={{ q: "Leasing" }}
+    />
+  ),
+};

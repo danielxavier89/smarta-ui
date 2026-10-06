@@ -13,9 +13,6 @@ import { Chip } from "../components/Chip";
 import { Progress } from "../components/Progress";
 import { DataTable, type DataTableColumn } from "../components/DataTable";
 import { EmptyState } from "../components/EmptyState";
-import { SearchInput } from "../components/SearchInput";
-import { MultiSelect } from "../components/MultiSelect";
-import { DateRangePicker, type DateRange } from "../components/DateRangePicker";
 import { Tabs, TabsList, Tab, TabPanel } from "../components/Tabs";
 import { Panel, PanelSection } from "../components/Panel";
 import { FilePreview } from "../components/FilePreview";
@@ -232,20 +229,10 @@ function ChargePanel({ charge, onClose }: { charge: Charge | null; onClose: () =
 
 export const Charges: Story = {
   render: function ChargesPage() {
-    const [query, setQuery] = React.useState("");
-    const [cats, setCats] = React.useState<string[]>([]);
-    const [period, setPeriod] = React.useState<DateRange>(june);
     const [tab, setTab] = React.useState("all");
     const [open, setOpen] = React.useState<Charge | null>(null);
-
-    const matches = charges.filter(
-      (c) =>
-        (!query || `${c.supplier} ${c.description}`.toLowerCase().includes(query.toLowerCase())) &&
-        (cats.length === 0 || cats.includes(c.category)) &&
-        (!period.from || c.date >= period.from) &&
-        (!period.to || c.date <= period.to),
-    );
-    const rows = tab === "open" ? matches.filter((c) => c.status !== "matched") : matches;
+    // The tabs choose WHICH charges; the filters inside the table narrow them.
+    const rows = tab === "open" ? charges.filter((c) => c.status !== "matched") : charges;
 
     const columns: DataTableColumn<Charge>[] = [
       { id: "date", header: "Date", cell: (c) => day(c.date), sort: (c) => c.date, muted: true, width: "90px" },
@@ -265,12 +252,6 @@ export const Charges: Story = {
       { id: "status", header: "Receipt", cell: (c) => <StatusChip status={c.status} /> },
     ];
 
-    const clear = () => {
-      setQuery("");
-      setCats([]);
-      setPeriod(june);
-    };
-
     return (
       <WebappShell current="charges">
         <div className="sui:flex sui:flex-col sui:gap-[20px]">
@@ -287,42 +268,12 @@ export const Charges: Story = {
             }
           />
 
-          <div className="sui:flex sui:flex-wrap sui:items-end sui:gap-[12px]">
-            <SearchInput
-              label="Search charges"
-              placeholder="Search by supplier"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onClear={() => setQuery("")}
-              containerClassName="sui:w-full sui:sm:w-[260px]"
-            />
-            <MultiSelect
-              aria-label="Categories"
-              options={categories}
-              value={cats}
-              onValueChange={setCats}
-              placeholder="All categories"
-              className="sui:w-full sui:sm:w-[280px]"
-            />
-            <DateRangePicker
-              label="Period"
-              value={period}
-              onValueChange={setPeriod}
-              presets={[
-                { label: "June", range: june },
-                { label: "May", range: { from: new Date(2026, 4, 1), to: new Date(2026, 4, 31) } },
-                { label: "Second quarter", range: { from: new Date(2026, 3, 1), to: new Date(2026, 5, 30) } },
-              ]}
-              className="sui:w-full sui:sm:w-[300px]"
-            />
-          </div>
-
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList>
-              <Tab value="all" count={matches.length}>
+              <Tab value="all" count={charges.length}>
                 All charges
               </Tab>
-              <Tab value="open" count={matches.filter((c) => c.status !== "matched").length}>
+              <Tab value="open" count={charges.filter((c) => c.status !== "matched").length}>
                 Needs you
               </Tab>
             </TabsList>
@@ -346,13 +297,27 @@ export const Charges: Story = {
                   </>
                 )}
                 pageSize={10}
+                filters={[
+                  { id: "q", type: "search", label: "Search charges", placeholder: "Search by supplier" },
+                  { id: "category", type: "options", label: "Category", options: categories, value: (c) => c.category },
+                  {
+                    id: "period",
+                    type: "dateRange",
+                    label: "Period",
+                    value: (c) => c.date,
+                    presets: [
+                      { label: "June", range: june },
+                      { label: "May", range: { from: new Date(2026, 4, 1), to: new Date(2026, 4, 31) } },
+                      { label: "Second quarter", range: { from: new Date(2026, 3, 1), to: new Date(2026, 5, 30) } },
+                    ],
+                  },
+                ]}
+                defaultFilterValues={{ period: june }}
                 empty={
                   <EmptyState
-                    variant="no-results"
                     size="sm"
-                    title="No charge matches these filters"
-                    description="Try another period or category, or clear the filters to see all of June."
-                    action={<Button size="sm" onClick={clear}>Clear the filters</Button>}
+                    title={tab === "open" ? "Nothing needs you in June" : "No charges in June yet"}
+                    description="Charges arrive from your bank every morning."
                   />
                 }
               />

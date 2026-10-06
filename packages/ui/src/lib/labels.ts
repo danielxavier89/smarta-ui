@@ -134,6 +134,14 @@ export interface SmartaLabels {
   selectRow: (rowLabel: string) => string;
   couldNotLoad: string;
   tryAgain: string;
+  /** The placeholder of a pick-several filter with nothing picked. */
+  filterAll: string;
+  clearFilters: string;
+  /** The table's own empty state when the filters, not the data, emptied it. */
+  noFilterMatches: string;
+  noFilterMatchesHint: string;
+  /** Announced when the filters change what is shown. */
+  filteredCount: (shown: number, total: number) => string;
 
   /* ---- PageHeader, AppShell ----------------------------------------------- */
   breadcrumb: string;
@@ -219,6 +227,11 @@ export const defaultLabels: SmartaLabels = {
   selectRow: (label) => `Select ${label}`,
   couldNotLoad: "This could not be loaded.",
   tryAgain: "Try again",
+  filterAll: "All",
+  clearFilters: "Clear the filters",
+  noFilterMatches: "Nothing matches these filters",
+  noFilterMatchesHint: "Change a filter, or clear them to see everything.",
+  filteredCount: (shown, total) => `${shown} of ${total} shown`,
 
   breadcrumb: "Breadcrumb",
   skipToContent: "Skip to content",

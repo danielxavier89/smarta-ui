@@ -8,7 +8,7 @@ tokens_only: true
 
 # DataTable
 
-A Table with the behaviour every list screen needs: sorting, selection with bulk actions, activatable rows, loading, error, empty and pagination.
+A Table with the behaviour every list screen needs: filters, sorting, selection with bulk actions, activatable rows, loading, error, empty and pagination.
 
 > Cross-cutting rules — copy and tone, the six states every screen owes the user, validation, accessibility, spacing — live in [conventions](../../../docs/conventions.md) and are assumed here. This file records only what is particular to DataTable.
 
@@ -26,6 +26,7 @@ A Table with the behaviour every list screen needs: sorting, selection with bulk
 | The layout needs something DataTable does not do: grouped rows, a footer of totals, cells spanning columns | `Table`, which looks identical |
 | Items read as sentences, not columns — notifications, activity | `ListItem` |
 | Two or three facts about one record | `KeyValue` |
+| Filters that change the whole page, not one table — tabs of different lists, a period for a dashboard | `Tabs`, or `SearchInput` / `DateRangePicker` in the page's own toolbar |
 
 ## Props
 
@@ -47,6 +48,9 @@ A Table with the behaviour every list screen needs: sorting, selection with bulk
 | `error` / `onRetry` | `ReactNode` / `() => void` | no | — | Replaces the rows with the reason and "Try again". |
 | `pagination` | `{ page, pageCount, onPageChange, totalItems?, pageSize? }` | no | — | Server paging. |
 | `pageSize` | `number` | no | — | Client paging: the table slices `rows` itself. |
+| `filters` | `DataTableFilter<T>[]` | no | — | Above the table. `{ id, type: "search", label, placeholder?, match? }`, `{ id, type: "options", label, options, value }` or `{ id, type: "dateRange", label, value, presets? }`. |
+| `filterValues` / `defaultFilterValues` / `onFiltersChange` | `Record<id, string \| string[] \| { from, to }>` | no | — | Controlled filter values leave the filtering to the product, as with sort. |
+| `emptyFiltered` | `ReactNode` | no | "Nothing matches these filters" + clear | What to say when the filters, not the data, emptied the table. |
 | `stickyHeader` | `boolean` | no | `false` | |
 
 ## States
@@ -54,6 +58,7 @@ A Table with the behaviour every list screen needs: sorting, selection with bulk
 - **Loading** — skeleton rows shaped like the columns, the table `aria-busy`, the skeletons hidden from screen readers.
 - **Empty** — the product's `empty`, inside the table so the headings still say what would be here.
 - **Error** — "This could not be loaded.", the product's reason, and "Try again".
+- **Filtered** — the filter row above the table, "Clear the filters" while any is set, and "12 of 53 shown" announced as the list narrows. A filter that leaves nothing shows its own empty state with the way back, never the product's "no charges yet".
 - **Sorted** — `aria-sort` on the column; a third click returns to the product's own order.
 - **Selected** — rows tinted, the header checkbox ticked or mixed, the bulk toolbar showing "3 selected".
 - **Active** — the row open in a Panel stays tinted while the Panel is open.
@@ -67,6 +72,9 @@ A Table with the behaviour every list screen needs: sorting, selection with bulk
 5. **The header checkbox selects the page, not the world.** "All 318" is a separate, explicit action in `bulkActions`.
 6. **A row's own controls don't open the row.** Clicking a checkbox, a menu or a link inside a row does only that.
 7. **Money columns are `numeric`**, right-aligned and tabular, formatted by the product before they arrive.
+8. **Filters narrow, then sorting orders, then pages slice** — and a filter change goes back to page 1. Selected rows a filter hides drop out of the bulk actions: an action on records nobody can see is the one nobody meant.
+9. **Search ignores case and accents**, and by default reads the row's own text and numbers. Pass `match` when what people search for is not on the row — a supplier's former name, an IBAN.
+10. **A period takes whole days at both ends.** A charge at 18:00 on the 30th is in a period ending the 30th.
 
 ## Do and don't
 
@@ -98,6 +106,11 @@ A Table with the behaviour every list screen needs: sorting, selection with bulk
   error={loadError && "The bank connection timed out."}
   onRetry={refetch}
   pageSize={20}
+  filters={[
+    { id: "q", type: "search", label: "Search charges", placeholder: "Search by supplier" },
+    { id: "category", type: "options", label: "Category", options: categories, value: (c) => c.category },
+    { id: "booked", type: "dateRange", label: "Period", value: (c) => c.date, presets: periods },
+  ]}
   empty={<EmptyState title="No charges in June yet" description="They show up here as the bank sends them, usually the next morning." />}
 />
 ```

@@ -59,7 +59,7 @@ Everything that exists, on one page, so nothing gets rebuilt that is already her
 | Component | What it is | Exports |
 |---|---|---|
 | `Card` | A bordered surface holding one thing. | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardBody`, `CardFooter`, `CardAction` |
-| `DataTable` | A Table with the behaviour every list screen needs: sorting, selection with bulk actions, activatable rows, loading, error, empty and pagination. | `DataTable` |
+| `DataTable` | A Table with the behaviour every list screen needs: filters, sorting, selection with bulk actions, activatable rows, loading, error, empty and pagination. | `DataTable` |
 | `EmptyState` | The state a list is in when it has nothing to list. | `EmptyState` |
 | `FilePreview` | A receipt, an invoice or a contract, shown in place with a way out to a full tab and a download. | `FilePreview` |
 | `KeyValue` | The facts about one thing, as a real `<dl>`. | `KeyValue` |
