@@ -89,10 +89,9 @@ for (const s of stories) {
   // different control heights and row density, so a backoffice row can wrap
   // where a webapp one does not. A review caught it, not a failure; better it
   // stays that way.
+  const rest = OVERFLOW_WIDTHS.filter((w) => !AXE_WIDTHS.includes(w));
   for (const [product, theme] of THEMES) {
-    for (const width of OVERFLOW_WIDTHS.filter((w) => !AXE_WIDTHS.includes(w))) {
-      jobs.push({ s, product, theme, width, axe: false, overflow: true });
-    }
+    if (rest.length) jobs.push({ s, product, theme, width: rest[0], alsoWidths: rest.slice(1), axe: false, overflow: true });
   }
 }
 
@@ -124,8 +123,19 @@ async function run(job) {
     }
 
     if (job.overflow) {
-      const o = await page.evaluate(() => ({ doc: document.documentElement.scrollWidth, vw: window.innerWidth }));
-      if (o.doc > o.vw + 1) failures.push(`OVERFLOW  ${where}\n            the page is ${o.doc}px wide in a ${o.vw}px viewport`);
+      // One load, several widths: the overflow-only widths resize the same
+      // page instead of loading the story again for each, which is what kept
+      // checking them in every theme inside CI's time limit.
+      for (const w of [width, ...(job.alsoWidths ?? [])]) {
+        if (w !== width) {
+          await page.setViewportSize({ width: w, height: 800 });
+          await page.waitForTimeout(50);
+        }
+        const o = await page.evaluate(() => ({ doc: document.documentElement.scrollWidth, vw: window.innerWidth }));
+        if (o.doc > o.vw + 1) {
+          failures.push(`OVERFLOW  ${s.id}  [${product}/${theme} @${w}px]\n            the page is ${o.doc}px wide in a ${o.vw}px viewport`);
+        }
+      }
     }
 
     if (job.axe) {
