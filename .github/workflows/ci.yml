@@ -56,7 +56,10 @@ jobs:
       # .changeset/ note: which version bump, and what to do when upgrading.
       # That note is the changelog. See .changeset/README.md.
       - name: A changeset accompanies every library change
-        if: github.event_name == 'pull_request'
+        # Not on the "Version packages" pull request: that one consumes the
+        # notes — deletes them into the changelog and the version bump — so it
+        # changes the package with no note left, by design, and failed here.
+        if: github.event_name == 'pull_request' && github.head_ref != 'changeset-release/main'
         run: node scripts/run-bin.mjs @changesets/cli::changeset status --since="origin/${{ github.base_ref }}"
 
       # typecheck, no hardcoded colours, no hardcoded English, contrast across
