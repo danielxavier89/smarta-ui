@@ -207,4 +207,12 @@ describe("DatePicker, the edges", () => {
     await user.tab();
     expect(onValueChange).not.toHaveBeenCalled();
   });
+
+  it("names the calendar's month navigation", async () => {
+    const user = userEvent.setup();
+    de(<DatePicker label="Booked on" />, { calendarNavigation: "Monat wechseln" });
+    await user.click(screen.getByRole("button", { name: "Choose a date" }));
+    const dialog = await screen.findByRole("dialog");
+    expect(within(dialog).getByRole("navigation", { name: "Monat wechseln" })).toBeInTheDocument();
+  });
 });

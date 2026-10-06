@@ -233,6 +233,7 @@ step("a. packing the tarball and unpacking it into the fixture");
     "dist/formik.cjs",
     "dist/formik.d.ts",
     "dist/styles.css",
+    "dist/styles.css.map",
     "dist/reset.css",
   ];
   const absent = required.filter((f) => !existsSync(join(dest, f)));

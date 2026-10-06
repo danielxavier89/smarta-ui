@@ -203,31 +203,44 @@ library needs it.
 
 ### The font
 
-The library names Plus Jakarta Sans and then inherits. It does not fetch it —
-a request to Google Fonts from inside a component library is a CSP entry and a
-privacy review the host did not ask for. Tell it what to use:
+The library has no typeface of its own: it inherits the page's. Inside a
+migrated screen it renders in whatever font the webapp or backoffice already
+uses, with nothing to configure. It never fetches a font — a request to Google
+Fonts from inside a component library is a CSP entry and a privacy review the
+host did not ask for.
+
+To give the library a face of its own, set one variable:
 
 ```css
-:root { --smarta-font-product: "Inter", sans-serif; }   /* match the product */
-:root { --smarta-font-product: "Plus Jakarta Sans"; }   /* if you self-host it */
+:root { --smarta-font-product: "Plus Jakarta Sans", sans-serif; }   /* self-hosted by the product */
 ```
 
-During the migration the first is the right answer.
+During the migration, set nothing. On a page the library owns outright
+(`asRoot` with `reset.css`) there is no host font to inherit, so the reset falls
+back to the system face unless the variable is set. Storybook sets it to Plus
+Jakarta Sans.
 
 ### Words the library says for itself
 
-A close button, a spinner, the pagination landmark. They default to English and
-a product overrides what it needs:
+A close button, a spinner, the pagination landmark. They default to English. A
+complete German set ships with the library:
 
 ```tsx
-import type { PartialLabels } from "@smarta/ui";
+import { ThemeProvider, labelsDe } from "@smarta/ui";
 
-const de: PartialLabels = {
-  close: "Schließen",
-  previousPage: "Vorherige Seite",
-  pageRange: (first, last, total) => `${first}–${last} von ${total}`,
-};
+<ThemeProvider labels={labelsDe} locale="de-DE">…</ThemeProvider>
 ```
+
+A product overrides any of them, in either language:
+
+```tsx
+import { labelsDe, type PartialLabels } from "@smarta/ui";
+
+const labels: PartialLabels = { ...labelsDe, close: "Zumachen" };
+```
+
+`labelsDe` is typed as the full set, so a label added to the library without its
+German fails the typecheck rather than reading English to a German screen.
 
 Interpolated ones are functions, not templates, because word order is not
 universal. Your own copy is still passed in as props, as it always was.

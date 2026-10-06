@@ -39,7 +39,9 @@
     margin: 0;
     background: var(--canvas);
     color: var(--fg);
-    font-family: var(--sui-font-sans);
+    /* A page the library owns has no host font to inherit, so here — and only
+       here — an unset variable falls back to the system face. */
+    font-family: var(--smarta-font-product, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
     font-size: var(--sui-text-base);
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;

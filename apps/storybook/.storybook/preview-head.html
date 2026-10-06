@@ -4,6 +4,14 @@
   href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
   rel="stylesheet"
 />
+<style>
+  /* Storybook is a product like any other: the library inherits the page's
+     font unless told otherwise, so this is Storybook telling it — and the
+     example of the one line a product writes to give the library its own face. */
+  :root {
+    --smarta-font-product: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  }
+</style>
 <script>
   // The decorator sets these from the toolbar as soon as React mounts. Setting
   // the default here means the first frame is already light, rather than

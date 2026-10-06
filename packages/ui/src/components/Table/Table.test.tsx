@@ -280,22 +280,22 @@ describe("Table's scroll container", () => {
   });
 });
 
-describe("TR clickable, the deprecated path", () => {
-  it("warns in development when used without onActivate", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-
+describe("TR without onActivate", () => {
+  /** `clickable` is removed: the only way to look pressable is to be pressable. */
+  it("has no clickable prop, and a plain row neither looks nor acts pressable", () => {
     render(
       <Table>
         <TBody>
+          {/* @ts-expect-error clickable was removed; onActivate is the only way */}
           <TR clickable>
-            <TD>Looks pressable</TD>
+            <TD>Just a row</TD>
           </TR>
         </TBody>
       </Table>,
     );
-
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining("cannot be reached or fired from a keyboard"));
-    warn.mockRestore();
+    const row = screen.getByText("Just a row").closest("tr")!;
+    expect(row).not.toHaveAttribute("tabindex");
+    expect(row.className).not.toContain("cursor-pointer");
   });
 
   it("does not warn when onActivate is present", () => {

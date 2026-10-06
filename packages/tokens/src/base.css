@@ -43,7 +43,11 @@
 .smarta-ui {
   background: var(--canvas);
   color: var(--fg);
-  font-family: var(--sui-font-sans);
+  /* No fallback, on purpose: unset, this is invalid at computed-value time,
+     acts as `unset`, and the island inherits the host page's font. Read the
+     product's variable directly rather than through --sui-font-sans, which is
+     computed once at :root and would miss a variable set on a wrapper. */
+  font-family: var(--smarta-font-product);
   font-size: var(--sui-text-base);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;

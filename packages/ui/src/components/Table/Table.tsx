@@ -113,17 +113,13 @@ export interface TRProps extends React.HTMLAttributes<HTMLTableRowElement> {
    * a keyboard user cannot operate.
    */
   onActivate?: (event: React.MouseEvent | React.KeyboardEvent) => void;
-  /**
-   * @deprecated Use `onActivate`. This gives a row the appearance of being
-   * pressable without making it so; on its own it produces exactly the defect
-   * described above. It is kept only so existing screens keep rendering.
-   */
-  clickable?: boolean;
+  // `clickable` is gone. It gave a row the look of being pressable without
+  // making it so — exactly the defect above — and was deprecated in 0.2.
   selected?: boolean;
 }
 
 export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
-  { className, clickable = false, selected = false, onActivate, onClick, onKeyDown, tabIndex, ...props },
+  { className, selected = false, onActivate, onClick, onKeyDown, tabIndex, ...props },
   ref,
 ) {
   const activatable = Boolean(onActivate);
@@ -143,13 +139,6 @@ export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
   const resolvedTabIndex = activatable ? (negativeTabIndex ? 0 : (tabIndex ?? 0)) : tabIndex;
 
   if (process.env.NODE_ENV !== "production") {
-    if (clickable && !onActivate) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "[@smarta/ui] <TR clickable> without onActivate renders a row that looks " +
-          "pressable but cannot be reached or fired from a keyboard. Pass onActivate instead.",
-      );
-    }
     if (negativeTabIndex) {
       // eslint-disable-next-line no-console
       console.warn(
@@ -197,8 +186,8 @@ export const TR = React.forwardRef<HTMLTableRowElement, TRProps>(function TR(
       }}
       className={cn(
         "sui:border-b sui:border-border-soft sui:last:border-b-0",
-        (clickable || activatable) && "sui:cursor-pointer sui:hover:bg-surface-hover",
-        (clickable || activatable) &&
+        activatable && "sui:cursor-pointer sui:hover:bg-surface-hover",
+        activatable &&
           "sui:focus-visible:outline-2 sui:focus-visible:-outline-offset-2 sui:focus-visible:outline-focus-ring",
         selected && "sui:bg-accent-soft",
         className,

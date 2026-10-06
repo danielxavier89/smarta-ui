@@ -84,6 +84,8 @@ export interface SmartaLabels {
   chooseDateRange: string;
   previousMonth: string;
   nextMonth: string;
+  /** Names the calendar's row of month buttons, a <nav>: unnamed, it was announced as just "navigation". */
+  calendarNavigation: string;
   /** Appended to a calendar day's name when it is today / chosen. */
   today: string;
   selected: string;
@@ -195,6 +197,7 @@ export const defaultLabels: SmartaLabels = {
   chooseDateRange: "Choose dates",
   previousMonth: "Previous month",
   nextMonth: "Next month",
+  calendarNavigation: "Change month",
   today: "today",
   selected: "selected",
   clearValue: "Clear",

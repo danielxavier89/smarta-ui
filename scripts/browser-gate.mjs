@@ -84,9 +84,14 @@ for (const s of stories) {
   for (const [product, theme] of THEMES) {
     for (const width of AXE_WIDTHS) jobs.push({ s, product, theme, width, axe: !antiPattern, overflow: true });
   }
-  // The remaining widths only need one theme: layout does not change by theme.
-  for (const width of OVERFLOW_WIDTHS.filter((w) => !AXE_WIDTHS.includes(w))) {
-    jobs.push({ s, product: "webapp", theme: "light", width, axe: false, overflow: true });
+  // The remaining widths in every theme too. It used to be one theme, on the
+  // reasoning that layout does not change by theme — but the two products have
+  // different control heights and row density, so a backoffice row can wrap
+  // where a webapp one does not. A review caught it, not a failure; better it
+  // stays that way.
+  const rest = OVERFLOW_WIDTHS.filter((w) => !AXE_WIDTHS.includes(w));
+  for (const [product, theme] of THEMES) {
+    if (rest.length) jobs.push({ s, product, theme, width: rest[0], alsoWidths: rest.slice(1), axe: false, overflow: true });
   }
 }
 
@@ -118,8 +123,19 @@ async function run(job) {
     }
 
     if (job.overflow) {
-      const o = await page.evaluate(() => ({ doc: document.documentElement.scrollWidth, vw: window.innerWidth }));
-      if (o.doc > o.vw + 1) failures.push(`OVERFLOW  ${where}\n            the page is ${o.doc}px wide in a ${o.vw}px viewport`);
+      // One load, several widths: the overflow-only widths resize the same
+      // page instead of loading the story again for each, which is what kept
+      // checking them in every theme inside CI's time limit.
+      for (const w of [width, ...(job.alsoWidths ?? [])]) {
+        if (w !== width) {
+          await page.setViewportSize({ width: w, height: 800 });
+          await page.waitForTimeout(50);
+        }
+        const o = await page.evaluate(() => ({ doc: document.documentElement.scrollWidth, vw: window.innerWidth }));
+        if (o.doc > o.vw + 1) {
+          failures.push(`OVERFLOW  ${s.id}  [${product}/${theme} @${w}px]\n            the page is ${o.doc}px wide in a ${o.vw}px viewport`);
+        }
+      }
     }
 
     if (job.axe) {
@@ -174,6 +190,6 @@ if (failures.length) {
 console.log(
   `\nbrowser gate: ${stories.length} stories, ${jobs.length} page loads — no crashes, no axe violations ` +
     `(contrast included) in any of the four themes at ${AXE_WIDTHS.join(" and ")}px, ` +
-    `and no horizontal overflow at ${OVERFLOW_WIDTHS.join(", ")}px.` +
+    `and no horizontal overflow at ${OVERFLOW_WIDTHS.join(", ")}px in any of them.` +
     (skipped ? ` ${skipped} anti-pattern stor${skipped === 1 ? "y" : "ies"} excused from axe only.` : ""),
 );

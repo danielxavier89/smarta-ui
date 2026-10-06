@@ -51,7 +51,7 @@ export function Calendar({ locale: localeProp, classNames, labels: dpLabels, ...
       labels={{
         labelPrevious: () => labels.previousMonth,
         labelNext: () => labels.nextMonth,
-        labelNav: () => "",
+        labelNav: () => labels.calendarNavigation,
         labelGrid: (date) => formatMonth(date, locale),
         labelDayButton: (date, modifiers) =>
           [

@@ -15,11 +15,19 @@
 
 @theme {
   /* --- Type ------------------------------------------------------------
-     Plus Jakarta Sans at 400 and 500. 600 is reserved for headings and the
-     one or two places that mean "unread". There is no 700 anywhere.
+     Weights 400 and 500. 600 is reserved for headings and the one or two
+     places that mean "unread". There is no 700 anywhere.
 
-     The library does not load the font. It names it and then falls back,
-     through --smarta-font-product, to whatever the product is already using.
+     The library has no typeface of its own. It inherits the product's: the
+     island's root declares `font-family: var(--smarta-font-product)` with no
+     fallback, so while the variable is unset the declaration is invalid at
+     computed-value time, behaves as `unset`, and font-family — an inherited
+     property — inherits from the host. A product that wants a particular
+     face for the library alone sets the variable.
+
+     It used to name Plus Jakarta Sans as the fallback. Nobody loads Jakarta,
+     so a product that had not set the variable got the system font, silently:
+     the exact failure the review flagged.
 
      This is deliberate, and it is the smaller of the two options. The font was
      only ever loaded by Storybook, from Google Fonts — so a product importing
@@ -31,17 +39,19 @@
      third-party request the privacy review has to sign off, neither of which
      a library should impose on its host.
 
-     So a product decides, in one line:
+     So a product does nothing, or decides in one line:
 
-       :root { --smarta-font-product: "Inter", sans-serif; }   inherit
-       :root { --smarta-font-product: "Plus Jakarta Sans"; }   self-hosted
+       (nothing)                                               inherit the page
+       :root { --smarta-font-product: "Plus Jakarta Sans"; }   a face of its own
 
      During the migration the first is the right answer: the library matches
      the page it is on instead of introducing a second typeface halfway down
-     a screen. See packages/tokens/README.md. */
-  --font-sans: var(--smarta-font-product, "Plus Jakarta Sans"), ui-sans-serif,
-               system-ui, -apple-system,
-               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+     a screen. See packages/tokens/README.md.
+
+     --font-sans (the sui:font-sans utility) follows the same rule. The one
+     place with a system fallback is reset.css, for a page the library owns
+     outright: there is no host font there to inherit. */
+  --font-sans: var(--smarta-font-product);
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
                "Liberation Mono", monospace;
 

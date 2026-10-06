@@ -130,8 +130,16 @@ const captiveIsland = renderToStaticMarkup(
  * id selector no host rule outranks. Without it the bare page keeps the
  * browser's 8px body margin and the host pages zero it, and every width in the
  * island differs by 16px for reasons that have nothing to do with our CSS.
+ *
+ * It also pins the island's font. The island inherits the host page's font by
+ * design (P0-6: inherit the product's), so on a bare page it is Times and on a
+ * Bootstrap page it is Bootstrap's — a difference this comparison must not
+ * mistake for interference. Pinning it through --smarta-font-product is what a
+ * product would do, and leaves every other property under test. Inheritance
+ * itself is checked separately, unpinned, below.
  */
-const HARNESS = `<style>html,body{margin:0!important;padding:0!important}#mount#mount{display:block;width:900px;margin:0;padding:0;border:0}</style>`;
+const PIN = "--smarta-font-product:Arial,sans-serif;";
+const HARNESS = `<style>html,body{margin:0!important;padding:0!important}#mount#mount{display:block;width:900px;margin:0;padding:0;border:0;${PIN}}</style>`;
 
 const page = (sheets) => `<!doctype html><html><head><meta charset="utf-8">
 ${HARNESS}
@@ -261,6 +269,16 @@ for (const order of ["host-then-ours", "ours-then-host"]) {
   }
 }
 
+// 4b. The font is the host's. Unpinned, the island takes the font of the page
+//     it sits on — Bootstrap's here — rather than naming a face nobody loaded.
+{
+  pages.inherit = page(["antd", "bootstrap", "tailwind", "legacy", "ours"]).replace(PIN, "");
+  const got = await read("inherit", ["#mount", "#island"]);
+  const host = got["#mount"]["font-family"];
+  const ours = got["#island"]["font-family"];
+  if (ours !== host) failures.push(`FONT: the island computes font-family ${ours}, not the host's ${host}. It should inherit the product's font.`);
+}
+
 // 5. The README's override advice, as a test rather than a promise. A product
 //    class that only ADDS a property applies as before; one that CHANGES a
 //    property the component sets needs one more class, and with it, wins.
@@ -332,5 +350,5 @@ if (failures.length) {
 }
 console.log(
   `coexistence: the host page is untouched by our stylesheet, our components are untouched by Ant Design 4,\n` +
-    `Bootstrap 5 and a host Tailwind, host content inside our island keeps its own classes, and the focus ring survives the host's :focus rules — in both import orders.`,
+    `Bootstrap 5 and a host Tailwind, host content inside our island keeps its own classes, the focus ring survives the host's :focus rules — in both import orders — and the island takes the host's font.`,
 );

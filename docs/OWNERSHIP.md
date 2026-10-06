@@ -24,6 +24,15 @@ waiting for requirements" — which `enforce_admins: false` allows, and which is
 visible in the pull request's history. Add a second owner to CODEOWNERS as soon
 as the team exists.
 
+**Decided on 2026-10-06: it stays that way for now.** The review pointed out
+that "block merge without green CI" can therefore be bypassed, and that PRs #2
+and #5 were merged by the sole owner without a review. The bypass is a known,
+accepted state until there is a second owner, not an oversight. Required checks
+still run on every pull request and the bypass is recorded on each one. When a
+second owner exists: add them to `.github/CODEOWNERS`, then set
+`enforce_admins: true` in `.github/branch-protection.json` and re-apply it. In
+that order — switching the override off first leaves nobody who can merge.
+
 ## Still to do — each needs something this account does not have
 
 ### 1. Make the repository private — after giving Alisson access
@@ -115,7 +124,10 @@ Automated, with [Changesets](https://github.com/changesets/changesets).
    `npm run changeset -- --empty`.
 2. **On `main`, `.github/workflows/release.yml` opens a "Version packages"
    pull request** that turns the pending notes into a version bump and
-   `packages/ui/CHANGELOG.md`. It updates itself as more notes land.
+   `packages/ui/CHANGELOG.md`. It updates itself as more notes land, and
+   starts CI on itself: a pull request opened with the built-in `GITHUB_TOKEN`
+   triggers no workflows, so without that dispatch its required checks never
+   reported and it could only be merged by an admin override.
 3. **Merging that pull request is the release.** Once a registry is configured
    (`PUBLISH_ENABLED` and `NPM_TOKEN`, see the workflow's header) the same
    workflow builds and publishes; until then it versions and stops.

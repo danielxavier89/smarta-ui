@@ -49,8 +49,9 @@ Panel             opens on a row click, over the list
   disagree with the list under it.
 - **An activatable row uses `onActivate`.** One prop gives you the appearance,
   `tabIndex`, the click and Enter/Space at once, so they cannot come apart. The
-  deprecated `clickable` gave you only the look, and a row that looks pressable
-  but does nothing under the keyboard is a screen a keyboard user cannot use.
+  old `clickable` gave you only the look, and a row that looks pressable but
+  does nothing under the keyboard is a screen a keyboard user cannot use — so it
+  is gone.
 - **A row with `onActivate` may still carry its own controls.** A button or menu
   inside it handles its own click and Enter, and the row does not fire on top.
 - **Selecting a row marks it.** `selected` on the row whose `Panel` is open, so
